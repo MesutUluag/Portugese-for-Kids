@@ -19,6 +19,7 @@ export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange }: Pro
   const [loading, setLoading] = useState(false);
   const [slideDir, setSlideDir] = useState<'left' | 'right' | ''>('');
   const [pageKey, setPageKey] = useState(0);
+  const [lastPhotoUrl, setLastPhotoUrl] = useState<string | null>(null);
   const initialized = useRef(false);
 
   useEffect(() => {
@@ -85,7 +86,14 @@ export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange }: Pro
       <span className="badge-ai" style={{ background: aiColor }}>{aiLabel}</span>
       <div className="story-card">
         {page && theme
-          ? <StoryIllustration page={page} theme={theme} pageKey={pageKey} sceneVars={sceneVars} />
+          ? <StoryIllustration
+              page={page}
+              theme={theme}
+              pageKey={pageKey}
+              sceneVars={sceneVars}
+              lastPhotoUrl={lastPhotoUrl}
+              onPhotoLoaded={setLastPhotoUrl}
+            />
           : <div className="story-illustration" style={sceneVars} />
         }
         <button className="btn-story-audio" onClick={() => page && speakText(page.pt)} title="Listen to Sentence">
