@@ -19,7 +19,7 @@ export default function StoryIllustration({ page, pageKey, sceneVars }: Props): 
   const [errored, setErrored] = useState(false);
 
   const prompt = buildPrompt(page);
-  const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=480&height=240&nologo=true&seed=${pageKey}`;
+  const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=780&height=360&nologo=true&seed=${pageKey}`;
 
   // Current photo ready; show CSS scene while loading (no old-photo fallback)
   const photoActive = loaded && !errored;
