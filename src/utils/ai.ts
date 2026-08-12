@@ -39,9 +39,19 @@ async function fetchPollinationsStory(): Promise<StoryPage> {
     throw new Error('Pollinations blocked (402) — retry after cooldown');
   }
 
-  // Simple GET — no CORS preflight, works on all devices including phones
-  const url = `https://text.pollinations.ai/${encodeURIComponent(POLLINATIONS_PROMPT)}?model=openai-fast&json=true`;
-  const res = await fetchWithTimeout(url, {}, 25000);
+  // POST with explicit Authorization: Bearer anonymous — overrides any stored
+  // browser key so authenticated users are not charged and get 402.
+  const res = await fetchWithTimeout('https://text.pollinations.ai/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer anonymous',
+    },
+    body: JSON.stringify({
+      model: 'openai-fast',
+      messages: [{ role: 'user', content: POLLINATIONS_PROMPT }],
+    }),
+  }, 25000);
 
   if (res.status === 402) {
     pollinationsBlockedUntil = Date.now() + FOUR_HOURS_MS;
@@ -49,7 +59,9 @@ async function fetchPollinationsStory(): Promise<StoryPage> {
   }
 
   if (!res.ok) throw new Error(`Pollinations error: ${res.status}`);
-  return parseStoryJson(await res.text());
+  const data = await res.json() as { choices?: { message?: { content?: string } }[] };
+  const content = data?.choices?.[0]?.message?.content ?? '';
+  return parseStoryJson(content);
 }
 
 function generateTemplateStoryPage(): StoryPage {
