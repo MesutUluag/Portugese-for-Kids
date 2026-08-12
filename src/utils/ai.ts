@@ -1,4 +1,4 @@
-import { StoryPage, subjects, actions } from '../data/words';
+import { StoryPage, templatePages } from '../data/words';
 
 export type AiState = 'pollinations' | 'template' | null;
 
@@ -9,7 +9,7 @@ export async function initAI(
   return 'pollinations';
 }
 
-const POLLINATIONS_PROMPT = `Generate 1 short A1 level European Portuguese sentence for kids with its English translation and 3 fitting emojis. Respond ONLY with raw JSON, no extra text: {"pt": "O gato dorme no sofá.", "en": "The cat sleeps on the sofa.", "mainEmoji": "🐱", "bgLeft": "🛋️", "bgRight": "😴"}`;
+const POLLINATIONS_PROMPT = `Generate 1 short A1 level European Portuguese sentence for kids. The sentence must describe a realistic, everyday scene (e.g. animals in their natural habitat, people doing normal activities). Do NOT mix unrelated subjects and places (e.g. no fish in gardens, no cats in the ocean). Include its English translation and 3 emojis that logically match the scene. Respond ONLY with raw JSON, no extra text: {"pt": "O gato dorme no sofá.", "en": "The cat sleeps on the sofa.", "mainEmoji": "🐱", "bgLeft": "🛋️", "bgRight": "😴"}`;
 
 function parseStoryJson(raw: string): StoryPage {
   const cleaned = raw.replace(/```json|```/g, '').trim();
@@ -53,15 +53,7 @@ async function fetchPollinationsStory(): Promise<StoryPage> {
 }
 
 function generateTemplateStoryPage(): StoryPage {
-  const subj = subjects[Math.floor(Math.random() * subjects.length)];
-  const act = actions[Math.floor(Math.random() * actions.length)];
-  return {
-    mainEmoji: subj.emoji,
-    bgLeft: act.leftBg,
-    bgRight: act.rightBg,
-    pt: `${subj.pt} ${act.pt}!`,
-    en: `${subj.en} ${act.en}!`,
-  };
+  return templatePages[Math.floor(Math.random() * templatePages.length)];
 }
 
 export async function getNewStoryPage(

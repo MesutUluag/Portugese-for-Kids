@@ -20,7 +20,7 @@ export default function StoryIllustration({ page, pageKey, sceneVars }: Props): 
   const pollUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=780&height=360&nologo=true&seed=${pageKey}`;
   const imgResult = usePollinationsImage(pollUrl);
 
-  const photoActive = typeof imgResult === 'string';
+  const photoActive = imgResult !== 'loading' && imgResult !== 'blocked';
   const hasPhoto = photoActive;
 
   return (
