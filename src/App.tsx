@@ -11,8 +11,8 @@ import Game5 from './components/Game5';
 
 export default function App(): React.ReactElement {
   const [mode, setMode] = useState<Mode>('cards');
-  const [score, setScore] = useState(0);
-  const [bounce, setBounce] = useState(false);
+  const [_score, setScore] = useState(0);
+  const [_bounce, setBounce] = useState(false);
   const [aiState, setAiState] = useState<AiState>(null);
   const [aiLabel, setAiLabel] = useState('Checking Chrome Built-in AI...');
   const [aiColor, setAiColor] = useState('#0284c7');
