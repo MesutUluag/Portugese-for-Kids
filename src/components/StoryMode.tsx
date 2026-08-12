@@ -19,7 +19,6 @@ export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange }: Pro
   const [loading, setLoading] = useState(false);
   const [slideDir, setSlideDir] = useState<'left' | 'right' | ''>('');
   const [pageKey, setPageKey] = useState(0);
-  const [lastPhotoUrl, setLastPhotoUrl] = useState<string | null>(null);
   const initialized = useRef(false);
 
   useEffect(() => {
@@ -87,12 +86,11 @@ export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange }: Pro
       <div className="story-card">
         {page && theme
           ? <StoryIllustration
+              key={pageKey}
               page={page}
               theme={theme}
               pageKey={pageKey}
               sceneVars={sceneVars}
-              lastPhotoUrl={lastPhotoUrl}
-              onPhotoLoaded={setLastPhotoUrl}
             />
           : <div className="story-illustration" style={sceneVars} />
         }
