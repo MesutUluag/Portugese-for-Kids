@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { kidsWords, Word } from '../data/words';
 import { speakText } from '../utils/speech';
+import WordImage from './WordImage';
 import '../styles/Game4.scss';
 
 interface Props {
@@ -60,7 +61,7 @@ export default function Game4({ onScore }: Props): React.ReactElement {
   return (
     <div className={`game-container ${animClass}`} style={{ display: 'block', borderColor: '#3b82f6' }}>
       <h2 style={{ color: '#3b82f6', margin: 0 }}>✍️ Fill Missing Letter</h2>
-      <div className="game-target" style={{ fontSize: '60px' }}>{target?.emoji ?? '😴'}</div>
+      <WordImage en={target?.en ?? ''} emoji={target?.emoji ?? '😴'} size={120} className="game-target" />
       <div className="blank-display">{blank}</div>
       <div className="letter-options">
         {options.map((c) => (

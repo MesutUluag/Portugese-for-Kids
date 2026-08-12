@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { kidsWords, Word } from '../data/words';
 import { speakText } from '../utils/speech';
+import WordImage from './WordImage';
 import '../styles/Game5.scss';
 
 interface Props {
@@ -13,20 +14,49 @@ export default function Game5({ onScore }: Props): React.ReactElement {
   const [input, setInput] = useState<string[]>([]);
   const [hidden, setHidden] = useState<boolean[]>([]);
   const [animClass, setAnimClass] = useState('');
+  const [history, setHistory] = useState<Word[]>([]);
+  const [historyIdx, setHistoryIdx] = useState(-1);
 
-  const load = useCallback(() => {
-    const valid = kidsWords.filter((w) => w.pt.length >= 3 && w.pt.length <= 8 && !w.pt.includes(' '));
-    const t = valid[Math.floor(Math.random() * valid.length)];
-    setTarget(t);
-    speakText(t.pt);
-    const sc = t.pt.split('').sort(() => Math.random() - 0.5);
+  const loadWord = useCallback((word: Word) => {
+    setTarget(word);
+    speakText(word.pt);
+    const sc = word.pt.split('').sort(() => Math.random() - 0.5);
     setScrambled(sc);
     setInput([]);
     setHidden(new Array(sc.length).fill(false));
     setAnimClass('');
   }, []);
 
-  useEffect(() => { load(); }, [load]);
+  const loadNew = useCallback(() => {
+    const valid = kidsWords.filter((w) => w.pt.length >= 3 && w.pt.length <= 8 && !w.pt.includes(' '));
+    const t = valid[Math.floor(Math.random() * valid.length)];
+    setHistory((prev) => {
+      const next = [...prev, t];
+      setHistoryIdx(next.length - 1);
+      return next;
+    });
+    loadWord(t);
+  }, [loadWord]);
+
+  useEffect(() => { loadNew(); }, [loadNew]);
+
+  function handlePrev() {
+    setHistoryIdx((idx) => {
+      const newIdx = idx - 1;
+      loadWord(history[newIdx]);
+      return newIdx;
+    });
+  }
+
+  function handleNext() {
+    const nextIdx = historyIdx + 1;
+    if (nextIdx < history.length) {
+      setHistoryIdx(nextIdx);
+      loadWord(history[nextIdx]);
+    } else {
+      loadNew();
+    }
+  }
 
   function handleLetter(idx: number, char: string) {
     if (!target || hidden[idx]) return;
@@ -41,11 +71,11 @@ export default function Game5({ onScore }: Props): React.ReactElement {
         setAnimClass('correct-anim');
         onScore(15);
         speakText(target.pt);
-        setTimeout(() => { setAnimClass(''); load(); }, 1200);
+        setTimeout(() => { setAnimClass(''); loadNew(); }, 1200);
       } else {
         setAnimClass('wrong-anim');
         speakText(target.pt);
-        setTimeout(() => { setAnimClass(''); load(); }, 2000);
+        setTimeout(() => { setAnimClass(''); handleReset(); }, 600);
       }
     }
   }
@@ -61,13 +91,13 @@ export default function Game5({ onScore }: Props): React.ReactElement {
   return (
     <div className={`game-container ${animClass}`} style={{ display: 'block', borderColor: '#f97316' }}>
       <h2 style={{ color: '#f97316', margin: 0 }}>🧩 Unscramble Word</h2>
-      <div
+      <WordImage
+        en={target?.en ?? ''}
+        emoji={target?.emoji ?? '🍎'}
+        size={120}
         className="game-target"
-        style={{ fontSize: '60px' }}
         onClick={() => target && speakText(target.pt)}
-      >
-        {target?.emoji ?? '🍎'}
-      </div>
+      />
       <div className="scramble-slots">{slots}</div>
       <div className="hint-text">Meaning: {target?.en ?? ''}</div>
       <div className="scramble-letters">
@@ -83,7 +113,9 @@ export default function Game5({ onScore }: Props): React.ReactElement {
         ))}
       </div>
       <div className="scramble-controls">
-        <button className="btn-reset" onClick={handleReset}>🔄 Clear / Undo</button>
+        <button className="btn-nav" onClick={handlePrev} disabled={historyIdx <= 0}>◀</button>
+        <button className="btn-reset" onClick={handleReset}>🔄 Reset</button>
+        <button className="btn-nav" onClick={handleNext}>▶</button>
       </div>
     </div>
   );

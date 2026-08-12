@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { kidsWords, Word } from '../data/words';
 import { speakText } from '../utils/speech';
+import WordImage from './WordImage';
 import '../styles/Game2.scss';
 
 interface Props {
@@ -52,7 +53,7 @@ export default function Game2({ onScore }: Props): React.ReactElement {
       <div className="emoji-options">
         {options.map((opt) => (
           <div key={opt.pt} className="emoji-opt" onClick={() => handleAnswer(opt)}>
-            {opt.emoji}
+            <WordImage en={opt.en} emoji={opt.emoji} size={80} />
           </div>
         ))}
       </div>

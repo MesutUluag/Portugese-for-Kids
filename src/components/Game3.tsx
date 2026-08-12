@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { kidsWords, Word } from '../data/words';
 import { speakText } from '../utils/speech';
+import WordImage from './WordImage';
 import '../styles/Game3.scss';
 
 interface FlippedEntry {
@@ -75,7 +76,7 @@ export default function Game3({ onScore }: Props): React.ReactElement {
               className={`memory-card${isFlipped ? ' flipped' : ''}`}
               onClick={() => handleFlip(idx, item)}
             >
-              {isFlipped ? item.emoji : '❓'}
+              {isFlipped ? <WordImage en={item.en} emoji={item.emoji} size={64} /> : '❓'}
             </div>
           );
         })}

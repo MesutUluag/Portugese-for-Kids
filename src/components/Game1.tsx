@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { kidsWords, Word } from '../data/words';
 import { speakText } from '../utils/speech';
+import WordImage from './WordImage';
 import '../styles/Game1.scss';
 
 interface Props {
@@ -49,9 +50,13 @@ export default function Game1({ onScore }: Props): React.ReactElement {
   return (
     <div ref={containerRef} className={`game-container ${animClass}`} style={{ display: 'block', borderColor: '#10b981' }}>
       <h2 style={{ color: '#10b981', margin: 0 }}>Which word is this? 🔊</h2>
-      <div className="game-target" onClick={() => target && speakText(target.pt)} title="Click to listen">
-        {target?.emoji ?? '🐶'}
-      </div>
+      <WordImage
+        en={target?.en ?? ''}
+        emoji={target?.emoji ?? '🐶'}
+        size={120}
+        className="game-target"
+        onClick={() => target && speakText(target.pt)}
+      />
       <div className="game-options">
         {options.map((opt) => (
           <button key={opt} className="game-opt" onClick={() => handleAnswer(opt)}>
