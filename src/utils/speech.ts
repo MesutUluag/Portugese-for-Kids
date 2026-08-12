@@ -7,13 +7,10 @@
 export function speakText(text: string): void {
   if (!text || !text.trim()) return;
 
-  // Cancel any currently speaking utterance
-  if (window.speechSynthesis) {
-    window.speechSynthesis.cancel();
-  }
-
   // Strategy 1: Try Web Speech API with Portuguese voice
   if ('speechSynthesis' in window && window.speechSynthesis) {
+    // Cancel previous speech to avoid overlap
+    window.speechSynthesis.cancel();
     try {
       const utterance = new SpeechSynthesisUtterance(text);
       
