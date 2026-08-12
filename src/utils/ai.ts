@@ -40,7 +40,7 @@ async function fetchPollinationsStory(): Promise<StoryPage> {
   }
 
   // Simple GET — no CORS preflight, works on all devices including phones
-  const url = `https://text.pollinations.ai/${encodeURIComponent(POLLINATIONS_PROMPT)}?model=openai&json=true`;
+  const url = `https://text.pollinations.ai/${encodeURIComponent(POLLINATIONS_PROMPT)}?model=openai-fast&json=true`;
   const res = await fetchWithTimeout(url, {}, 25000);
 
   if (res.status === 402) {
