@@ -31,10 +31,23 @@ async function fetchWithTimeout(url: string, options: RequestInit, ms: number): 
   }
 }
 
+const FOUR_HOURS_MS = 4 * 60 * 60 * 1000;
+let pollinationsBlockedUntil = 0;
+
 async function fetchPollinationsStory(): Promise<StoryPage> {
+  if (Date.now() < pollinationsBlockedUntil) {
+    throw new Error('Pollinations blocked (402) — retry after cooldown');
+  }
+
   // Simple GET — no CORS preflight, works on all devices including phones
   const url = `https://text.pollinations.ai/${encodeURIComponent(POLLINATIONS_PROMPT)}?model=openai&json=true`;
   const res = await fetchWithTimeout(url, {}, 25000);
+
+  if (res.status === 402) {
+    pollinationsBlockedUntil = Date.now() + FOUR_HOURS_MS;
+    throw new Error('Pollinations returned 402 — blocked for 4 hours');
+  }
+
   if (!res.ok) throw new Error(`Pollinations error: ${res.status}`);
   return parseStoryJson(await res.text());
 }
@@ -60,7 +73,10 @@ export async function getNewStoryPage(
       return await fetchPollinationsStory();
     } catch (e) {
       console.warn('Pollinations story failed, falling back to template:', e);
-      onStatusChange('🧩 Template Engine (Pollinations failed)', '#0284c7');
+      const msg = e instanceof Error && e.message.includes('402')
+        ? '🧩 Template Engine (Pollinations limit — retry in 4h)'
+        : '🧩 Template Engine (Pollinations failed)';
+      onStatusChange(msg, '#0284c7');
     }
   }
 
