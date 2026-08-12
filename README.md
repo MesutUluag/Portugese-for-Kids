@@ -1,6 +1,8 @@
 # 🎈 Portuguese Kids Playground
 
-An interactive, single-file Portuguese learning app for kids — no backend, no dependencies, just open `index.html` in a browser.
+🌐 **Live at: [mesutuluag.github.io/Portugese-for-Kids](https://mesutuluag.github.io/Portugese-for-Kids/)**
+
+An interactive, single-file Portuguese learning app for kids — no backend, no dependencies, just open in a browser.
 
 ## Features
 
@@ -28,6 +30,13 @@ The Story mode uses a 3-tier AI fallback chain, probed **once at startup**:
 3. Verify in DevTools: `await LanguageModel.availability()` → should return `"readily"`
 
 > **Note:** Chrome Built-in AI is blocked by enterprise MDM policies on managed devices. Pollinations AI will be used automatically as fallback when served over HTTP/HTTPS.
+
+## Deployment
+
+The app is deployed via **GitHub Pages** and available at:
+**https://mesutuluag.github.io/Portugese-for-Kids/**
+
+Every `git push` to `main` automatically redeploys.
 
 ## Running Locally
 
