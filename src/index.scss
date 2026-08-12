@@ -66,8 +66,9 @@ h1 {
   }
 }
 
-// ─── Score Badge ──────────────────────────────────────────────────────────────
-.score-badge {
+// ─── Score / Time Badge ───────────────────────────────────────────────────────
+.score-badge,
+.time-badge {
   background: $color-amber;
   color: $color-white;
   padding: 10px 16px;
