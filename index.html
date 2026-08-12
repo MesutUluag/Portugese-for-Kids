@@ -416,7 +416,7 @@
     async function fetchChromeBuiltInAIStory() {
       const promptText = `Generate 1 short A1 level European Portuguese sentence for kids with its English translation and 3 fitting emojis. Respond ONLY with raw JSON format: {"pt": "O gato dorme no sofá.", "en": "The cat sleeps on the sofa.", "mainEmoji": "🐱", "bgLeft": "🛋️", "bgRight": "😴"}`;
       const LM = getAILanguageModel();
-      const session = await LM.create();
+      const session = await LM.create({ expectedInputLanguages: ["en"], expectedOutputLanguages: ["en"] });
       const result = await session.prompt(promptText);
       session.destroy();
       const rawText = result.replace(/```json|```/g, "").trim();
