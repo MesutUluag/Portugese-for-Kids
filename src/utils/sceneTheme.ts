@@ -1,5 +1,37 @@
 import { StoryPage } from '../data/words';
 
+// Maps emoji characters to English Wikipedia search terms
+export const emojiToSearchTerm: Record<string, string> = {
+  // Animals
+  '🐱': 'cat', '🐶': 'dog', '🐰': 'rabbit', '🐻': 'bear', '🦋': 'butterfly',
+  '🐦': 'bird', '🐴': 'horse', '🐄': 'cow', '🐘': 'elephant', '🦁': 'lion',
+  '🦒': 'giraffe', '🐟': 'fish', '🐠': 'tropical fish', '🐢': 'turtle',
+  '🦆': 'duck', '🐸': 'frog', '🐧': 'penguin', '🦊': 'fox', '🐺': 'wolf',
+  '🦅': 'eagle', '🦜': 'parrot', '🐬': 'dolphin', '🐳': 'whale', '🦓': 'zebra',
+  // People
+  '👦': 'boy', '👧': 'girl', '👩': 'woman', '👨': 'man', '👵': 'grandmother',
+  '👴': 'grandfather', '👶': 'baby', '🧒': 'child', '👩‍🏫': 'teacher',
+  '👨‍👩‍👧': 'family',
+  // Food & drink
+  '🥕': 'carrot', '🍎': 'apple', '🍌': 'banana', '🍊': 'orange', '🍰': 'cake',
+  '🎂': 'birthday cake', '🥛': 'milk', '🥤': 'juice', '🍼': 'baby bottle',
+  '🍱': 'bento box', '🍽️': 'dinner plate', '🐟': 'fish', '🥗': 'salad',
+  // Nature
+  '🌳': 'tree', '🌲': 'pine tree', '🌿': 'leaf', '🌱': 'seedling',
+  '🌸': 'cherry blossom', '🌺': 'flower', '🌻': 'sunflower', '🌷': 'tulip',
+  '🌾': 'wheat', '🍂': 'autumn leaf', '🍃': 'leaves', '🌵': 'cactus',
+  '🌴': 'palm tree',
+  // Objects
+  '📚': 'books', '📖': 'open book', '🎸': 'guitar', '🎵': 'music',
+  '⚽': 'football', '🎨': 'palette', '🖌️': 'paintbrush', '📓': 'notebook',
+  '🚗': 'car', '🏫': 'school', '🛏️': 'bed', '🕯️': 'candle',
+  // Weather / sky
+  '☀️': 'sun', '🌙': 'moon', '❄️': 'snowflake', '⛄': 'snowman',
+  '🌊': 'ocean wave', '💧': 'water drop', '🌈': 'rainbow',
+  // Places
+  '🏖️': 'beach', '🏔️': 'mountain', '🏟️': 'stadium',
+};
+
 export interface SceneTheme {
   skyTop: string;
   skyBottom: string;

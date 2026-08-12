@@ -24,6 +24,18 @@
   }
 }
 
+.game-target-label {
+  font-size: 13px;
+  font-weight: bold;
+  color: $color-text-muted;
+  margin: 4px 0 8px;
+  text-align: center;
+
+  @media (min-width: 480px) {
+    font-size: 15px;
+  }
+}
+
 .game-options {
   display: grid;
   grid-template-columns: 1fr 1fr;
