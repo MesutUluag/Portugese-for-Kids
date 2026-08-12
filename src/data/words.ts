@@ -319,6 +319,44 @@ export const actions: StoryAction[] = [
   { pt: "dança com alegria", en: "dances with joy", leftBg: "🎵", rightBg: "🌟" },
 ];
 
+// Curated fallback sentences — every subject+action pair is realistic and contextually correct.
+// Used when AI is unavailable so we never show nonsensical combinations.
+export const templatePages: StoryPage[] = [
+  // Animals in their natural habitat
+  { pt: "O cão feliz corre no parque.", en: "The happy dog runs in the park.", mainEmoji: "🐶", bgLeft: "🌳", bgRight: "⚽" },
+  { pt: "O gato curioso bebe leite.", en: "The curious cat drinks milk.", mainEmoji: "🐱", bgLeft: "🥛", bgRight: "🍼" },
+  { pt: "O coelho pequeno come uma cenoura.", en: "The little rabbit eats a carrot.", mainEmoji: "🐰", bgLeft: "🥕", bgRight: "🌿" },
+  { pt: "O urso grande dorme na floresta.", en: "The big bear sleeps in the forest.", mainEmoji: "🐻", bgLeft: "🌲", bgRight: "🍂" },
+  { pt: "A borboleta colorida voa no jardim.", en: "The colorful butterfly flies in the garden.", mainEmoji: "🦋", bgLeft: "🌸", bgRight: "🌺" },
+  { pt: "O pássaro cantor canta de manhã.", en: "The singing bird sings in the morning.", mainEmoji: "🐦", bgLeft: "☀️", bgRight: "🌿" },
+  { pt: "O cavalo veloz corre no campo.", en: "The fast horse runs in the field.", mainEmoji: "🐴", bgLeft: "🌾", bgRight: "🌻" },
+  { pt: "A tartaruga lenta anda na praia.", en: "The slow turtle walks on the beach.", mainEmoji: "🐢", bgLeft: "🏖️", bgRight: "🌊" },
+  { pt: "O elefante enorme bebe água.", en: "The huge elephant drinks water.", mainEmoji: "🐘", bgLeft: "💧", bgRight: "🌴" },
+  { pt: "O pato amarelo nada no lago.", en: "The yellow duck swims in the lake.", mainEmoji: "🦆", bgLeft: "💧", bgRight: "🌊" },
+  { pt: "O leão corajoso dorme ao sol.", en: "The brave lion sleeps in the sun.", mainEmoji: "🦁", bgLeft: "☀️", bgRight: "🌾" },
+  { pt: "A vaca mansa come erva verde.", en: "The gentle cow eats green grass.", mainEmoji: "🐄", bgLeft: "🌱", bgRight: "🌿" },
+  { pt: "O peixe dourado nada no mar.", en: "The golden fish swims in the sea.", mainEmoji: "🐟", bgLeft: "🌊", bgRight: "🐚" },
+  { pt: "O sapo verde salta no lago.", en: "The green frog jumps in the lake.", mainEmoji: "🐸", bgLeft: "💧", bgRight: "🌿" },
+  { pt: "A girafa alta come folhas.", en: "The tall giraffe eats leaves.", mainEmoji: "🦒", bgLeft: "🌿", bgRight: "🌳" },
+  { pt: "A ovelha branca come erva.", en: "The white sheep eats grass.", mainEmoji: "🐑", bgLeft: "🌱", bgRight: "🌾" },
+  // People doing everyday activities
+  { pt: "O menino come uma maçã vermelha.", en: "The boy eats a red apple.", mainEmoji: "👦", bgLeft: "🍎", bgRight: "🌟" },
+  { pt: "A menina lê um livro.", en: "The girl reads a book.", mainEmoji: "👧", bgLeft: "📚", bgRight: "✏️" },
+  { pt: "A mãe carinhosa faz um bolo.", en: "The caring mother makes a cake.", mainEmoji: "👩", bgLeft: "🎂", bgRight: "🍰" },
+  { pt: "O pai trabalhador lava o carro.", en: "The hardworking father washes the car.", mainEmoji: "👨", bgLeft: "🚗", bgRight: "🪣" },
+  { pt: "O bebé pequenino dorme na cama.", en: "The tiny baby sleeps in the bed.", mainEmoji: "👶", bgLeft: "🛏️", bgRight: "🌙" },
+  { pt: "A avó gentil conta uma história.", en: "The kind grandmother tells a story.", mainEmoji: "👵", bgLeft: "📖", bgRight: "🕯️" },
+  { pt: "O avô simpático planta flores.", en: "The friendly grandfather plants flowers.", mainEmoji: "👴", bgLeft: "🌷", bgRight: "🌱" },
+  { pt: "A criança linda brinca no jardim.", en: "The pretty child plays in the garden.", mainEmoji: "🧒", bgLeft: "⚽", bgRight: "🌳" },
+  { pt: "O menino bebe sumo de laranja.", en: "The boy drinks orange juice.", mainEmoji: "👦", bgLeft: "🍊", bgRight: "🥤" },
+  { pt: "A menina pinta um quadro.", en: "The girl paints a picture.", mainEmoji: "👧", bgLeft: "🎨", bgRight: "🖌️" },
+  { pt: "O menino joga futebol no parque.", en: "The boy plays football in the park.", mainEmoji: "👦", bgLeft: "⚽", bgRight: "🏟️" },
+  { pt: "A professora ensina na escola.", en: "The teacher teaches at school.", mainEmoji: "👩‍🏫", bgLeft: "📚", bgRight: "🏫" },
+  { pt: "A família feliz come ao jantar.", en: "The happy family eats dinner.", mainEmoji: "👨‍👩‍👧", bgLeft: "🍽️", bgRight: "🕯️" },
+  { pt: "A menina dança com alegria.", en: "The girl dances with joy.", mainEmoji: "👧", bgLeft: "🎵", bgRight: "🌟" },
+  { pt: "O estudante esforçado escreve no caderno.", en: "The hardworking student writes in the notebook.", mainEmoji: "🎓", bgLeft: "📓", bgRight: "✏️" },
+];
+
 export const chromePhrases: StoryPage[] = [
   { pt: "O gato bebe leite.", en: "The cat drinks milk.", mainEmoji: "🐱", bgLeft: "🥛", bgRight: "🍼" },
   { pt: "O cão corre no parque.", en: "The dog runs in the park.", mainEmoji: "🐶", bgLeft: "🌳", bgRight: "⚽" },
