@@ -50,7 +50,7 @@ export default function Game3({ onScore }: Props): React.ReactElement {
         setFlipped([]);
         onScore(15);
         if (newMatched.length === 6) {
-          setTimeout(() => { speakText('Excelente!'); load(); }, 1000);
+          setTimeout(() => { load(); }, 1000);
         }
       } else {
         setBlocked(true);

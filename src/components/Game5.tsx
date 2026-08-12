@@ -40,11 +40,11 @@ export default function Game5({ onScore }: Props): React.ReactElement {
       if (newInput.join('') === target.pt) {
         setAnimClass('correct-anim');
         onScore(15);
-        speakText('Excelente! ' + target.pt);
+        speakText(target.pt);
         setTimeout(() => { setAnimClass(''); load(); }, 1200);
       } else {
         setAnimClass('wrong-anim');
-        speakText('A resposta certa é ' + target.pt);
+        speakText(target.pt);
         setTimeout(() => { setAnimClass(''); load(); }, 2000);
       }
     }

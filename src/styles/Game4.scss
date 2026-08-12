@@ -47,6 +47,12 @@
 
   &:active { transform: scale(0.95); }
 
+  &--disabled {
+    opacity: 0.4;
+    cursor: default;
+    pointer-events: none;
+  }
+
   @media (hover: hover) {
     &:hover { transform: scale(1.1); }
   }

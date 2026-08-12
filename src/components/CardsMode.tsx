@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import { kidsWords } from '../data/words';
+import { kidsWords, Word } from '../data/words';
 import { speakText } from '../utils/speech';
 import '../styles/CardsMode.scss';
 
 export default function CardsMode(): React.ReactElement {
   const [query, setQuery] = useState('');
+  
+  // Shuffle the words list once on mount so the learning cards appear in a fresh, randomized order each visit
+  const [shuffledWords] = useState<Word[]>(() => shuffleArray(kidsWords));
 
   const filtered = query
-    ? kidsWords.filter(
+    ? shuffledWords.filter(
         (w) =>
           w.pt.toLowerCase().includes(query.toLowerCase()) ||
           w.en.toLowerCase().includes(query.toLowerCase())
       )
-    : kidsWords;
+    : shuffledWords;
 
   return (
     <>
@@ -39,4 +42,14 @@ export default function CardsMode(): React.ReactElement {
       </div>
     </>
   );
+}
+
+// Fisher-Yates shuffle algorithm to generate an unbiased, randomized copy of the words array
+function shuffleArray<T>(array: T[]): T[] {
+  const arr = [...array];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
