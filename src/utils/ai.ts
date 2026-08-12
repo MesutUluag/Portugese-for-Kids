@@ -44,7 +44,7 @@ export async function initAI(
 
   // 2. Pollinations AI
   try {
-    const testUrl = `https://text.pollinations.ai/${encodeURIComponent('reply with the single word: ok')}?model=openai`;
+    const testUrl = `https://text.pollinations.ai/${encodeURIComponent('reply with the single word: ok')}`;
     const res = await fetch(testUrl, { signal: AbortSignal.timeout(8000) });
     if (res.ok) {
       onStatusChange('🌸 Pollinations AI (Free, No Key)', '#8b5cf6');
@@ -87,7 +87,7 @@ function pollChromeAIReady(LM: any, onStatusChange: (text: string, color: string
 
 async function fetchPollinationsStory(): Promise<StoryPage> {
   const prompt = `Generate 1 short A1 level European Portuguese sentence for kids with its English translation and 3 fitting emojis. Respond ONLY with raw JSON, no extra text: {"pt": "O gato dorme no sofá.", "en": "The cat sleeps on the sofa.", "mainEmoji": "🐱", "bgLeft": "🛋️", "bgRight": "😴"}`;
-  const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai&json=true`;
+  const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?json=true`;
   const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
   if (!response.ok) throw new Error(`Pollinations error: ${response.status}`);
   const text = await response.text();
