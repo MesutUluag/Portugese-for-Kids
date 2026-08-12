@@ -41,7 +41,7 @@ export default function App(): React.ReactElement {
   ];
 
   return (
-    <>
+    <div className="app">
       <h1>🎈 Portuguese Kids Playground 🎨</h1>
       <div className={`score-badge${bounce ? ' bounce' : ''}`}>⭐ Stars: {score}</div>
 
@@ -67,6 +67,6 @@ export default function App(): React.ReactElement {
       {mode === 'game3' && <Game3 onScore={addScore} />}
       {mode === 'game4' && <Game4 onScore={addScore} />}
       {mode === 'game5' && <Game5 onScore={addScore} />}
-    </>
+    </div>
   );
 }
