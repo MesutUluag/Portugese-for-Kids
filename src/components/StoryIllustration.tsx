@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StoryPage } from '../data/words';
 import { SceneTheme } from '../utils/sceneTheme';
+import { usePollinationsImage } from '../utils/usePollinationsImage';
 
 interface Props {
   page: StoryPage;
@@ -15,14 +16,11 @@ function buildPrompt(page: StoryPage): string {
 }
 
 export default function StoryIllustration({ page, pageKey, sceneVars }: Props): React.ReactElement {
-  const [loaded, setLoaded] = useState(false);
-  const [errored, setErrored] = useState(false);
-
   const prompt = buildPrompt(page);
-  const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=780&height=360&nologo=true&seed=${pageKey}`;
+  const pollUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=780&height=360&nologo=true&seed=${pageKey}`;
+  const imgResult = usePollinationsImage(pollUrl);
 
-  // Current photo ready; show CSS scene while loading (no old-photo fallback)
-  const photoActive = loaded && !errored;
+  const photoActive = typeof imgResult === 'string';
   const hasPhoto = photoActive;
 
   return (
@@ -31,22 +29,12 @@ export default function StoryIllustration({ page, pageKey, sceneVars }: Props): 
       style={{
         ...sceneVars,
         ...(hasPhoto ? {
-          backgroundImage: `url(${imgUrl})`,
+          backgroundImage: `url(${imgResult})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center top',
         } : {}),
       }}
     >
-      {/* Silently preload the new image */}
-      <img
-        key={imgUrl}
-        src={imgUrl}
-        alt=""
-        style={{ display: 'none' }}
-        onLoad={() => { setLoaded(true); setErrored(false); }}
-        onError={() => setErrored(true)}
-      />
-
       {/* Overlay for readability over photo */}
       {hasPhoto && <div className="story-photo-overlay" />}
 
