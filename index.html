@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Learn Portuguese - Kids Playground 🎈</title>
+  <style>
+    * { box-sizing: border-box; font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', sans-serif; }
+    body { background: #fef9c3; margin: 0; padding: 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+    
+    h1 { color: #d97706; margin-bottom: 5px; font-size: 24px; text-shadow: 2px 2px #fde047; text-align: center; }
+    
+    .score-badge { background: #f59e0b; color: white; padding: 8px 18px; border-radius: 20px; font-size: 18px; font-weight: bold; margin-bottom: 15px; display: inline-block; box-shadow: 0 4px 10px rgba(0,0,0,0.1); transition: transform 0.2s; }
+    .score-badge.bounce { transform: scale(1.2); }
+
+    .nav-buttons { display: flex; gap: 8px; margin-bottom: 15px; flex-wrap: wrap; justify-content: center; }
+    .btn { padding: 10px 14px; border: none; border-radius: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 14px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+    .btn-kids { background: #f59e0b; color: white; border: 3px solid #fef08a; }
+    .btn-game1 { background: #10b981; color: white; border: 3px solid #a7f3d0; }
+    .btn-game2 { background: #ec4899; color: white; border: 3px solid #fbcfe8; }
+    .btn-game3 { background: #8b5cf6; color: white; border: 3px solid #ddd6fe; }
+    .btn-game4 { background: #3b82f6; color: white; border: 3px solid #bfdbfe; }
+    .btn-game5 { background: #f97316; color: white; border: 3px solid #fed7aa; }
+    .btn-story { background: #06b6d4; color: white; border: 3px solid #a5f3fc; }
+    .btn:hover { transform: scale(1.05); }
+
+    .search-box { width: 100%; max-width: 480px; padding: 12px; border-radius: 16px; border: 3px solid #fde047; margin-bottom: 15px; font-size: 16px; font-weight: bold; }
+
+    /* Kids Cards Grid */
+    .kids-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; width: 100%; max-width: 500px; }
+    .kids-card { background: white; border-radius: 24px; padding: 15px; text-align: center; box-shadow: 0 8px 20px rgba(0,0,0,0.08); cursor: pointer; transition: 0.3s; border: 4px solid #fef08a; position: relative; }
+    .kids-card:hover { transform: translateY(-5px) scale(1.03); border-color: #f59e0b; background: #fffde7; }
+    .kids-emoji { font-size: 50px; display: block; margin-bottom: 5px; }
+    .kids-pt { font-size: 18px; font-weight: bold; color: #1e3a8a; }
+    .kids-en { font-size: 13px; color: #64748b; font-weight: bold; }
+    .sound-icon { position: absolute; top: 8px; right: 10px; font-size: 16px; opacity: 0.6; }
+
+    /* Generic Game Container */
+    .game-container { background: white; width: 100%; max-width: 440px; padding: 25px; border-radius: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: none; text-align: center; border: 4px solid #f59e0b; position: relative; }
+
+    /* UX Animations for Games */
+    @keyframes correctPulse { 0% { background: #dcfce7; } 50% { transform: scale(1.05); } 100% { background: white; } }
+    @keyframes wrongShake { 0%, 100% { transform: translateX(0); } 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+    
+    .correct-anim { animation: correctPulse 0.5s ease; border-color: #22c55e !important; }
+    .wrong-anim { animation: wrongShake 0.4s ease; border-color: #ef4444 !important; }
+
+    /* Story Mode Styles */
+    .story-card { background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%); border-radius: 24px; padding: 20px; border: 4px solid #0284c7; }
+    .story-illustration {
+      border-radius: 20px; height: 200px; margin-bottom: 15px; position: relative;
+      overflow: hidden; border: 3px solid #0284c7;
+      background: linear-gradient(180deg, #7dd3fc 0%, #bae6fd 55%, #86efac 55%, #4ade80 100%);
+    }
+    .story-sky { position: absolute; inset: 0; height: 55%; }
+    .story-ground { position: absolute; bottom: 0; left: 0; right: 0; height: 45%; }
+    .story-sun { position: absolute; top: 10px; right: 18px; font-size: 32px; animation: sunSpin 8s linear infinite; }
+    @keyframes sunSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .story-cloud { position: absolute; font-size: 28px; opacity: 0.85; animation: cloudDrift 12s linear infinite; }
+    .story-cloud.c2 { animation-duration: 18s; animation-delay: -6s; top: 18px; font-size: 22px; }
+    @keyframes cloudDrift { 0% { transform: translateX(-60px); } 100% { transform: translateX(calc(100vw + 60px)); } }
+    .story-main-emoji { position: absolute; bottom: 28%; left: 50%; transform: translateX(-50%); font-size: 72px; z-index: 3; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15)); animation: characterBob 2s ease-in-out infinite; }
+    @keyframes characterBob { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(-6px); } }
+    .story-bg-left { position: absolute; bottom: 2px; left: 18px; font-size: 38px; z-index: 2; }
+    .story-bg-right { position: absolute; bottom: 2px; right: 18px; font-size: 38px; z-index: 2; }
+    .story-grass { position: absolute; bottom: 38%; left: 0; right: 0; font-size: 22px; text-align: center; letter-spacing: 2px; opacity: 0.7; }
+    .story-illustration .bg-element { position: absolute; font-size: 35px; opacity: 0.6; }
+    .story-text-pt { font-size: 20px; font-weight: bold; color: #0369a1; margin-bottom: 10px; line-height: 1.4; min-height: 56px; display: flex; align-items: center; justify-content: center; }
+    .story-text-en { font-size: 14px; color: #64748b; font-weight: bold; margin-bottom: 15px; min-height: 38px; display: flex; align-items: center; justify-content: center; }
+    .story-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; }
+    .btn-story-action { background: #0284c7; color: white; padding: 10px 18px; border-radius: 16px; border: none; font-weight: bold; cursor: pointer; font-size: 15px; transition: 0.2s; }
+    .btn-story-action:hover { transform: scale(1.05); }
+    .btn-story-audio { background: #f43f5e; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 24px; cursor: pointer; transition: 0.2s; margin-bottom: 10px; }
+    .btn-story-audio:hover { transform: scale(1.1); }
+    .badge-ai { background: #0284c7; color: white; font-size: 11px; padding: 4px 10px; border-radius: 12px; font-weight: bold; display: inline-block; margin-bottom: 10px; }
+
+    /* Game 1: Picture Game */
+    .game-target { font-size: 80px; margin: 10px 0; cursor: pointer; transition: transform 0.2s; }
+    .game-target:hover { transform: scale(1.1); }
+    .game-options { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 15px; }
+    .game-opt { padding: 15px; border: 3px solid #cbd5e1; border-radius: 16px; background: #f8fafc; font-size: 18px; font-weight: bold; color: #1e293b; cursor: pointer; transition: 0.2s; }
+    .game-opt:hover { background: #e2e8f0; border-color: #10b981; }
+
+    /* Game 2: Listen & Find */
+    .audio-speaker-btn { background: #fbcfe8; border: 4px solid #ec4899; border-radius: 50%; width: 90px; height: 90px; font-size: 45px; cursor: pointer; margin: 10px auto; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .audio-speaker-btn:hover { transform: scale(1.08); }
+    .emoji-options { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+    .emoji-opt { background: #f8fafc; border: 3px solid #cbd5e1; border-radius: 20px; padding: 12px; font-size: 50px; cursor: pointer; transition: 0.2s; }
+    .emoji-opt:hover { background: #fce7f3; border-color: #ec4899; transform: scale(1.05); }
+
+    /* Game 3: Memory Game */
+    .memory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+    .memory-card { background: #8b5cf6; border: 3px solid #7c3aed; border-radius: 16px; height: 90px; display: flex; align-items: center; justify-content: center; font-size: 40px; color: white; cursor: pointer; transition: 0.3s; }
+    .memory-card.flipped { background: white; color: #1e293b; border-color: #f59e0b; }
+
+    /* Game 4: Fill Blanks */
+    .blank-display { font-size: 32px; font-weight: bold; letter-spacing: 4px; color: #1e3a8a; margin: 15px 0; }
+    .letter-options { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
+    .letter-btn { background: #3b82f6; color: white; border: none; border-radius: 12px; width: 50px; height: 50px; font-size: 22px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .letter-btn:hover { transform: scale(1.1); }
+
+    /* Game 5: Scramble */
+    .scramble-slots { font-size: 28px; font-weight: bold; letter-spacing: 4px; color: #d97706; margin: 15px 0; border-bottom: 3px dashed #f59e0b; padding-bottom: 8px; min-height: 45px; display: flex; justify-content: center; gap: 6px; }
+    .scramble-letters { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 15px; }
+    .scramble-btn { background: #f97316; color: white; border: none; border-radius: 12px; padding: 10px 16px; font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .scramble-btn:hover { transform: scale(1.08); }
+    .scramble-controls { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+    .btn-reset { background: #ef4444; color: white; padding: 6px 14px; border-radius: 12px; border: none; font-weight: bold; cursor: pointer; font-size: 13px; }
+    .hint-text { color: #64748b; font-size: 15px; font-weight: bold; margin-top: 8px; }
+  </style>
+</head>
+<body>
+
+  <h1>🎈 Portuguese Kids Playground 🎨</h1>
+  <div class="score-badge" id="scoreDisplay">⭐ Stars: 0</div>
+
+  <div class="nav-buttons">
+    <button class="btn btn-kids" onclick="setMode('cards')">🖼️ Cards</button>
+    <button class="btn btn-story" onclick="setMode('story')">📖 Story</button>
+    <button class="btn btn-game1" onclick="setMode('game1')">🎯 Picture Game</button>
+    <button class="btn btn-game2" onclick="setMode('game2')">🎧 Listen & Find</button>
+    <button class="btn btn-game3" onclick="setMode('game3')">🃏 Memory Match</button>
+    <button class="btn btn-game4" onclick="setMode('game4')">✍️ Fill Blank</button>
+    <button class="btn btn-game5" onclick="setMode('game5')">🧩 Scramble</button>
+  </div>
+
+  <input type="text" id="searchInput" class="search-box" placeholder="🔍 Search word (e.g. dormir, dog, falar)..." oninput="filterCards()">
+
+  <!-- Cards Mode -->
+  <div id="cardsMode" class="kids-grid"></div>
+
+  <!-- Story Mode Container -->
+  <div id="storyContainer" class="game-container" style="border-color: #0284c7;">
+    <span class="badge-ai" id="aiStatusBadge">Checking Chrome Built-in AI...</span>
+    <div class="story-card">
+      <div class="story-illustration" id="storyScene"></div>
+      <button class="btn-story-audio" onclick="speakStoryText()" title="Listen to Sentence">🔊</button>
+      <div class="story-text-pt" id="storyTextPt">...</div>
+      <div class="story-text-en" id="storyTextEn">...</div>
+      <div class="story-nav">
+        <button class="btn-story-action" onclick="prevStory()">⬅️ Anterior</button>
+        <span id="storyPageNum" style="font-weight: bold; color: #0284c7;">Página 1</span>
+        <button class="btn-story-action" onclick="nextStory()">Próximo ➡️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game 1: Picture Game -->
+  <div id="game1Container" class="game-container" style="border-color: #10b981;">
+    <h2 style="color: #10b981; margin:0;">Which word is this? 🔊</h2>
+    <div class="game-target" id="g1Emoji" onclick="speakG1()" title="Click to listen">🐶</div>
+    <div class="game-options" id="g1Options"></div>
+  </div>
+
+  <!-- Game 2: Listen & Find -->
+  <div id="game2Container" class="game-container" style="border-color: #ec4899;">
+    <h2 style="color: #ec4899; margin:0;">Tap to Listen! 🔊</h2>
+    <div class="audio-speaker-btn" onclick="speakG2()">🔊</div>
+    <p style="color: #64748b; font-weight: bold; margin: 0;">Which picture did you hear?</p>
+    <div class="emoji-options" id="g2Options"></div>
+  </div>
+
+  <!-- Game 3: Memory Match -->
+  <div id="game3Container" class="game-container" style="border-color: #8b5cf6;">
+    <h2 style="color: #8b5cf6; margin:0;">🃏 Memory Match</h2>
+    <p style="color: #64748b; margin: 5px 0;">Find matching emoji pairs!</p>
+    <div class="memory-grid" id="g3Grid"></div>
+  </div>
+
+  <!-- Game 4: Fill in the Blanks -->
+  <div id="game4Container" class="game-container" style="border-color: #3b82f6;">
+    <h2 style="color: #3b82f6; margin:0;">✍️ Fill Missing Letter</h2>
+    <div class="game-target" id="g4Emoji" style="font-size: 60px;">😴</div>
+    <div class="blank-display" id="g4Blank">d _ r m i r</div>
+    <div class="letter-options" id="g4Options"></div>
+  </div>
+
+  <!-- Game 5: Word Scramble -->
+  <div id="game5Container" class="game-container" style="border-color: #f97316;">
+    <h2 style="color: #f97316; margin:0;">🧩 Unscramble Word</h2>
+    <div class="game-target" id="g5Emoji" style="font-size: 60px;" onclick="speakG5()">🍎</div>
+    <div class="scramble-slots" id="g5Slots">_ _ _ _</div>
+    <div class="hint-text" id="g5Hint">Meaning: apple</div>
+    <div class="scramble-letters" id="g5Letters"></div>
+    <div class="scramble-controls">
+      <button class="btn-reset" onclick="resetG5()">🔄 Clear / Undo</button>
+    </div>
+  </div>
+
+  <script>
+    const kidsWords = [
+      { pt: "acabar", en: "to finish / end", emoji: "🏁" },
+      { pt: "ajudar", en: "to help", emoji: "🤝" },
+      { pt: "começar", en: "to start / begin", emoji: "🚀" },
+      { pt: "gostar", en: "to like", emoji: "❤️" },
+      { pt: "perguntar", en: "to ask", emoji: "❓" },
+      { pt: "chegar", en: "to arrive", emoji: "🏁" },
+      { pt: "fechar", en: "to close / shut", emoji: "🔒" },
+      { pt: "desenhar", en: "to draw", emoji: "🎨" },
+      { pt: "fazer", en: "to do / make", emoji: "🛠️" },
+      { pt: "ouvir", en: "to listen / hear", emoji: "🎧" },
+      { pt: "dormir", en: "to sleep", emoji: "😴" },
+      { pt: "ver", en: "to see", emoji: "👀" },
+      { pt: "ir", en: "to go", emoji: "🏃" },
+      { pt: "vir", en: "to come", emoji: "🚶" },
+      { pt: "ler", en: "to read", emoji: "📖" },
+      { pt: "dar", en: "to give", emoji: "🎁" },
+      { pt: "poder", en: "can / to be able to", emoji: "💪" },
+      { pt: "dizer", en: "to say / tell", emoji: "🗣️" },
+      { pt: "ficar", en: "to stay / become", emoji: "🏠" },
+      { pt: "incomodar", en: "to bother", emoji: "🐝" },
+      { pt: "medir", en: "to measure", emoji: "📏" },
+      { pt: "trazer", en: "to bring", emoji: "🎒" },
+      { pt: "saber", en: "to know", emoji: "💡" },
+      { pt: "odiar", en: "to hate", emoji: "😡" },
+      { pt: "querer", en: "to want", emoji: "🌟" },
+      { pt: "escrever", en: "to write", emoji: "✍️" },
+      { pt: "sair", en: "to leave / go out", emoji: "🚪" },
+      { pt: "jantar", en: "to have dinner", emoji: "🍽️" },
+      { pt: "pensar", en: "to think", emoji: "🤔" },
+      { pt: "brincar", en: "to play", emoji: "🧸" },
+      { pt: "ser", en: "to be (permanent)", emoji: "👤" },
+      { pt: "estar", en: "to be (temporary)", emoji: "📍" },
+      { pt: "aberta", en: "open", emoji: "🔓" },
+      { pt: "fechada", en: "closed", emoji: "🔒" },
+      { pt: "triste", en: "sad", emoji: "😢" },
+      { pt: "feliz", en: "happy", emoji: "😊" },
+      { pt: "alto", en: "tall / high", emoji: "🦒" },
+      { pt: "pobre", en: "poor", emoji: "🪙" },
+      { pt: "caro", en: "expensive", emoji: "💎" },
+      { pt: "barato", en: "cheap", emoji: "🏷️" },
+      { pt: "lindo", en: "pretty / gorgeous", emoji: "✨" },
+      { pt: "giro", en: "cute / nice", emoji: "🥳" },
+      { pt: "bonito", en: "handsome / pretty", emoji: "🌸" },
+      { pt: "feio", en: "ugly", emoji: "👹" },
+      { pt: "morta", en: "dead", emoji: "🪦" },
+      { pt: "jovem", en: "young", emoji: "👶" },
+      { pt: "novo", en: "new", emoji: "🎁" },
+      { pt: "velho", en: "old", emoji: "👴" },
+      { pt: "antigo", en: "ancient / antique", emoji: "🏛️" },
+      { pt: "bom", en: "good", emoji: "👍" },
+      { pt: "mau", en: "bad", emoji: "👎" },
+      { pt: "longo", en: "long", emoji: "🐍" },
+      { pt: "curto", en: "short", emoji: "🐛" },
+      { pt: "certo", en: "right / correct", emoji: "✅" },
+      { pt: "errado", en: "wrong", emoji: "❌" },
+      { pt: "difícil", en: "difficult", emoji: "🧩" },
+      { pt: "fácil", en: "easy", emoji: "🎈" },
+      { pt: "saudável", en: "healthy", emoji: "🥗" },
+      { pt: "doente", en: "sick", emoji: "🤒" },
+      { pt: "magro", en: "thin", emoji: "🏃" },
+      { pt: "gordo", en: "fat", emoji: "🐼" },
+      { pt: "melhor", en: "better", emoji: "🥇" },
+      { pt: "seco", en: "dry", emoji: "☀️" },
+      { pt: "molhado", en: "wet", emoji: "🌧️" },
+      { pt: "atual", en: "current / present", emoji: "⏰" },
+      { pt: "pais", en: "parents", emoji: "👨‍👩‍👧" },
+      { pt: "filho", en: "son", emoji: "👦" },
+      { pt: "filha", en: "daughter", emoji: "👧" },
+      { pt: "filhos", en: "children", emoji: "👶" },
+      { pt: "rapaz", en: "boy", emoji: "👦" },
+      { pt: "rapariga", en: "girl", emoji: "👧" },
+      { pt: "avô", en: "grandfather", emoji: "👴" },
+      { pt: "pai", en: "father", emoji: "👨" },
+      { pt: "mãe", en: "mother", emoji: "👩" },
+      { pt: "criança", en: "child", emoji: "🧒" },
+      { pt: "pessoas", en: "people", emoji: "👥" },
+      { pt: "aluno", en: "student", emoji: "🎓" },
+      { pt: "almoço", en: "lunch", emoji: "🍱" },
+      { pt: "jantar", en: "dinner", emoji: "🍽️" },
+      { pt: "padaria", en: "bakery", emoji: "🥖" },
+      { pt: "faca", en: "knife", emoji: "🔪" },
+      { pt: "garfo", en: "fork", emoji: "🍴" },
+      { pt: "leite", en: "milk", emoji: "🥛" },
+      { pt: "vinho", en: "wine", emoji: "🍷" },
+      { pt: "sumo", en: "juice", emoji: "🧃" },
+      { pt: "doce", en: "sweet / candy", emoji: "🍬" },
+      { pt: "praia", en: "beach", emoji: "🏖️" },
+      { pt: "jogo", en: "game / match", emoji: "🎮" },
+      { pt: "portas", en: "doors", emoji: "🚪" },
+      { pt: "jóias", en: "jewelry", emoji: "💎" },
+      { pt: "cabelo", en: "hair", emoji: "💇" },
+      { pt: "malas", en: "bags / suitcases", emoji: "🧳" },
+      { pt: "cão", en: "dog", emoji: "🐶" },
+      { pt: "saldo", en: "balance", emoji: "💳" },
+      { pt: "pagamento", en: "payment", emoji: "💶" },
+      { pt: "valor", en: "value", emoji: "🏷️" },
+      { pt: "canção", en: "song", emoji: "🎵" },
+      { pt: "palavra", en: "word", emoji: "💬" },
+      { pt: "matéria", en: "subject / material", emoji: "📚" },
+      { pt: "loja", en: "store / shop", emoji: "🏪" },
+      { pt: "calor", en: "heat", emoji: "🔥" },
+      { pt: "verdade", en: "truth", emoji: "🕊️" },
+      { pt: "cama", en: "bed", emoji: "🛏️" },
+      { pt: "tempo", en: "time / weather", emoji: "🌤️" },
+      { pt: "pergunta", en: "question", emoji: "❓" },
+      { pt: "meu", en: "my", emoji: "🙋‍♂️" },
+      { pt: "dela", en: "her / hers", emoji: "🙋‍♀️" },
+      { pt: "nosso", en: "our", emoji: "👨‍👩‍👧‍👦" },
+      { pt: "isso", en: "that", emoji: "👉" },
+      { pt: "comigo", en: "with me", emoji: "🤝" },
+      { pt: "que", en: "what", emoji: "❓" },
+      { pt: "quem", en: "who", emoji: "🕵️" },
+      { pt: "como", en: "how", emoji: "💡" },
+      { pt: "onde", en: "where", emoji: "🗺️" },
+      { pt: "hoje", en: "today", emoji: "📅" },
+      { pt: "amanhã", en: "tomorrow", emoji: "🌅" },
+      { pt: "agora", en: "now", emoji: "⏰" },
+      { pt: "noite", en: "night", emoji: "🌙" },
+      { pt: "dia", en: "day", emoji: "☀️" },
+      { pt: "depois", en: "later / after", emoji: "⏳" },
+      { pt: "ainda", en: "still / yet", emoji: "⌛" },
+      { pt: "sempre", en: "always", emoji: "♾️" },
+      { pt: "aqui", en: "here", emoji: "📍" },
+      { pt: "fora", en: "outside", emoji: "🏞️" },
+      { pt: "embora", en: "away", emoji: "🚪" },
+      { pt: "apenas", en: "just / only", emoji: "☝️" },
+      { pt: "também", en: "also / too", emoji: "➕" },
+      { pt: "pouco", en: "few / a little", emoji: "🤏" },
+      { pt: "tão", en: "so / such", emoji: "💥" },
+      { pt: "faz sentido", en: "makes sense", emoji: "💡" },
+      { pt: "ter pressa", en: "to be in a hurry", emoji: "🏃💨" },
+      { pt: "ter fome", en: "to be hungry", emoji: "🍔" },
+      { pt: "ter medo", en: "to be afraid", emoji: "😱" },
+      { pt: "ter cuidado", en: "to be careful", emoji: "⚠️" },
+      { pt: "está bem", en: "alright / okay", emoji: "👌" },
+      { pt: "até lá", en: "until then", emoji: "👋" },
+      { pt: "juntos", en: "together", emoji: "👫" }
+    ];
+
+    // TEMPLATE ENGINE FALLBACK COMPONENTS
+    const subjects = [
+      { pt: "O cão feliz", en: "The happy dog", emoji: "🐶" },
+      { pt: "A criança linda", en: "The pretty child", emoji: "🧒" },
+      { pt: "O rapaz jovem", en: "The young boy", emoji: "👦" },
+      { pt: "A rapariga alegre", en: "The cheerful girl", emoji: "👧" },
+      { pt: "O astronauta", en: "The astronaut", emoji: "👨‍🚀" }
+    ];
+
+    const actions = [
+      { pt: "vai para a praia", en: "goes to the beach", leftBg: "☀️", rightBg: "🏖️" },
+      { pt: "come um almoço delicioso", en: "eats a delicious lunch", leftBg: "🍱", rightBg: "🥤" },
+      { pt: "gosta de desenhar", en: "likes to draw", leftBg: "🎨", rightBg: "✏️" },
+      { pt: "vai dormir na cama", en: "goes to sleep in bed", leftBg: "🌙", rightBg: "🛏️" }
+    ];
+
+    let generatedStoryHistory = [];
+    let currentStoryIndex = 0;
+    let score = 0;
+    let activeAudio = null;
+
+    // AI STORY GENERATION
+    // Priority: 1) Chrome Built-in AI  2) Pollinations AI (free, no key)  3) Template fallback
+    // aiState is probed ONCE at startup — never retried if a backend fails.
+    // Values: null (not probed yet) | "chrome" | "pollinations" | "template"
+    let aiState = null;
+
+    function getAILanguageModel() {
+      if (typeof window.LanguageModel !== "undefined") return window.LanguageModel;
+      if (window.ai && window.ai.languageModel) return window.ai.languageModel;
+      return null;
+    }
+
+    // Runs once on page load — probes each backend and caches the result in aiState.
+    async function initAI() {
+      const badge = document.getElementById('aiStatusBadge');
+      badge.innerText = "🔍 Checking AI...";
+
+      // 1. Chrome Built-in AI
+      const LM = getAILanguageModel();
+      if (LM) {
+        try {
+          let available = "no";
+          if (typeof LM.availability === "function") available = await LM.availability();
+          else if (typeof LM.capabilities === "function") { const c = await LM.capabilities(); available = c.available; }
+          if (available !== "no" && available !== "unavailable") {
+            aiState = "chrome";
+            badge.innerText = "✨ Chrome Built-in AI (Gemini Nano On-Device)";
+            badge.style.background = "#10b981";
+            console.log("AI: Chrome Built-in AI ready");
+            return;
+          }
+        } catch (e) { console.warn("Chrome AI probe failed:", e); }
+      }
+
+      // 2. Pollinations AI — send a cheap test request
+      try {
+        const testUrl = `https://text.pollinations.ai/${encodeURIComponent("reply with the single word: ok")}?model=openai`;
+        const res = await fetch(testUrl, { signal: AbortSignal.timeout(8000) });
+        if (res.ok) {
+          aiState = "pollinations";
+          badge.innerText = "🌸 Pollinations AI (Free, No Key)";
+          badge.style.background = "#8b5cf6";
+          console.log("AI: Pollinations ready");
+          return;
+        }
+      } catch (e) { console.warn("Pollinations probe failed:", e); }
+
+      // 3. Neither works — use template engine only
+      aiState = "template";
+      badge.innerText = "🧩 Template Engine (AI unavailable)";
+      badge.style.background = "#0284c7";
+      console.log("AI: using template engine");
+    }
+
+    async function fetchPollinationsStory() {
+      const prompt = `Generate 1 short A1 level European Portuguese sentence for kids with its English translation and 3 fitting emojis. Respond ONLY with raw JSON, no extra text: {"pt": "O gato dorme no sofá.", "en": "The cat sleeps on the sofa.", "mainEmoji": "🐱", "bgLeft": "🛋️", "bgRight": "😴"}`;
+      const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?model=openai&json=true`;
+      const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
+      if (!response.ok) throw new Error(`Pollinations error: ${response.status}`);
+      const text = await response.text();
+      const rawText = text.replace(/```json|```/g, "").trim();
+      return JSON.parse(rawText);
+    }
+
+    async function fetchChromeBuiltInAIStory() {
+      const promptText = `Generate 1 short A1 level European Portuguese sentence for kids with its English translation and 3 fitting emojis. Respond ONLY with raw JSON format: {"pt": "O gato dorme no sofá.", "en": "The cat sleeps on the sofa.", "mainEmoji": "🐱", "bgLeft": "🛋️", "bgRight": "😴"}`;
+      const LM = getAILanguageModel();
+      const session = await LM.create();
+      const result = await session.prompt(promptText);
+      session.destroy();
+      const rawText = result.replace(/```json|```/g, "").trim();
+      return JSON.parse(rawText);
+    }
+
+    function generateTemplateStoryPage() {
+      const subj = subjects[Math.floor(Math.random() * subjects.length)];
+      const act = actions[Math.floor(Math.random() * actions.length)];
+      return {
+        mainEmoji: subj.emoji,
+        bgLeft: act.leftBg,
+        bgRight: act.rightBg,
+        pt: `${subj.pt} ${act.pt}!`,
+        en: `${subj.en} ${act.en}!`
+      };
+    }
+
+    async function getNewStoryPage() {
+      document.getElementById('storyTextPt').innerText = "🤖 Generating story...";
+
+      // Use cached aiState — no re-probing
+      if (aiState === "chrome") {
+        try { return await fetchChromeBuiltInAIStory(); }
+        catch (e) { console.warn("Chrome AI story failed:", e); }
+      }
+
+      if (aiState === "pollinations") {
+        try { return await fetchPollinationsStory(); }
+        catch (e) { console.warn("Pollinations story failed:", e); }
+      }
+
+      // template (or any unexpected failure above)
+      return generateTemplateStoryPage();
+    }
+
+    function speakText(text) {
+      if (activeAudio) activeAudio.pause();
+      if ('speechSynthesis' in window && window.speechSynthesis) {
+        try {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = 'pt-PT';
+          utterance.rate = 0.85;
+          utterance.onerror = () => playFallbackAudio(text);
+          window.speechSynthesis.speak(utterance);
+          return;
+        } catch (e) {
+          playFallbackAudio(text);
+          return;
+        }
+      }
+      playFallbackAudio(text);
+    }
+
+    function playFallbackAudio(text) {
+      const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&tl=pt-PT&client=tw-ob&q=${encodeURIComponent(text)}`;
+      activeAudio = new Audio(audioUrl);
+      activeAudio.play().catch(() => {});
+    }
+
+    function addScore(pts) {
+      score += pts;
+      const badge = document.getElementById('scoreDisplay');
+      badge.innerText = `⭐ Stars: ${score}`;
+      badge.classList.add('bounce');
+      setTimeout(() => badge.classList.remove('bounce'), 300);
+    }
+
+    function animateContainer(id, isCorrect) {
+      const container = document.getElementById(id);
+      const animClass = isCorrect ? 'correct-anim' : 'wrong-anim';
+      container.classList.add(animClass);
+      setTimeout(() => container.classList.remove(animClass), 600);
+    }
+
+    function renderCards(list = kidsWords) {
+      const container = document.getElementById('cardsMode');
+      container.innerHTML = '';
+      list.forEach(w => {
+        const card = document.createElement('div');
+        card.className = 'kids-card';
+        card.onclick = () => speakText(w.pt);
+        card.innerHTML = `<span class="sound-icon">🔊</span><span class="kids-emoji">${w.emoji}</span><div class="kids-pt">${w.pt}</div><div class="kids-en">${w.en}</div>`;
+        container.appendChild(card);
+      });
+    }
+
+    function filterCards() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = kidsWords.filter(w => w.pt.toLowerCase().includes(query) || w.en.toLowerCase().includes(query));
+      renderCards(filtered);
+    }
+
+    async function setMode(mode) {
+      document.getElementById('cardsMode').style.display = mode === 'cards' ? 'grid' : 'none';
+      document.getElementById('searchInput').style.display = mode === 'cards' ? 'block' : 'none';
+      
+      const gameContainers = ['storyContainer', 'game1Container', 'game2Container', 'game3Container', 'game4Container', 'game5Container'];
+      gameContainers.forEach(c => document.getElementById(c).style.display = 'none');
+
+      if (mode === 'story') { 
+        document.getElementById('storyContainer').style.display = 'block'; 
+        if (generatedStoryHistory.length === 0) {
+          const firstPage = await getNewStoryPage();
+          generatedStoryHistory.push(firstPage);
+        }
+        loadStory(); 
+      }
+      if (mode === 'game1') { document.getElementById('game1Container').style.display = 'block'; loadG1(); }
+      if (mode === 'game2') { document.getElementById('game2Container').style.display = 'block'; loadG2(); }
+      if (mode === 'game3') { document.getElementById('game3Container').style.display = 'block'; loadG3(); }
+      if (mode === 'game4') { document.getElementById('game4Container').style.display = 'block'; loadG4(); }
+      if (mode === 'game5') { document.getElementById('game5Container').style.display = 'block'; loadG5(); }
+    }
+
+    // --- STORY LOGIC ---
+    function loadStory() {
+      const page = generatedStoryHistory[currentStoryIndex];
+      const scene = document.getElementById('storyScene');
+      scene.innerHTML = `
+        <div class="story-sky"></div>
+        <div class="story-ground"></div>
+        <span class="story-sun">☀️</span>
+        <span class="story-cloud" style="top:12px; left:-40px;">☁️</span>
+        <span class="story-cloud c2" style="left:-30px;">🌤️</span>
+        <span class="story-grass">🌿🌱🌿🌱🌿🌱🌿</span>
+        <span class="story-bg-left">${page.bgLeft}</span>
+        <span class="story-bg-right">${page.bgRight}</span>
+        <span class="story-main-emoji">${page.mainEmoji}</span>
+      `;
+      document.getElementById('storyTextPt').innerText = page.pt;
+      document.getElementById('storyTextEn').innerText = page.en;
+      document.getElementById('storyPageNum').innerText = `Página ${currentStoryIndex + 1}`;
+      speakStoryText();
+    }
+
+    function speakStoryText() {
+      speakText(generatedStoryHistory[currentStoryIndex].pt);
+    }
+
+    async function nextStory() {
+      currentStoryIndex++;
+      if (currentStoryIndex >= generatedStoryHistory.length) {
+        const newPage = await getNewStoryPage();
+        generatedStoryHistory.push(newPage);
+      }
+      loadStory();
+    }
+
+    function prevStory() {
+      if (currentStoryIndex > 0) {
+        currentStoryIndex--;
+        loadStory();
+      }
+    }
+
+    // --- GAME 1 ---
+    let g1Target = null;
+    function loadG1() {
+      g1Target = kidsWords[Math.floor(Math.random() * kidsWords.length)];
+      document.getElementById('g1Emoji').innerText = g1Target.emoji;
+      speakText(g1Target.pt);
+      let opts = [g1Target.pt];
+      while (opts.length < 4) {
+        let rand = kidsWords[Math.floor(Math.random() * kidsWords.length)].pt;
+        if (!opts.includes(rand)) opts.push(rand);
+      }
+      opts.sort(() => Math.random() - 0.5);
+      const optContainer = document.getElementById('g1Options');
+      optContainer.innerHTML = '';
+      opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'game-opt';
+        btn.innerText = opt;
+        btn.onclick = () => {
+          if (opt === g1Target.pt) {
+            animateContainer('game1Container', true);
+            addScore(10);
+            speakText("Muito bem! " + g1Target.pt);
+            setTimeout(loadG1, 1000);
+          } else { 
+            animateContainer('game1Container', false);
+            speakText("Tenta outra vez"); 
+          }
+        };
+        optContainer.appendChild(btn);
+      });
+    }
+    function speakG1() { if (g1Target) speakText(g1Target.pt); }
+
+    // --- GAME 2 ---
+    let g2Target = null;
+    function loadG2() {
+      g2Target = kidsWords[Math.floor(Math.random() * kidsWords.length)];
+      speakText(g2Target.pt);
+      let opts = [g2Target];
+      while (opts.length < 4) {
+        let rand = kidsWords[Math.floor(Math.random() * kidsWords.length)];
+        if (!opts.some(i => i.pt === rand.pt)) opts.push(rand);
+      }
+      opts.sort(() => Math.random() - 0.5);
+      const optContainer = document.getElementById('g2Options');
+      optContainer.innerHTML = '';
+      opts.forEach(opt => {
+        const btn = document.createElement('div');
+        btn.className = 'emoji-opt';
+        btn.innerText = opt.emoji;
+        btn.onclick = () => {
+          if (opt.pt === g2Target.pt) {
+            animateContainer('game2Container', true);
+            addScore(10);
+            speakText("Muito bem! " + g2Target.pt);
+            setTimeout(loadG2, 1000);
+          } else { 
+            animateContainer('game2Container', false);
+            speakText("Tenta outra vez"); 
+          }
+        };
+        optContainer.appendChild(btn);
+      });
+    }
+    function speakG2() { if (g2Target) speakText(g2Target.pt); }
+
+    // --- GAME 3 ---
+    let memFlipped = [];
+    function loadG3() {
+      const selected = [];
+      while (selected.length < 3) {
+        let rand = kidsWords[Math.floor(Math.random() * kidsWords.length)];
+        if (!selected.some(s => s.pt === rand.pt)) selected.push(rand);
+      }
+      const deck = [...selected, ...selected].sort(() => Math.random() - 0.5);
+      const grid = document.getElementById('g3Grid');
+      grid.innerHTML = '';
+      memFlipped = [];
+
+      deck.forEach((item) => {
+        const card = document.createElement('div');
+        card.className = 'memory-card';
+        card.innerText = '❓';
+        card.onclick = () => {
+          if (card.classList.contains('flipped') || memFlipped.length >= 2) return;
+          card.classList.add('flipped');
+          card.innerText = item.emoji;
+          speakText(item.pt);
+          memFlipped.push({ card, item });
+
+          if (memFlipped.length === 2) {
+            if (memFlipped[0].item.pt === memFlipped[1].item.pt) {
+              addScore(15);
+              memFlipped = [];
+              if (document.querySelectorAll('.memory-card.flipped').length === 6) {
+                setTimeout(() => { speakText("Excelente!"); loadG3(); }, 1000);
+              }
+            } else {
+              setTimeout(() => {
+                memFlipped[0].card.classList.remove('flipped');
+                memFlipped[0].card.innerText = '❓';
+                memFlipped[1].card.classList.remove('flipped');
+                memFlipped[1].card.innerText = '❓';
+                memFlipped = [];
+              }, 1000);
+            }
+          }
+        };
+        grid.appendChild(card);
+      });
+    }
+
+    // --- GAME 4 ---
+    let g4Target = null;
+    function loadG4() {
+      const valid = kidsWords.filter(w => w.pt.length >= 3 && !w.pt.includes(' '));
+      g4Target = valid[Math.floor(Math.random() * valid.length)];
+      const missingIndex = Math.floor(Math.random() * g4Target.pt.length);
+      const charArray = g4Target.pt.split('');
+      const correctChar = charArray[missingIndex];
+      charArray[missingIndex] = '_';
+
+      document.getElementById('g4Emoji').innerText = g4Target.emoji;
+      document.getElementById('g4Blank').innerText = charArray.join(' ');
+      speakText(g4Target.pt);
+
+      const alphabet = "abcdefghijklmnopqrstuvwxyzáéíóúãõç";
+      let opts = [correctChar];
+      while (opts.length < 4) {
+        let randChar = alphabet[Math.floor(Math.random() * alphabet.length)];
+        if (!opts.includes(randChar)) opts.push(randChar);
+      }
+      opts.sort(() => Math.random() - 0.5);
+
+      const optContainer = document.getElementById('g4Options');
+      optContainer.innerHTML = '';
+      opts.forEach(c => {
+        const btn = document.createElement('button');
+        btn.className = 'letter-btn';
+        btn.innerText = c;
+        btn.onclick = () => {
+          if (c === correctChar) {
+            animateContainer('game4Container', true);
+            addScore(10);
+            speakText("Muito bem! " + g4Target.pt);
+            setTimeout(loadG4, 1000);
+          } else { 
+            animateContainer('game4Container', false);
+            speakText("Tenta outra vez"); 
+          }
+        };
+        optContainer.appendChild(btn);
+      });
+    }
+
+    // --- GAME 5 ---
+    let g5Target = null;
+    let currentInput = [];
+    let scrambleButtons = [];
+
+    function loadG5() {
+      const valid = kidsWords.filter(w => w.pt.length >= 3 && w.pt.length <= 8 && !w.pt.includes(' '));
+      g5Target = valid[Math.floor(Math.random() * valid.length)];
+      currentInput = [];
+      scrambleButtons = [];
+
+      document.getElementById('g5Emoji').innerText = g5Target.emoji;
+      document.getElementById('g5Slots').innerText = '_ '.repeat(g5Target.pt.length);
+      document.getElementById('g5Hint').innerText = `Meaning: ${g5Target.en}`;
+      speakText(g5Target.pt);
+
+      const scrambled = g5Target.pt.split('').sort(() => Math.random() - 0.5);
+      const letterContainer = document.getElementById('g5Letters');
+      letterContainer.innerHTML = '';
+
+      scrambled.forEach((char) => {
+        const btn = document.createElement('button');
+        btn.className = 'scramble-btn';
+        btn.innerText = char;
+        scrambleButtons.push(btn);
+
+        btn.onclick = () => {
+          currentInput.push(char);
+          btn.style.visibility = 'hidden';
+          updateG5Slots();
+
+          if (currentInput.length === g5Target.pt.length) {
+            if (currentInput.join('') === g5Target.pt) {
+              animateContainer('game5Container', true);
+              addScore(15);
+              speakText("Excelente! " + g5Target.pt);
+              setTimeout(loadG5, 1200);
+            } else {
+              animateContainer('game5Container', false);
+              document.getElementById('g5Slots').innerText = g5Target.pt; 
+              speakText("A resposta certa é " + g5Target.pt);
+              setTimeout(loadG5, 2000);
+            }
+          }
+        };
+        letterContainer.appendChild(btn);
+      });
+    }
+
+    function resetG5() {
+      currentInput = [];
+      scrambleButtons.forEach(btn => btn.style.visibility = 'visible');
+      updateG5Slots();
+    }
+
+    function speakG5() { if (g5Target) speakText(g5Target.pt); }
+
+    function updateG5Slots() {
+      const remaining = g5Target.pt.length - currentInput.length;
+      document.getElementById('g5Slots').innerText = currentInput.join(' ') + ' ' + '_ '.repeat(remaining);
+    }
+
+    renderCards();
+    initAI();
+  </script>
+</body>
+</html>
