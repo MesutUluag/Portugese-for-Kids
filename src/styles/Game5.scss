@@ -1,0 +1,114 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Game5 Component Styles (Scramble)
+// ─────────────────────────────────────────────────────────────────────────────
+
+@use './_variables.scss' as *;
+@use './common.scss' as *;
+
+// ─── Game 5: Scramble ─────────────────────────────────────────────────────────
+.scramble-slots {
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #d97706;
+  margin: 12px 0;
+  border-bottom: 3px dashed $color-amber;
+  padding-bottom: 8px;
+  min-height: 40px;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+
+  @media (min-width: 480px) {
+    font-size: 28px;
+    letter-spacing: 4px;
+    margin: 15px 0;
+    gap: 6px;
+  }
+}
+
+.scramble-letters {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+
+  @media (min-width: 480px) {
+    gap: 8px;
+    margin-top: 15px;
+  }
+}
+
+.scramble-btn {
+  background: $color-orange;
+  color: $color-white;
+  border: none;
+  border-radius: $radius-sm;
+  padding: 10px 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+  min-height: 44px;
+
+  &:active { transform: scale(0.95); }
+
+  @media (hover: hover) {
+    &:hover { transform: scale(1.08); }
+  }
+
+  @media (min-width: 480px) {
+    padding: 10px 16px;
+    font-size: 20px;
+    min-height: auto;
+  }
+}
+
+.scramble-controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 10px;
+
+  @media (min-width: 480px) {
+    gap: 10px;
+    margin-top: 12px;
+  }
+}
+
+.btn-reset {
+  background: $color-red;
+  color: $color-white;
+  padding: 8px 12px;
+  border-radius: $radius-sm;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 12px;
+  min-height: 44px;
+
+  &:active { transform: scale(0.95); }
+
+  @media (hover: hover) {
+    &:hover { opacity: 0.9; }
+  }
+
+  @media (min-width: 480px) {
+    padding: 6px 14px;
+    font-size: 13px;
+    min-height: auto;
+  }
+}
+
+.hint-text {
+  color: $color-text-muted;
+  font-size: 13px;
+  font-weight: bold;
+  margin-top: 6px;
+
+  @media (min-width: 480px) {
+    font-size: 15px;
+    margin-top: 8px;
+  }
+}

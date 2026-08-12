@@ -1,0 +1,65 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Game1 Component Styles (Picture Game)
+// ─────────────────────────────────────────────────────────────────────────────
+
+@use './_variables.scss' as *;
+@use './common.scss' as *;
+
+// ─── Game 1: Picture Game ─────────────────────────────────────────────────────
+.game-target {
+  font-size: 64px;
+  margin: 8px 0;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:active { transform: scale(0.95); }
+
+  @media (hover: hover) {
+    &:hover { transform: scale(1.1); }
+  }
+
+  @media (min-width: 480px) {
+    font-size: 80px;
+    margin: 10px 0;
+  }
+}
+
+.game-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+
+  @media (min-width: 480px) {
+    gap: 12px;
+    margin-top: 15px;
+  }
+}
+
+.game-opt {
+  padding: 12px;
+  border: 3px solid #cbd5e1;
+  border-radius: $radius-md;
+  background: #f8fafc;
+  font-size: 14px;
+  font-weight: bold;
+  color: $color-text-dark;
+  cursor: pointer;
+  transition: 0.2s;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:active { background: #e2e8f0; border-color: $color-green; }
+
+  @media (hover: hover) {
+    &:hover { background: #e2e8f0; border-color: $color-green; }
+  }
+
+  @media (min-width: 480px) {
+    padding: 15px;
+    font-size: 18px;
+    min-height: auto;
+  }
+}

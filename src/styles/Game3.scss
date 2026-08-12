@@ -1,0 +1,40 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Game3 Component Styles (Memory Match)
+// ─────────────────────────────────────────────────────────────────────────────
+
+@use './_variables.scss' as *;
+@use './common.scss' as *;
+
+// ─── Game 3: Memory Match ─────────────────────────────────────────────────────
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+
+  @media (min-width: 480px) {
+    gap: 10px;
+    margin-top: 15px;
+  }
+}
+
+.memory-card {
+  background: $color-purple;
+  border: 3px solid $color-purple-dark;
+  border-radius: $radius-md;
+  height: 70px;
+  @include flex-center;
+  font-size: 32px;
+  color: $color-white;
+  cursor: pointer;
+  transition: 0.3s;
+
+  &:active { transform: scale(0.95); }
+
+  &.flipped { background: $color-white; color: $color-text-dark; border-color: $color-amber; }
+
+  @media (min-width: 480px) {
+    height: 90px;
+    font-size: 40px;
+  }
+}
