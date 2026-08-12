@@ -57,6 +57,7 @@ export default function Game1({ onScore }: Props): React.ReactElement {
         className="game-target"
         onClick={() => target && speakText(target.pt)}
       />
+      {target && <div className="game-target-label">{target.en}</div>}
       <div className="game-options">
         {options.map((opt) => (
           <button key={opt} className="game-opt" onClick={() => handleAnswer(opt)}>
