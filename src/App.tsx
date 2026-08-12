@@ -40,6 +40,11 @@ export default function App(): React.ReactElement {
 
   useEffect(() => {
     const timer = setInterval(() => {
+      // Pause the timer if the user is on a different tab or the window is minimized
+      if (document.visibilityState !== 'visible') {
+        return;
+      }
+
       setTimeSpent((prev) => {
         const next = prev + 1;
         try {
