@@ -1,27 +1,22 @@
 /**
  * Speak Portuguese text using Web Speech API.
- * Uses a flag to suppress the onerror callback when we intentionally cancel
- * a previous utterance, preventing cascading fallback calls.
+ * Keeps a strong reference to the active utterance to prevent garbage collection in Chrome.
  */
 
-let isCanceling = false;
+// Keep a reference to the active utterance to prevent garbage collection in Chrome/Chromium
+let activeUtterance: SpeechSynthesisUtterance | null = null;
 
 export function speakText(text: string): void {
+  console.log('[Audio] speakText called with:', text);
   if (!text || !text.trim()) return;
 
   if ('speechSynthesis' in window && window.speechSynthesis) {
-    // Set the flag so the onerror on the previous utterance is ignored
-    isCanceling = true;
-    window.speechSynthesis.cancel();
-
-    // Defer speaking slightly to let cancel() settle
-    setTimeout(() => {
-      isCanceling = false;
-      startUtterance(text);
-    }, 50);
+    console.log('[Audio] speechSynthesis available in window');
+    startUtterance(text);
     return;
   }
 
+  console.log('[Audio] speechSynthesis not available, trying ResponsiveVoice');
   tryResponsiveVoice(text);
 }
 
@@ -35,23 +30,61 @@ function startUtterance(text: string): void {
 
     // Find a Portuguese voice
     const voices = window.speechSynthesis.getVoices();
+    console.log(`[Audio] Current getVoices() length: ${voices.length}`);
     const portugueseVoice =
       voices.find((v) => v.lang === 'pt-PT') ??
       voices.find((v) => v.lang.startsWith('pt')) ??
       voices.find((v) => v.name.toLowerCase().includes('portuguese'));
 
     if (portugueseVoice) {
+      console.log('[Audio] Found Portuguese voice:', portugueseVoice.name, portugueseVoice.lang);
       utterance.voice = portugueseVoice;
+    } else {
+      console.warn('[Audio] No Portuguese voice found, using default voice');
     }
 
-    utterance.onstart = () => console.log('[Audio] ✓ Speaking:', text);
-    utterance.onend   = () => console.log('[Audio] ✓ Finished speaking');
+    utterance.onstart = () => {
+      console.log('[Audio] ✓ Speaking started:', text);
+    };
+
+    utterance.onend = () => {
+      console.log('[Audio] ✓ Finished speaking:', text);
+      if (activeUtterance === utterance) {
+        activeUtterance = null;
+      }
+    };
+
     utterance.onerror = (event) => {
-      if (isCanceling) return; // intentional cancel — ignore
-      console.warn('[Audio] ✗ Speech error:', event.error);
+      if (activeUtterance === utterance) {
+        activeUtterance = null;
+      }
+
+      console.warn('[Audio] ✗ Speech onerror event triggered:', event.error, 'for text:', text);
+
+      // Ignore expected errors from cancel() or autoplay blocks
+      if (event.error === 'interrupted' || event.error === 'canceled') {
+        console.log('[Audio] Speech canceled/interrupted:', text);
+        return;
+      }
+
+      if (event.error === 'not-allowed') {
+        console.warn('[Audio] Speech blocked (interaction required):', text);
+        return;
+      }
+
       tryResponsiveVoice(text);
     };
 
+    // Store reference to prevent garbage collection in Chrome
+    activeUtterance = utterance;
+
+    // Unpause the speech synthesis engine if it is paused
+    if (window.speechSynthesis.paused) {
+      console.log('[Audio] speechSynthesis is paused, calling resume()');
+      window.speechSynthesis.resume();
+    }
+
+    console.log('[Audio] Calling window.speechSynthesis.speak() for:', text);
     window.speechSynthesis.speak(utterance);
   } catch (error) {
     console.error('[Audio] ✗ Web Speech API error:', error);
