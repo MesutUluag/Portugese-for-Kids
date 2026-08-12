@@ -59,15 +59,12 @@ export default function StoryIllustration({ page, pageKey, sceneVars }: Props): 
         <span className="story-bg-right">{page.bgRight}</span>
       </>}
 
-      {/* Loading indicator */}
-      {!loaded && !errored && (
-        <div className="story-generating">🎨 Generating scene…</div>
+      {/* Main character only shown when no photo (CSS scene fallback) */}
+      {!photoActive && (
+        <span key={`main-${pageKey}`} className="story-main-emoji story-main-emoji--enter">
+          {page.mainEmoji}
+        </span>
       )}
-
-      {/* Main character always on top */}
-      <span key={`main-${pageKey}`} className="story-main-emoji story-main-emoji--enter">
-        {page.mainEmoji}
-      </span>
     </div>
   );
 }
