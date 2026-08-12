@@ -42,10 +42,13 @@ export async function initAI(
     }
   }
 
-  // 2. Pollinations AI
+  // 2. Pollinations AI — simple HEAD check with manual timeout for broad browser compat
   try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
     const testUrl = `https://text.pollinations.ai/${encodeURIComponent('reply with the single word: ok')}`;
-    const res = await fetch(testUrl, { signal: AbortSignal.timeout(8000) });
+    const res = await fetch(testUrl, { signal: controller.signal });
+    clearTimeout(timer);
     if (res.ok) {
       onStatusChange('🌸 Pollinations AI (Free, No Key)', '#8b5cf6');
       return 'pollinations';
@@ -85,14 +88,49 @@ function pollChromeAIReady(LM: any, onStatusChange: (text: string, color: string
   }, 10000);
 }
 
+const POLLINATIONS_PROMPT = `Generate 1 short A1 level European Portuguese sentence for kids with its English translation and 3 fitting emojis. Respond ONLY with raw JSON, no extra text: {"pt": "O gato dorme no sofá.", "en": "The cat sleeps on the sofa.", "mainEmoji": "🐱", "bgLeft": "🛋️", "bgRight": "😴"}`;
+
+function parseStoryJson(raw: string): StoryPage {
+  const cleaned = raw.replace(/```json|```/g, '').trim();
+  const match = cleaned.match(/\{[\s\S]*\}/);
+  if (!match) throw new Error('No JSON found');
+  return JSON.parse(match[0]) as StoryPage;
+}
+
+async function fetchWithTimeout(url: string, options: RequestInit, ms: number): Promise<Response> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  try {
+    const res = await fetch(url, { ...options, signal: controller.signal });
+    clearTimeout(timer);
+    return res;
+  } catch (e) {
+    clearTimeout(timer);
+    throw e;
+  }
+}
+
 async function fetchPollinationsStory(): Promise<StoryPage> {
-  const prompt = `Generate 1 short A1 level European Portuguese sentence for kids with its English translation and 3 fitting emojis. Respond ONLY with raw JSON, no extra text: {"pt": "O gato dorme no sofá.", "en": "The cat sleeps on the sofa.", "mainEmoji": "🐱", "bgLeft": "🛋️", "bgRight": "😴"}`;
-  const url = `https://text.pollinations.ai/${encodeURIComponent(prompt)}?json=true`;
-  const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
-  if (!response.ok) throw new Error(`Pollinations error: ${response.status}`);
-  const text = await response.text();
-  const rawText = text.replace(/```json|```/g, '').trim();
-  return JSON.parse(rawText) as StoryPage;
+  // Try GET endpoint first
+  try {
+    const url = `https://text.pollinations.ai/${encodeURIComponent(POLLINATIONS_PROMPT)}?json=true`;
+    const res = await fetchWithTimeout(url, {}, 25000);
+    if (res.ok) return parseStoryJson(await res.text());
+  } catch { /* fall through to POST */ }
+
+  // Try OpenAI-compatible POST endpoint (different domain path, may bypass blocks)
+  const res = await fetchWithTimeout('https://text.pollinations.ai/openai', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'openai',
+      messages: [{ role: 'user', content: POLLINATIONS_PROMPT }],
+    }),
+  }, 25000);
+  if (!res.ok) throw new Error(`Pollinations POST error: ${res.status}`);
+  const data = await res.json() as { choices?: { message?: { content?: string } }[] };
+  const content = data?.choices?.[0]?.message?.content ?? '';
+  return parseStoryJson(content);
 }
 
 async function fetchChromeBuiltInAIStory(): Promise<StoryPage> {
