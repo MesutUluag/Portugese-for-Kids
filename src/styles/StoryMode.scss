@@ -1,0 +1,199 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// StoryMode Component Styles
+// ─────────────────────────────────────────────────────────────────────────────
+
+@use './_variables.scss' as *;
+
+// ─── Story Mode ───────────────────────────────────────────────────────────────
+.story-card {
+  background: linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%);
+  border-radius: $radius-xl;
+  padding: 16px;
+  border: 4px solid $color-sky;
+
+  @media (min-width: 480px) {
+    padding: 20px;
+  }
+}
+
+.story-illustration {
+  border-radius: $radius-lg;
+  height: 160px;
+  margin-bottom: 12px;
+  position: relative;
+  overflow: hidden;
+  border: 3px solid $color-sky;
+  background: linear-gradient(180deg, #7dd3fc 0%, #bae6fd 55%, #86efac 55%, #4ade80 100%);
+
+  @media (min-width: 480px) {
+    height: 200px;
+    margin-bottom: 15px;
+  }
+}
+
+.story-sky    { position: absolute; inset: 0; height: 55%; }
+.story-ground { position: absolute; bottom: 0; left: 0; right: 0; height: 45%; }
+
+.story-sun {
+  position: absolute;
+  top: 10px;
+  right: 18px;
+  font-size: 32px;
+  animation: sunSpin 8s linear infinite;
+}
+
+@keyframes sunSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.story-cloud {
+  position: absolute;
+  font-size: 28px;
+  opacity: 0.85;
+  animation: cloudDrift 12s linear infinite;
+
+  &.c2 {
+    animation-duration: 18s;
+    animation-delay: -6s;
+    top: 18px;
+    font-size: 22px;
+  }
+}
+
+@keyframes cloudDrift {
+  0%   { transform: translateX(-60px); }
+  100% { transform: translateX(calc(100vw + 60px)); }
+}
+
+.story-main-emoji {
+  position: absolute;
+  bottom: 28%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 72px;
+  z-index: 3;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.15));
+  animation: characterBob 2s ease-in-out infinite;
+}
+
+@keyframes characterBob {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(-6px); }
+}
+
+.story-bg-left  { position: absolute; bottom: 2px; left: 18px; font-size: 38px; z-index: 2; }
+.story-bg-right { position: absolute; bottom: 2px; right: 18px; font-size: 38px; z-index: 2; }
+.story-grass    { position: absolute; bottom: 38%; left: 0; right: 0; font-size: 22px; text-align: center; letter-spacing: 2px; opacity: 0.7; }
+
+// ─── Story Text ───────────────────────────────────────────────────────────────
+.story-text-pt {
+  font-size: 16px;
+  font-weight: bold;
+  color: $color-sky-dark;
+  margin-bottom: 8px;
+  line-height: 1.4;
+  min-height: 48px;
+  @include flex-center;
+
+  @media (min-width: 480px) {
+    font-size: 20px;
+    margin-bottom: 10px;
+    min-height: 56px;
+  }
+}
+
+.story-text-en {
+  font-size: 12px;
+  color: $color-text-muted;
+  font-weight: bold;
+  margin-bottom: 12px;
+  min-height: 32px;
+  @include flex-center;
+
+  @media (min-width: 480px) {
+    font-size: 14px;
+    margin-bottom: 15px;
+    min-height: 38px;
+  }
+}
+
+.story-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+  gap: 8px;
+  flex-wrap: wrap;
+
+  @media (min-width: 480px) {
+    margin-top: 15px;
+    gap: 10px;
+  }
+}
+
+.btn-story-action {
+  background: $color-sky;
+  color: $color-white;
+  padding: 12px 14px;
+  border-radius: $radius-md;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.2s;
+  min-height: 44px;
+  flex: 1 1 auto;
+  min-width: 80px;
+
+  &:active { transform: scale(0.95); }
+  &:disabled { opacity: 0.5; cursor: default; transform: none; }
+
+  @media (hover: hover) {
+    &:hover { transform: scale(1.05); }
+  }
+
+  @media (min-width: 480px) {
+    padding: 10px 18px;
+    font-size: 15px;
+    min-height: auto;
+    flex: 0 1 auto;
+    min-width: auto;
+  }
+}
+
+.btn-story-audio {
+  background: $color-rose;
+  color: $color-white;
+  border: none;
+  border-radius: $radius-circle;
+  width: 56px;
+  height: 56px;
+  font-size: 28px;
+  cursor: pointer;
+  transition: 0.2s;
+  margin-bottom: 8px;
+
+  &:active { transform: scale(0.95); }
+
+  @media (hover: hover) {
+    &:hover { transform: scale(1.1); }
+  }
+
+  @media (min-width: 480px) {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+}
+
+.badge-ai {
+  color: $color-white;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: $radius-sm;
+  font-weight: bold;
+  display: inline-block;
+  margin-bottom: 10px;
+}

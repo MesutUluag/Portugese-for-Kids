@@ -1,0 +1,59 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Game4 Component Styles (Fill Blank)
+// ─────────────────────────────────────────────────────────────────────────────
+
+@use './_variables.scss' as *;
+@use './common.scss' as *;
+
+// ─── Game 4: Fill Blank ───────────────────────────────────────────────────────
+.blank-display {
+  font-size: 24px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  color: $color-navy;
+  margin: 12px 0;
+
+  @media (min-width: 480px) {
+    font-size: 32px;
+    letter-spacing: 4px;
+    margin: 15px 0;
+  }
+}
+
+.letter-options {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 12px;
+
+  @media (min-width: 480px) {
+    gap: 10px;
+    margin-top: 15px;
+  }
+}
+
+.letter-btn {
+  background: $color-blue;
+  color: $color-white;
+  border: none;
+  border-radius: $radius-sm;
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+
+  &:active { transform: scale(0.95); }
+
+  @media (hover: hover) {
+    &:hover { transform: scale(1.1); }
+  }
+
+  @media (min-width: 480px) {
+    width: 50px;
+    height: 50px;
+    font-size: 22px;
+  }
+}

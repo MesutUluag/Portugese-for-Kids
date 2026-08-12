@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { kidsWords } from '../data/words';
 import { speakText } from '../utils/speech';
+import '../styles/CardsMode.scss';
 
 export default function CardsMode(): React.ReactElement {
   const [query, setQuery] = useState('');

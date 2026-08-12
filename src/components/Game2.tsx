@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { kidsWords, Word } from '../data/words';
 import { speakText } from '../utils/speech';
+import '../styles/Game2.scss';
 
 interface Props {
   onScore: (pts: number) => void;

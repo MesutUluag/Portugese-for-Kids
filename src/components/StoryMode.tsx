@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { StoryPage } from '../data/words';
 import { AiState, getNewStoryPage } from '../utils/ai';
 import { speakText } from '../utils/speech';
+import '../styles/StoryMode.scss';
 
 interface Props {
   aiState: AiState;

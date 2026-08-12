@@ -1,0 +1,116 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// CardsMode Component Styles
+// ─────────────────────────────────────────────────────────────────────────────
+
+@use './_variables.scss' as *;
+
+// ─── Search Box ───────────────────────────────────────────────────────────────
+.search-box {
+  width: 100%;
+  max-width: 480px;
+  padding: 14px;
+  border-radius: $radius-md;
+  border: 3px solid $color-amber-light;
+  margin-bottom: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  min-height: 44px;
+
+  @media (min-width: 480px) {
+    margin-bottom: 15px;
+  }
+}
+
+// ─── Cards ────────────────────────────────────────────────────────────────────
+.kids-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 500px;
+
+  @media (min-width: 480px) {
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 15px;
+  }
+}
+
+.kids-card {
+  background: $color-white;
+  border-radius: $radius-xl;
+  padding: 12px;
+  text-align: center;
+  box-shadow: $shadow-md;
+  cursor: pointer;
+  transition: 0.3s;
+  border: 4px solid $color-amber-pale;
+  position: relative;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &:active {
+    transform: scale(0.98);
+    border-color: $color-amber;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-5px) scale(1.03);
+      border-color: $color-amber;
+      background: #fffde7;
+    }
+  }
+
+  @media (min-width: 480px) {
+    padding: 15px;
+    min-height: auto;
+  }
+}
+
+.kids-emoji {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 4px;
+
+  @media (min-width: 480px) {
+    font-size: 50px;
+    margin-bottom: 5px;
+  }
+}
+
+.kids-pt {
+  font-size: 14px;
+  font-weight: bold;
+  color: $color-navy;
+
+  @media (min-width: 480px) {
+    font-size: 18px;
+  }
+}
+
+.kids-en {
+  font-size: 11px;
+  color: $color-text-muted;
+  font-weight: bold;
+
+  @media (min-width: 480px) {
+    font-size: 13px;
+  }
+}
+
+.sound-icon {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 14px;
+  opacity: 0.6;
+
+  @media (min-width: 480px) {
+    top: 8px;
+    right: 10px;
+    font-size: 16px;
+  }
+}

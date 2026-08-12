@@ -1,0 +1,63 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Design Variables and Mixins (shared across all components)
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Note: This file is imported as a partial and used with @use in other files
+// No need for @use here since this is the base variables file
+
+$font-family: 'Comic Sans MS', 'Chalkboard SE', 'Segoe UI', sans-serif;
+
+$color-bg:          #fef9c3;
+$color-white:       #fff;
+$color-text-dark:   #1e293b;
+$color-text-muted:  #64748b;
+$color-navy:        #1e3a8a;
+
+// Brand palette
+$color-amber:       #f59e0b;
+$color-amber-light: #fde047;
+$color-amber-pale:  #fef08a;
+$color-green:       #10b981;
+$color-green-light: #a7f3d0;
+$color-pink:        #ec4899;
+$color-pink-light:  #fbcfe8;
+$color-purple:      #8b5cf6;
+$color-purple-dark: #7c3aed;
+$color-purple-light:#ddd6fe;
+$color-blue:        #3b82f6;
+$color-blue-light:  #bfdbfe;
+$color-orange:      #f97316;
+$color-orange-light:#fed7aa;
+$color-cyan:        #06b6d4;
+$color-cyan-light:  #a5f3fc;
+$color-sky:         #0284c7;
+$color-sky-dark:    #0369a1;
+$color-red:         #ef4444;
+$color-rose:        #f43f5e;
+
+// Shadows
+$shadow-sm:   0 4px 10px rgba(0, 0, 0, 0.1);
+$shadow-md:   0 8px 20px rgba(0, 0, 0, 0.08);
+$shadow-lg:   0 10px 25px rgba(0, 0, 0, 0.1);
+
+// Border radii
+$radius-sm:   12px;
+$radius-md:   16px;
+$radius-lg:   20px;
+$radius-xl:   24px;
+$radius-xxl:  28px;
+$radius-pill: 20px;
+$radius-circle: 50%;
+
+// Mixins
+@mixin nav-btn($bg, $border-color) {
+  background: $bg;
+  color: $color-white;
+  border: 3px solid $border-color;
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
