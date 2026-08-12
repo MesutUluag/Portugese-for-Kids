@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const THIRTY_SECONDS_MS = 30 * 1000;
+const TEN_SECONDS_MS = 10 * 1000;
 let imageBlockedUntil = 0;
 
 export function usePollinationsImage(url: string): 'loading' | 'blocked' | string {
@@ -20,7 +20,7 @@ export function usePollinationsImage(url: string): 'loading' | 'blocked' | strin
       .then((res) => {
         if (cancelled) return;
         if (res.status === 429) {
-          imageBlockedUntil = Date.now() + THIRTY_SECONDS_MS;
+          imageBlockedUntil = Date.now() + TEN_SECONDS_MS;
           setResult('blocked');
           return;
         }
