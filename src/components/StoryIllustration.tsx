@@ -7,8 +7,6 @@ interface Props {
   theme: SceneTheme;
   pageKey: number;
   sceneVars: React.CSSProperties;
-  lastPhotoUrl: string | null;
-  onPhotoLoaded: (url: string) => void;
 }
 
 function buildPrompt(page: StoryPage): string {
@@ -16,17 +14,16 @@ function buildPrompt(page: StoryPage): string {
   return `${scene}, colorful cute kids illustration, storybook art, bright colors, simple background`;
 }
 
-export default function StoryIllustration({ page, pageKey, sceneVars, lastPhotoUrl, onPhotoLoaded }: Props): React.ReactElement {
+export default function StoryIllustration({ page, pageKey, sceneVars }: Props): React.ReactElement {
   const [loaded, setLoaded] = useState(false);
   const [errored, setErrored] = useState(false);
 
   const prompt = buildPrompt(page);
   const imgUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=480&height=240&nologo=true&seed=${pageKey}`;
 
-  // Current photo ready, or fall back to last known good photo while loading
+  // Current photo ready; show CSS scene while loading (no old-photo fallback)
   const photoActive = loaded && !errored;
-  const displayUrl = photoActive ? imgUrl : lastPhotoUrl;
-  const hasPhoto = !!displayUrl;
+  const hasPhoto = photoActive;
 
   return (
     <div
@@ -34,7 +31,7 @@ export default function StoryIllustration({ page, pageKey, sceneVars, lastPhotoU
       style={{
         ...sceneVars,
         ...(hasPhoto ? {
-          backgroundImage: `url(${displayUrl})`,
+          backgroundImage: `url(${imgUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center top',
         } : {}),
@@ -46,15 +43,15 @@ export default function StoryIllustration({ page, pageKey, sceneVars, lastPhotoU
         src={imgUrl}
         alt=""
         style={{ display: 'none' }}
-        onLoad={() => { setLoaded(true); setErrored(false); onPhotoLoaded(imgUrl); }}
+        onLoad={() => { setLoaded(true); setErrored(false); }}
         onError={() => setErrored(true)}
       />
 
       {/* Overlay for readability over photo */}
       {hasPhoto && <div className="story-photo-overlay" />}
 
-      {/* CSS scene shown only when no photo at all (very first load) */}
-      {!hasPhoto && <>
+      {/* CSS scene shown while AI photo hasn't loaded yet */}
+      {!photoActive && <>
         <span className="story-cloud" style={{ top: '12px', left: '-40px' }} />
         <span className="story-cloud c2" style={{ left: '-30px' }} />
         <span className="story-sun" />
@@ -63,8 +60,8 @@ export default function StoryIllustration({ page, pageKey, sceneVars, lastPhotoU
         <span className="story-bg-right">{page.bgRight}</span>
       </>}
 
-      {/* Character emoji only when no photo */}
-      {!hasPhoto && (
+      {/* Character emoji while AI photo hasn't loaded */}
+      {!photoActive && (
         <span key={`main-${pageKey}`} className="story-main-emoji story-main-emoji--enter">
           {page.mainEmoji}
         </span>
