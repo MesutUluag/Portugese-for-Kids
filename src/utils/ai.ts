@@ -32,7 +32,7 @@ async function fetchWithTimeout(url: string, options: RequestInit, ms: number): 
 }
 
 async function fetchPollinationsStory(): Promise<StoryPage> {
-  // Simple GET — same pattern as image.pollinations.ai, works on all devices including phones
+  // Simple GET — no CORS preflight, works on all devices including phones
   const url = `https://text.pollinations.ai/${encodeURIComponent(POLLINATIONS_PROMPT)}?model=openai&json=true`;
   const res = await fetchWithTimeout(url, {}, 25000);
   if (!res.ok) throw new Error(`Pollinations error: ${res.status}`);
