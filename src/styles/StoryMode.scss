@@ -82,8 +82,31 @@
   50%       { transform: translateX(-50%) translateY(-6px); }
 }
 
-.story-bg-left  { position: absolute; bottom: 2px; left: 18px; font-size: 38px; z-index: 2; }
-.story-bg-right { position: absolute; bottom: 2px; right: 18px; font-size: 38px; z-index: 2; }
+.story-bg-left {
+  display: none;
+  position: absolute;
+  bottom: 2px;
+  left: 18px;
+  font-size: 38px;
+  z-index: 2;
+
+  @media (min-width: 480px) {
+    display: inline;
+  }
+}
+
+.story-bg-right {
+  display: none;
+  position: absolute;
+  bottom: 2px;
+  right: 18px;
+  font-size: 38px;
+  z-index: 2;
+
+  @media (min-width: 480px) {
+    display: inline;
+  }
+}
 .story-grass    { position: absolute; bottom: 38%; left: 0; right: 0; font-size: 22px; text-align: center; letter-spacing: 2px; opacity: 0.7; }
 
 // ─── Story Text ───────────────────────────────────────────────────────────────
@@ -124,7 +147,16 @@
   align-items: center;
   margin-top: 12px;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap; // Symmetrical layout on single line
+
+  span {
+    white-space: nowrap;
+    font-size: 13px;
+
+    @media (min-width: 480px) {
+      font-size: 16px;
+    }
+  }
 
   @media (min-width: 480px) {
     margin-top: 15px;
@@ -135,7 +167,7 @@
 .btn-story-action {
   background: $color-sky;
   color: $color-white;
-  padding: 12px 14px;
+  padding: 10px 12px; // slightly snugger padding on mobile
   border-radius: $radius-md;
   border: none;
   font-weight: bold;
@@ -143,7 +175,8 @@
   font-size: 13px;
   transition: 0.2s;
   min-height: 44px;
-  flex: 1 1 auto;
+  flex: 1; // equal sizing
+  max-width: 120px; // don't grow too large on wide screens
   min-width: 80px;
 
   &:active { transform: scale(0.95); }
@@ -158,6 +191,7 @@
     font-size: 15px;
     min-height: auto;
     flex: 0 1 auto;
+    max-width: none;
     min-width: auto;
   }
 }

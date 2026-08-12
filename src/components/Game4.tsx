@@ -15,6 +15,7 @@ export default function Game4({ onScore }: Props): React.ReactElement {
   const [correctChar, setCorrectChar] = useState('');
   const [options, setOptions] = useState<string[]>([]);
   const [animClass, setAnimClass] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const load = useCallback(() => {
     const valid = kidsWords.filter((w) => w.pt.length >= 3 && !w.pt.includes(' '));
@@ -41,14 +42,17 @@ export default function Game4({ onScore }: Props): React.ReactElement {
 
   function handleAnswer(c: string) {
     if (!target) return;
+    if (showSuccess) return;
     if (c === correctChar) {
       setAnimClass('correct-anim');
+      setShowSuccess(true);
+      setBlank(target.pt.split('').join(' '));
       onScore(10);
-      speakText('Muito bem! ' + target.pt);
-      setTimeout(() => { setAnimClass(''); load(); }, 1000);
+      speakText(target.pt);
+      setTimeout(() => { setAnimClass(''); setShowSuccess(false); load(); }, 2000);
     } else {
       setAnimClass('wrong-anim');
-      speakText('Tenta outra vez');
+      speakText(target.pt);
       setTimeout(() => setAnimClass(''), 600);
     }
   }
@@ -60,7 +64,7 @@ export default function Game4({ onScore }: Props): React.ReactElement {
       <div className="blank-display">{blank}</div>
       <div className="letter-options">
         {options.map((c) => (
-          <button key={c} className="letter-btn" onClick={() => handleAnswer(c)}>
+          <button key={c} className={`letter-btn${showSuccess ? ' letter-btn--disabled' : ''}`} onClick={() => handleAnswer(c)}>
             {c}
           </button>
         ))}

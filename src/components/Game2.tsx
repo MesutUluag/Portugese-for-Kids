@@ -36,11 +36,11 @@ export default function Game2({ onScore }: Props): React.ReactElement {
     if (opt.pt === target.pt) {
       triggerAnim(true);
       onScore(10);
-      speakText('Muito bem! ' + target.pt);
+      speakText(target.pt);
       setTimeout(load, 1000);
     } else {
       triggerAnim(false);
-      speakText('Tenta outra vez');
+      speakText(target.pt);
     }
   }
 

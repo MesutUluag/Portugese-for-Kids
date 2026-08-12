@@ -17,11 +17,48 @@ export default function App(): React.ReactElement {
   const [aiLabel, setAiLabel] = useState('Checking Chrome Built-in AI...');
   const [aiColor, setAiColor] = useState('#0284c7');
 
+  const [timeSpent, setTimeSpent] = useState<number>(() => {
+    try {
+      const today = getTodayDateString();
+      const savedDate = localStorage.getItem('kids_study_time_date');
+      const savedSeconds = localStorage.getItem('kids_study_time_seconds');
+      if (savedDate === today && savedSeconds) {
+        return parseInt(savedSeconds, 10) || 0;
+      }
+    } catch (e) {
+      console.error('Failed to load study time:', e);
+    }
+    return 0;
+  });
+
   useEffect(() => {
     void initAI((label, color) => {
       setAiLabel(label);
       setAiColor(color);
     }).then((state) => setAiState(state));
+  }, []);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      // Pause the timer if the user is on a different tab or the window is minimized
+      if (document.visibilityState !== 'visible') {
+        return;
+      }
+
+      setTimeSpent((prev) => {
+        const next = prev + 1;
+        try {
+          const today = getTodayDateString();
+          localStorage.setItem('kids_study_time_date', today);
+          localStorage.setItem('kids_study_time_seconds', String(next));
+        } catch (e) {
+          console.error('Failed to save study time:', e);
+        }
+        return next;
+      });
+    }, 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
   function addScore(pts: number) {
@@ -43,7 +80,7 @@ export default function App(): React.ReactElement {
   return (
     <div className="app">
       <h1>🎈 Portuguese Kids Playground 🎨</h1>
-      <div className={`score-badge${bounce ? ' bounce' : ''}`}>⭐ Stars: {score}</div>
+      <div className="time-badge">⏱️ Time Today: {formatTime(timeSpent)}</div>
 
       <div className="nav-buttons">
         {navButtons.map(({ key, label, cls }) => (
@@ -69,4 +106,31 @@ export default function App(): React.ReactElement {
       {mode === 'game5' && <Game5 onScore={addScore} />}
     </div>
   );
+}
+
+function getTodayDateString(): string {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+function formatTime(seconds: number): string {
+  if (seconds < 60) {
+    return `${seconds}s`;
+  }
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+
+  let result = '';
+  if (hrs > 0) {
+    result += `${hrs}h `;
+  }
+  if (mins > 0 || hrs > 0) {
+    result += `${mins}m `;
+  }
+  result += `${secs}s`;
+  return result;
 }
