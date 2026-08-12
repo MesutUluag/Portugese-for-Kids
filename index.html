@@ -442,22 +442,49 @@
       return JSON.parse(rawText);
     }
 
+    // Pre-built sentence pool — picked randomly, then AI only fills in the blanks
+    // This avoids asking Gemini Nano to generate full JSON from scratch (too slow)
+    const storyTemplates = [
+      { pt: "O {animal} {verb}.", emoji: "🐶", bgLeft: "🌳", bgRight: "🌿" },
+    ];
+
+    const chromePhrases = [
+      { pt: "O gato bebe leite.", en: "The cat drinks milk.", mainEmoji: "🐱", bgLeft: "🥛", bgRight: "🍼" },
+      { pt: "O cão corre no parque.", en: "The dog runs in the park.", mainEmoji: "🐶", bgLeft: "🌳", bgRight: "⚽" },
+      { pt: "A menina lê um livro.", en: "The girl reads a book.", mainEmoji: "👧", bgLeft: "📚", bgRight: "✏️" },
+      { pt: "O menino come uma maçã.", en: "The boy eats an apple.", mainEmoji: "👦", bgLeft: "🍎", bgRight: "🌟" },
+      { pt: "A mãe faz um bolo.", en: "The mother makes a cake.", mainEmoji: "👩", bgLeft: "🎂", bgRight: "🍰" },
+      { pt: "O pato nada no lago.", en: "The duck swims in the lake.", mainEmoji: "🦆", bgLeft: "💧", bgRight: "🌊" },
+      { pt: "A borboleta voa no jardim.", en: "The butterfly flies in the garden.", mainEmoji: "🦋", bgLeft: "🌸", bgRight: "🌺" },
+      { pt: "O coelho come uma cenoura.", en: "The rabbit eats a carrot.", mainEmoji: "🐰", bgLeft: "🥕", bgRight: "🌿" },
+    ];
+
     async function fetchChromeBuiltInAIStory() {
-      const promptText = `You are a Portuguese language teacher for children. Respond ONLY with a single raw JSON object, no extra text, no markdown, no explanation. Use this exact format: {"pt": "O gato dorme no sofá.", "en": "The cat sleeps on the sofa.", "mainEmoji": "🐱", "bgLeft": "🛋️", "bgRight": "😴"}. Generate 1 new short A1 level European Portuguese sentence for kids with its English translation and 3 fitting emojis.`;
+      // Use a short fill-in-the-blank prompt — much faster than full generation
+      const base = chromePhrases[Math.floor(Math.random() * chromePhrases.length)];
+      const promptText = `Complete this JSON with 2 different emojis that fit the scene. Reply ONLY with JSON, nothing else: {"pt":"${base.pt}","en":"${base.en}","mainEmoji":"${base.mainEmoji}","bgLeft":"?","bgRight":"?"}`;
       const LM = getAILanguageModel();
       const session = await LM.create({ expectedInputLanguages: ["en"], expectedOutputLanguages: ["en"] });
 
-      // Timeout: Gemini Nano can hang — give it 20 seconds max
+      // Timeout: 15 seconds max
       const result = await Promise.race([
         session.prompt(promptText),
-        new Promise((_, reject) => setTimeout(() => reject(new Error("Chrome AI timed out after 20s")), 20000))
+        new Promise((_, reject) => setTimeout(() => reject(new Error("Chrome AI timed out after 15s")), 15000))
       ]);
 
       session.destroy();
       console.log("Chrome AI raw response:", result);
-      const match = result.match(/\{[\s\S]*\}/);
-      if (!match) throw new Error("No JSON found in Chrome AI response: " + result);
-      return JSON.parse(match[0]);
+      const match = result.match(/\{[\s\S]*?\}/);
+      if (!match) throw new Error("No JSON found: " + result);
+      const parsed = JSON.parse(match[0]);
+      // Fallback to base values if AI returns invalid emojis
+      return {
+        pt: base.pt,
+        en: base.en,
+        mainEmoji: parsed.mainEmoji || base.mainEmoji,
+        bgLeft: parsed.bgLeft || base.bgLeft,
+        bgRight: parsed.bgRight || base.bgRight
+      };
     }
 
     function generateTemplateStoryPage() {
