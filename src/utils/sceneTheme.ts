@@ -15,7 +15,7 @@ export const emojiToSearchTerm: Record<string, string> = {
   // Food & drink
   '🥕': 'carrot', '🍎': 'apple', '🍌': 'banana', '🍊': 'orange', '🍰': 'cake',
   '🎂': 'birthday cake', '🥛': 'milk', '🥤': 'juice', '🍼': 'baby bottle',
-  '🍱': 'bento box', '🍽️': 'dinner plate', '🐟': 'fish', '🥗': 'salad',
+  '🍱': 'bento box', '🍽️': 'dinner plate', '🥗': 'salad',
   // Nature
   '🌳': 'tree', '🌲': 'pine tree', '🌿': 'leaf', '🌱': 'seedling',
   '🌸': 'cherry blossom', '🌺': 'flower', '🌻': 'sunflower', '🌷': 'tulip',
