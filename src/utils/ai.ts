@@ -1,15 +1,29 @@
 import { StoryPage, templatePages } from '../data/words';
 
-export type AiState = 'pollinations' | 'template' | null;
+export type AiState = 'backend' | 'template' | null;
+
+const BACKEND_URL = 'https://portugese-for-kids-backend-784137631227.us-central1.run.app/api/story';
+const SCHOOL_TOPICS = [
+  'greeting the teacher',
+  'greeting classmates',
+  'introducing yourself',
+  'answering a classroom question',
+  'asking what something means',
+  'asking to repeat',
+  'saying you are ready',
+  'talking to a friend',
+  'talking at lunch',
+  'talking at break time',
+  'talking in the playground',
+  'talking about feelings at school',
+] as const;
 
 export async function initAI(
   onStatusChange: (text: string, color: string) => void
 ): Promise<AiState> {
-  onStatusChange('🌸 Pollinations AI (Free, No Key)', '#8b5cf6');
-  return 'pollinations';
+  onStatusChange('🤖 Backend AI', '#8b5cf6');
+  return 'backend';
 }
-
-const POLLINATIONS_PROMPT = `Generate 1 short A1 level European Portuguese sentence for kids. The sentence must describe a realistic, everyday scene (e.g. animals in their natural habitat, people doing normal activities). Do NOT mix unrelated subjects and places (e.g. no fish in gardens, no cats in the ocean). Include its English translation and 3 emojis that logically match the scene. Respond ONLY with raw JSON, no extra text: {"pt": "O gato dorme no sofá.", "en": "The cat sleeps on the sofa.", "mainEmoji": "🐱", "bgLeft": "🛋️", "bgRight": "😴"}`;
 
 function parseStoryJson(raw: string): StoryPage {
   const cleaned = raw.replace(/```json|```/g, '').trim();
@@ -31,36 +45,21 @@ async function fetchWithTimeout(url: string, options: RequestInit, ms: number): 
   }
 }
 
-const FOUR_HOURS_MS = 4 * 60 * 60 * 1000;
-let pollinationsBlockedUntil = 0;
-
-async function fetchPollinationsStory(): Promise<StoryPage> {
-  if (Date.now() < pollinationsBlockedUntil) {
-    throw new Error('Pollinations blocked (402) — retry after cooldown');
-  }
-
-  // POST with explicit Authorization: Bearer anonymous — overrides any stored
-  // browser key so authenticated users are not charged and get 402.
-  const res = await fetchWithTimeout('https://text.pollinations.ai/openai/v1/chat/completions', {
+async function fetchBackendStory(): Promise<StoryPage> {
+  const topic = SCHOOL_TOPICS[Math.floor(Math.random() * SCHOOL_TOPICS.length)];
+  const res = await fetchWithTimeout(BACKEND_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      model: 'openai-fast',
-      messages: [{ role: 'user', content: POLLINATIONS_PROMPT }],
+      prompt: `Generate one useful school sentence for kids about ${topic}.`,
     }),
   }, 25000);
 
-  if (res.status === 402) {
-    pollinationsBlockedUntil = Date.now() + FOUR_HOURS_MS;
-    throw new Error('Pollinations returned 402 — blocked for 4 hours');
-  }
-
-  if (!res.ok) throw new Error(`Pollinations error: ${res.status}`);
-  const data = await res.json() as { choices?: { message?: { content?: string } }[] };
-  const content = data?.choices?.[0]?.message?.content ?? '';
-  return parseStoryJson(content);
+  if (!res.ok) throw new Error(`Backend AI error: ${res.status}`);
+  const data = await res.json() as { content?: string };
+  return parseStoryJson(data.content ?? '');
 }
 
 function generateTemplateStoryPage(): StoryPage {
@@ -71,15 +70,12 @@ export async function getNewStoryPage(
   aiState: AiState,
   onStatusChange: (text: string, color: string) => void
 ): Promise<StoryPage> {
-  if (aiState === 'pollinations') {
+  if (aiState === 'backend') {
     try {
-      return await fetchPollinationsStory();
+      return await fetchBackendStory();
     } catch (e) {
-      console.warn('Pollinations story failed, falling back to template:', e);
-      const msg = e instanceof Error && e.message.includes('402')
-        ? '🧩 Template Engine (Pollinations limit — retry in 4h)'
-        : '🧩 Template Engine (Pollinations failed)';
-      onStatusChange(msg, '#0284c7');
+      console.warn('Backend story failed, falling back to template:', e);
+      onStatusChange('🧩 Template Engine (Backend AI failed)', '#0284c7');
     }
   }
 
