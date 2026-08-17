@@ -11,11 +11,15 @@ const SCHOOL_TOPICS = [
   'asking what something means',
   'asking to repeat',
   'saying you are ready',
+  'saying you do not understand',
+  'asking for help',
+  'asking where a book or notebook is',
   'talking to a friend',
   'talking at lunch',
   'talking at break time',
   'talking in the playground',
   'talking about feelings at school',
+  'hearing a teacher command such as sit down, stand up, open your book, close your notebook, look at the board, write your name, raise your hand, or be quiet',
 ] as const;
 
 export async function initAI(

@@ -20,6 +20,16 @@
   }
 }
 
+.blank-translation {
+  font-size: 14px;
+  color: $color-text-muted;
+  margin: -4px 0 8px;
+
+  @media (min-width: 480px) {
+    font-size: 16px;
+  }
+}
+
 .letter-options {
   display: flex;
   gap: 8px;
@@ -43,18 +53,20 @@
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
-  transition: 0.2s;
+  transition: transform 0.15s, box-shadow 0.15s;
+  box-shadow: 0 3px 6px rgba(59,130,246,0.3);
 
-  &:active { transform: scale(0.95); }
+  &:active { transform: scale(0.92); box-shadow: none; }
 
   &--disabled {
     opacity: 0.4;
     cursor: default;
     pointer-events: none;
+    box-shadow: none;
   }
 
   @media (hover: hover) {
-    &:hover { transform: scale(1.1); }
+    &:hover { transform: scale(1.12); box-shadow: 0 6px 14px rgba(59,130,246,0.4); }
   }
 
   @media (min-width: 480px) {

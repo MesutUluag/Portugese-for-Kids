@@ -84,7 +84,7 @@ export default function App(): React.ReactElement {
 
       <div className="nav-buttons">
         {navButtons.map(({ key, label, cls }) => (
-          <button key={key} className={`btn ${cls}`} onClick={() => setMode(key)}>
+          <button key={key} className={`btn ${cls}${mode === key ? ' btn--active' : ''}`} onClick={() => setMode(key)}>
             {label}
           </button>
         ))}

@@ -57,16 +57,16 @@
   font-weight: bold;
   color: $color-text-dark;
   cursor: pointer;
-  transition: 0.2s;
+  transition: transform 0.15s, border-color 0.15s, background 0.15s, box-shadow 0.15s;
   min-height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  &:active { background: #e2e8f0; border-color: $color-green; }
+  &:active { background: #d1fae5; border-color: $color-green; transform: scale(0.96); }
 
   @media (hover: hover) {
-    &:hover { background: #e2e8f0; border-color: $color-green; }
+    &:hover { background: #d1fae5; border-color: $color-green; transform: scale(1.04); box-shadow: 0 4px 10px rgba(16,185,129,0.2); }
   }
 
   @media (min-width: 480px) {

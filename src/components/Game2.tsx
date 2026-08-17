@@ -50,6 +50,7 @@ export default function Game2({ onScore }: Props): React.ReactElement {
       <h2 style={{ color: '#ec4899', margin: 0 }}>Tap to Listen! 🔊</h2>
       <div className="audio-speaker-btn" onClick={() => target && speakText(target.pt)}>🔊</div>
       <p style={{ color: '#64748b', fontWeight: 'bold', margin: 0 }}>Which picture did you hear?</p>
+      {target && <p style={{ color: '#64748b', margin: '4px 0 0', fontSize: '14px' }}>{target.en}</p>}
       <div className="emoji-options">
         {options.map((opt) => (
           <div key={opt.pt} className="emoji-opt" onClick={() => handleAnswer(opt)}>

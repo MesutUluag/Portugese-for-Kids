@@ -63,6 +63,7 @@ export default function Game4({ onScore }: Props): React.ReactElement {
       <h2 style={{ color: '#3b82f6', margin: 0 }}>✍️ Fill Missing Letter</h2>
       <WordImage en={target?.en ?? ''} emoji={target?.emoji ?? '😴'} size={120} className="game-target" />
       <div className="blank-display">{blank}</div>
+      <div className="blank-translation">{target?.en ?? ''}</div>
       <div className="letter-options">
         {options.map((c) => (
           <button key={c} className={`letter-btn${showSuccess ? ' letter-btn--disabled' : ''}`} onClick={() => handleAnswer(c)}>
