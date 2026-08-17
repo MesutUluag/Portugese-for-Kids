@@ -98,7 +98,7 @@ export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange }: Pro
           <button className="btn-story-audio" onClick={() => page && speakText(page.pt)} title="Listen to Sentence">
             🔊
           </button>
-          <button className="btn-story-audio btn-story-audio--slow" onClick={() => page && speakText(page.pt, { rate: 0.45 })} title="Listen to Sentence Slowly">
+          <button className="btn-story-audio btn-story-audio--slow" onClick={() => page && speakText(page.pt, { rate: 0.3 })} title="Listen to Sentence Slowly">
             🐢
           </button>
         </div>
