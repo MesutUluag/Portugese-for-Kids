@@ -27,11 +27,21 @@
   font-size: 32px;
   color: $color-white;
   cursor: pointer;
-  transition: 0.3s;
+  transition: transform 0.35s, background 0.2s, border-color 0.2s, box-shadow 0.2s;
+  transform-style: preserve-3d;
 
-  &:active { transform: scale(0.95); }
+  &:active { transform: scale(0.93); }
 
-  &.flipped { background: $color-white; color: $color-text-dark; border-color: $color-amber; }
+  @media (hover: hover) {
+    &:not(.flipped):hover { transform: scale(1.06); box-shadow: 0 6px 16px rgba(139,92,246,0.35); }
+  }
+
+  &.flipped {
+    background: $color-white;
+    color: $color-text-dark;
+    border-color: $color-amber;
+    box-shadow: 0 4px 12px rgba(245,158,11,0.25);
+  }
 
   @media (min-width: 480px) {
     height: 90px;
