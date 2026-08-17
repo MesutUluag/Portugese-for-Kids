@@ -45,7 +45,6 @@ async function fetchPollinationsStory(): Promise<StoryPage> {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer anonymous',
     },
     body: JSON.stringify({
       model: 'openai-fast',
