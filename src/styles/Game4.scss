@@ -20,6 +20,16 @@
   }
 }
 
+.blank-translation {
+  font-size: 14px;
+  color: $color-text-muted;
+  margin: -4px 0 8px;
+
+  @media (min-width: 480px) {
+    font-size: 16px;
+  }
+}
+
 .letter-options {
   display: flex;
   gap: 8px;

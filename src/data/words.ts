@@ -322,39 +322,87 @@ export const actions: StoryAction[] = [
 // Curated fallback sentences — every subject+action pair is realistic and contextually correct.
 // Used when AI is unavailable so we never show nonsensical combinations.
 export const templatePages: StoryPage[] = [
-  // Animals in their natural habitat
-  { pt: "O cão feliz corre no parque.", en: "The happy dog runs in the park.", mainEmoji: "🐶", bgLeft: "🌳", bgRight: "⚽" },
-  { pt: "O gato curioso bebe leite.", en: "The curious cat drinks milk.", mainEmoji: "🐱", bgLeft: "🥛", bgRight: "🍼" },
-  { pt: "O coelho pequeno come uma cenoura.", en: "The little rabbit eats a carrot.", mainEmoji: "🐰", bgLeft: "🥕", bgRight: "🌿" },
-  { pt: "O urso grande dorme na floresta.", en: "The big bear sleeps in the forest.", mainEmoji: "🐻", bgLeft: "🌲", bgRight: "🍂" },
-  { pt: "A borboleta colorida voa no jardim.", en: "The colorful butterfly flies in the garden.", mainEmoji: "🦋", bgLeft: "🌸", bgRight: "🌺" },
-  { pt: "O pássaro cantor canta de manhã.", en: "The singing bird sings in the morning.", mainEmoji: "🐦", bgLeft: "☀️", bgRight: "🌿" },
-  { pt: "O cavalo veloz corre no campo.", en: "The fast horse runs in the field.", mainEmoji: "🐴", bgLeft: "🌾", bgRight: "🌻" },
-  { pt: "A tartaruga lenta anda na praia.", en: "The slow turtle walks on the beach.", mainEmoji: "🐢", bgLeft: "🏖️", bgRight: "🌊" },
-  { pt: "O elefante enorme bebe água.", en: "The huge elephant drinks water.", mainEmoji: "🐘", bgLeft: "💧", bgRight: "🌴" },
-  { pt: "O pato amarelo nada no lago.", en: "The yellow duck swims in the lake.", mainEmoji: "🦆", bgLeft: "💧", bgRight: "🌊" },
-  { pt: "O leão corajoso dorme ao sol.", en: "The brave lion sleeps in the sun.", mainEmoji: "🦁", bgLeft: "☀️", bgRight: "🌾" },
-  { pt: "A vaca mansa come erva verde.", en: "The gentle cow eats green grass.", mainEmoji: "🐄", bgLeft: "🌱", bgRight: "🌿" },
-  { pt: "O peixe dourado nada no mar.", en: "The golden fish swims in the sea.", mainEmoji: "🐟", bgLeft: "🌊", bgRight: "🐚" },
-  { pt: "O sapo verde salta no lago.", en: "The green frog jumps in the lake.", mainEmoji: "🐸", bgLeft: "💧", bgRight: "🌿" },
-  { pt: "A girafa alta come folhas.", en: "The tall giraffe eats leaves.", mainEmoji: "🦒", bgLeft: "🌿", bgRight: "🌳" },
-  { pt: "A ovelha branca come erva.", en: "The white sheep eats grass.", mainEmoji: "🐑", bgLeft: "🌱", bgRight: "🌾" },
-  // People doing everyday activities
-  { pt: "O menino come uma maçã vermelha.", en: "The boy eats a red apple.", mainEmoji: "👦", bgLeft: "🍎", bgRight: "🌟" },
-  { pt: "A menina lê um livro.", en: "The girl reads a book.", mainEmoji: "👧", bgLeft: "📚", bgRight: "✏️" },
-  { pt: "A mãe carinhosa faz um bolo.", en: "The caring mother makes a cake.", mainEmoji: "👩", bgLeft: "🎂", bgRight: "🍰" },
-  { pt: "O pai trabalhador lava o carro.", en: "The hardworking father washes the car.", mainEmoji: "👨", bgLeft: "🚗", bgRight: "🪣" },
-  { pt: "O bebé pequenino dorme na cama.", en: "The tiny baby sleeps in the bed.", mainEmoji: "👶", bgLeft: "🛏️", bgRight: "🌙" },
-  { pt: "A avó gentil conta uma história.", en: "The kind grandmother tells a story.", mainEmoji: "👵", bgLeft: "📖", bgRight: "🕯️" },
-  { pt: "O avô simpático planta flores.", en: "The friendly grandfather plants flowers.", mainEmoji: "👴", bgLeft: "🌷", bgRight: "🌱" },
-  { pt: "A criança linda brinca no jardim.", en: "The pretty child plays in the garden.", mainEmoji: "🧒", bgLeft: "⚽", bgRight: "🌳" },
-  { pt: "O menino bebe sumo de laranja.", en: "The boy drinks orange juice.", mainEmoji: "👦", bgLeft: "🍊", bgRight: "🥤" },
-  { pt: "A menina pinta um quadro.", en: "The girl paints a picture.", mainEmoji: "👧", bgLeft: "🎨", bgRight: "🖌️" },
-  { pt: "O menino joga futebol no parque.", en: "The boy plays football in the park.", mainEmoji: "👦", bgLeft: "⚽", bgRight: "🏟️" },
-  { pt: "A professora ensina na escola.", en: "The teacher teaches at school.", mainEmoji: "👩‍🏫", bgLeft: "📚", bgRight: "🏫" },
-  { pt: "A família feliz come ao jantar.", en: "The happy family eats dinner.", mainEmoji: "👨‍👩‍👧", bgLeft: "🍽️", bgRight: "🕯️" },
-  { pt: "A menina dança com alegria.", en: "The girl dances with joy.", mainEmoji: "👧", bgLeft: "🎵", bgRight: "🌟" },
-  { pt: "O estudante esforçado escreve no caderno.", en: "The hardworking student writes in the notebook.", mainEmoji: "🎓", bgLeft: "📓", bgRight: "✏️" },
+  // Greeting the teacher
+  { pt: "Bom dia, professora!", en: "Good morning, teacher!", mainEmoji: "👩‍🏫", bgLeft: "🏫", bgRight: "☀️" },
+  { pt: "Boa tarde, professor!", en: "Good afternoon, teacher!", mainEmoji: "👨‍🏫", bgLeft: "🏫", bgRight: "🌤️" },
+  { pt: "Olá, professora!", en: "Hello, teacher!", mainEmoji: "👩‍🏫", bgLeft: "🏫", bgRight: "👋" },
+  { pt: "Até logo, professora!", en: "Goodbye, teacher!", mainEmoji: "👩‍🏫", bgLeft: "🏫", bgRight: "👋" },
+  // Greeting classmates
+  { pt: "Olá! Como te chamas?", en: "Hi! What is your name?", mainEmoji: "🙋", bgLeft: "🏫", bgRight: "👋" },
+  { pt: "Olá! Eu chamo-me Ana.", en: "Hi! My name is Ana.", mainEmoji: "👧", bgLeft: "🏫", bgRight: "😊" },
+  { pt: "Bom dia! Tudo bem?", en: "Good morning! All good?", mainEmoji: "😊", bgLeft: "☀️", bgRight: "🏫" },
+  { pt: "Estou bem, obrigado!", en: "I am fine, thank you!", mainEmoji: "😊", bgLeft: "🏫", bgRight: "👍" },
+  { pt: "Até amanhã!", en: "See you tomorrow!", mainEmoji: "👋", bgLeft: "🏫", bgRight: "🌙" },
+  // Introducing yourself
+  { pt: "Eu tenho seis anos.", en: "I am six years old.", mainEmoji: "🧒", bgLeft: "🏫", bgRight: "🎂" },
+  { pt: "Eu sou o João.", en: "I am João.", mainEmoji: "👦", bgLeft: "🏫", bgRight: "✏️" },
+  { pt: "Eu moro em Lisboa.", en: "I live in Lisbon.", mainEmoji: "🏠", bgLeft: "🏫", bgRight: "🗺️" },
+  { pt: "Eu gosto de ler.", en: "I like reading.", mainEmoji: "📖", bgLeft: "🏫", bgRight: "😊" },
+  // Answering simple classroom questions
+  { pt: "Sim, professora.", en: "Yes, teacher.", mainEmoji: "✋", bgLeft: "🏫", bgRight: "📚" },
+  { pt: "Não sei.", en: "I don't know.", mainEmoji: "🤷", bgLeft: "🏫", bgRight: "❓" },
+  { pt: "Estou pronto.", en: "I am ready.", mainEmoji: "👍", bgLeft: "📚", bgRight: "✏️" },
+  { pt: "Já acabei.", en: "I am done.", mainEmoji: "✅", bgLeft: "📓", bgRight: "✏️" },
+  { pt: "Não, professora.", en: "No, teacher.", mainEmoji: "🙅", bgLeft: "🏫", bgRight: "📚" },
+  // Asking what something means
+  { pt: "O que é isso?", en: "What is that?", mainEmoji: "🤔", bgLeft: "🏫", bgRight: "❓" },
+  { pt: "O que significa esta palavra?", en: "What does this word mean?", mainEmoji: "📖", bgLeft: "✏️", bgRight: "❓" },
+  { pt: "Como se diz em português?", en: "How do you say it in Portuguese?", mainEmoji: "💬", bgLeft: "🏫", bgRight: "❓" },
+  // Asking to repeat
+  { pt: "Pode repetir, por favor?", en: "Can you repeat, please?", mainEmoji: "🙏", bgLeft: "🏫", bgRight: "👂" },
+  { pt: "Pode dizer outra vez?", en: "Can you say it again?", mainEmoji: "😕", bgLeft: "🏫", bgRight: "🔄" },
+  { pt: "Mais devagar, por favor.", en: "Slower, please.", mainEmoji: "🐢", bgLeft: "🏫", bgRight: "👂" },
+  // Saying you don't understand
+  { pt: "Não percebi.", en: "I didn't understand.", mainEmoji: "😕", bgLeft: "🏫", bgRight: "❓" },
+  { pt: "Não entendo.", en: "I don't understand.", mainEmoji: "😕", bgLeft: "🏫", bgRight: "💭" },
+  // Asking for help
+  { pt: "Pode ajudar-me, por favor?", en: "Can you help me, please?", mainEmoji: "🙋", bgLeft: "📚", bgRight: "🤝" },
+  { pt: "Preciso de ajuda.", en: "I need help.", mainEmoji: "🙋", bgLeft: "🏫", bgRight: "🤝" },
+  // Asking where something is
+  { pt: "Onde está o meu livro?", en: "Where is my book?", mainEmoji: "📖", bgLeft: "🏫", bgRight: "❓" },
+  { pt: "Onde está o meu caderno?", en: "Where is my notebook?", mainEmoji: "📓", bgLeft: "🏫", bgRight: "❓" },
+  { pt: "Onde está o meu lápis?", en: "Where is my pencil?", mainEmoji: "✏️", bgLeft: "🏫", bgRight: "❓" },
+  { pt: "Onde é a casa de banho?", en: "Where is the bathroom?", mainEmoji: "🚻", bgLeft: "🏫", bgRight: "❓" },
+  { pt: "Posso ir à casa de banho?", en: "May I go to the bathroom?", mainEmoji: "🚻", bgLeft: "🏫", bgRight: "👩‍🏫" },
+  // Talking to a friend
+  { pt: "Posso sentar aqui?", en: "Can I sit here?", mainEmoji: "🧒", bgLeft: "🏫", bgRight: "🪑" },
+  { pt: "És meu amigo?", en: "Are you my friend?", mainEmoji: "🤝", bgLeft: "😊", bgRight: "🏫" },
+  { pt: "Posso ver o teu livro?", en: "Can I see your book?", mainEmoji: "📖", bgLeft: "👦", bgRight: "👧" },
+  { pt: "Gosto de ti!", en: "I like you!", mainEmoji: "😄", bgLeft: "🏫", bgRight: "❤️" },
+  // Talking at lunch
+  { pt: "Eu gosto do almoço.", en: "I like lunch.", mainEmoji: "🍱", bgLeft: "🥗", bgRight: "😋" },
+  { pt: "Posso comer aqui?", en: "Can I eat here?", mainEmoji: "🍽️", bgLeft: "🏫", bgRight: "😊" },
+  { pt: "Isto é bom!", en: "This is good!", mainEmoji: "😋", bgLeft: "🍱", bgRight: "👍" },
+  { pt: "Tenho fome.", en: "I am hungry.", mainEmoji: "🍽️", bgLeft: "🥗", bgRight: "😄" },
+  // Talking at break time
+  { pt: "Vamos brincar juntos?", en: "Shall we play together?", mainEmoji: "⚽", bgLeft: "🏫", bgRight: "😄" },
+  { pt: "Eu gosto do recreio.", en: "I like break time.", mainEmoji: "🏃", bgLeft: "⚽", bgRight: "🌳" },
+  { pt: "É a minha vez!", en: "It is my turn!", mainEmoji: "🙋", bgLeft: "⚽", bgRight: "😄" },
+  { pt: "Queres jogar comigo?", en: "Do you want to play with me?", mainEmoji: "😊", bgLeft: "⚽", bgRight: "🌳" },
+  // Talking in the playground
+  { pt: "Posso jogar contigo?", en: "Can I play with you?", mainEmoji: "🙂", bgLeft: "🏫", bgRight: "⚽" },
+  { pt: "Vamos correr!", en: "Let's run!", mainEmoji: "🏃", bgLeft: "🌳", bgRight: "⚽" },
+  { pt: "Apanha-me!", en: "Catch me!", mainEmoji: "🏃", bgLeft: "🌳", bgRight: "😄" },
+  { pt: "Vamos para o baloiço!", en: "Let's go to the swing!", mainEmoji: "🛝", bgLeft: "🌳", bgRight: "😄" },
+  // Talking about feelings at school
+  { pt: "Estou feliz.", en: "I am happy.", mainEmoji: "😄", bgLeft: "🏫", bgRight: "⭐" },
+  { pt: "Estou nervoso.", en: "I am nervous.", mainEmoji: "😬", bgLeft: "🏫", bgRight: "💭" },
+  { pt: "Estou triste.", en: "I am sad.", mainEmoji: "😢", bgLeft: "🏫", bgRight: "💭" },
+  { pt: "Estou com sono.", en: "I am sleepy.", mainEmoji: "😴", bgLeft: "🏫", bgRight: "💭" },
+  { pt: "Gosto desta escola.", en: "I like this school.", mainEmoji: "🏫", bgLeft: "⭐", bgRight: "😊" },
+  // Teacher commands
+  { pt: "Sentem-se, por favor.", en: "Sit down, please.", mainEmoji: "🪑", bgLeft: "🏫", bgRight: "👩‍🏫" },
+  { pt: "Levantem-se!", en: "Stand up!", mainEmoji: "🧍", bgLeft: "🏫", bgRight: "👩‍🏫" },
+  { pt: "Abram o livro.", en: "Open your book.", mainEmoji: "📖", bgLeft: "🏫", bgRight: "👩‍🏫" },
+  { pt: "Fechem o caderno.", en: "Close your notebook.", mainEmoji: "📓", bgLeft: "🏫", bgRight: "👩‍🏫" },
+  { pt: "Olhem para o quadro.", en: "Look at the board.", mainEmoji: "🖊️", bgLeft: "🏫", bgRight: "👩‍🏫" },
+  { pt: "Escrevam o vosso nome.", en: "Write your name.", mainEmoji: "✏️", bgLeft: "📓", bgRight: "👩‍🏫" },
+  { pt: "Levantem o braço.", en: "Raise your hand.", mainEmoji: "✋", bgLeft: "🏫", bgRight: "👩‍🏫" },
+  { pt: "Façam silêncio, por favor.", en: "Be quiet, please.", mainEmoji: "🤫", bgLeft: "🏫", bgRight: "👩‍🏫" },
+  { pt: "Ouçam com atenção.", en: "Listen carefully.", mainEmoji: "👂", bgLeft: "🏫", bgRight: "👩‍🏫" },
+  { pt: "Repitam depois de mim.", en: "Repeat after me.", mainEmoji: "🔄", bgLeft: "🏫", bgRight: "👩‍🏫" },
+  { pt: "Venham cá, por favor.", en: "Come here, please.", mainEmoji: "👋", bgLeft: "🏫", bgRight: "👩‍🏫" },
+  { pt: "Façam uma fila.", en: "Line up.", mainEmoji: "🚶", bgLeft: "🏫", bgRight: "👩‍🏫" },
 ];
 
 export const chromePhrases: StoryPage[] = [
