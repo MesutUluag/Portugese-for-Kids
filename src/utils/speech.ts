@@ -6,25 +6,29 @@
 // Keep a reference to the active utterance to prevent garbage collection in Chrome/Chromium
 let activeUtterance: SpeechSynthesisUtterance | null = null;
 
-export function speakText(text: string): void {
-  console.log('[Audio] speakText called with:', text);
+type SpeechOptions = {
+  rate?: number;
+};
+
+export function speakText(text: string, options: SpeechOptions = {}): void {
+  console.log('[Audio] speakText called with:', text, options);
   if (!text || !text.trim()) return;
 
   if ('speechSynthesis' in window && window.speechSynthesis) {
     console.log('[Audio] speechSynthesis available in window');
-    startUtterance(text);
+    startUtterance(text, options);
     return;
   }
 
   console.log('[Audio] speechSynthesis not available, trying ResponsiveVoice');
-  tryResponsiveVoice(text);
+  tryResponsiveVoice(text, options);
 }
 
-function startUtterance(text: string): void {
+function startUtterance(text: string, options: SpeechOptions): void {
   try {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'pt-PT';
-    utterance.rate = 0.85;
+    utterance.rate = options.rate ?? 0.85;
     utterance.pitch = 1.0;
     utterance.volume = 1.0;
 
@@ -72,7 +76,7 @@ function startUtterance(text: string): void {
         return;
       }
 
-      tryResponsiveVoice(text);
+      tryResponsiveVoice(text, options);
     };
 
     // Store reference to prevent garbage collection in Chrome
@@ -88,17 +92,17 @@ function startUtterance(text: string): void {
     window.speechSynthesis.speak(utterance);
   } catch (error) {
     console.error('[Audio] ✗ Web Speech API error:', error);
-    tryResponsiveVoice(text);
+    tryResponsiveVoice(text, options);
   }
 }
 
-function tryResponsiveVoice(text: string): void {
+function tryResponsiveVoice(text: string, options: SpeechOptions): void {
   if (typeof (window as any).responsiveVoice !== 'undefined') {
     try {
       console.log('[Audio] Using ResponsiveVoice for:', text);
       (window as any).responsiveVoice.speak(text, 'Portuguese Female', {
         pitch: 1.0,
-        rate: 0.85,
+        rate: options.rate ?? 0.85,
         volume: 1.0,
         onfinish: () => console.log('[Audio] ✓ ResponsiveVoice finished'),
         onerror: (err: any) => console.error('[Audio] ✗ ResponsiveVoice error:', err),

@@ -94,9 +94,14 @@ export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange }: Pro
             />
           : <div className="story-illustration" style={sceneVars} />
         }
-        <button className="btn-story-audio" onClick={() => page && speakText(page.pt)} title="Listen to Sentence">
-          🔊
-        </button>
+        <div className="story-audio-buttons">
+          <button className="btn-story-audio" onClick={() => page && speakText(page.pt)} title="Listen to Sentence">
+            🔊
+          </button>
+          <button className="btn-story-audio btn-story-audio--slow" onClick={() => page && speakText(page.pt, { rate: 0.6 })} title="Listen to Sentence Slowly">
+            🐢
+          </button>
+        </div>
         <div key={`text-${pageKey}`} className={`story-text-pt story-text--enter ${slideClass}`}>
           {loading ? '🤖 Generating story...' : page?.pt ?? '...'}
         </div>
