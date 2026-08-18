@@ -6,11 +6,12 @@ import '../styles/Game4.scss';
 
 interface Props {
   onScore: (pts: number) => void;
+  language: 'en' | 'tr';
 }
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyzáéíóúãõç';
 
-export default function Game4({ onScore }: Props): React.ReactElement {
+export default function Game4({ onScore, language }: Props): React.ReactElement {
   const [target, setTarget] = useState<Word | null>(null);
   const [blank, setBlank] = useState('');
   const [correctChar, setCorrectChar] = useState('');
@@ -60,10 +61,10 @@ export default function Game4({ onScore }: Props): React.ReactElement {
 
   return (
     <div className={`game-container ${animClass}`} style={{ display: 'block', borderColor: '#3b82f6' }}>
-      <h2 style={{ color: '#3b82f6', margin: 0 }}>✍️ Fill Missing Letter</h2>
+      <h2 style={{ color: '#3b82f6', margin: 0 }}>✍️ {language === 'tr' ? 'Eksik Harfi Bul' : 'Fill Missing Letter'}</h2>
       <WordImage en={target?.en ?? ''} emoji={target?.emoji ?? '😴'} size={120} className="game-target" />
       <div className="blank-display">{blank}</div>
-      <div className="blank-translation">{target?.en ?? ''}</div>
+      <div className="blank-translation">{language === 'tr' ? (target?.tr ?? '') : (target?.en ?? '')}</div>
       <div className="letter-options">
         {options.map((c) => (
           <button key={c} className={`letter-btn${showSuccess ? ' letter-btn--disabled' : ''}`} onClick={() => handleAnswer(c)}>

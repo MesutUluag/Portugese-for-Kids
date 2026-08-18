@@ -6,9 +6,10 @@ import '../styles/Game1.scss';
 
 interface Props {
   onScore: (pts: number) => void;
+  language: 'en' | 'tr';
 }
 
-export default function Game1({ onScore }: Props): React.ReactElement {
+export default function Game1({ onScore, language }: Props): React.ReactElement {
   const [target, setTarget] = useState<Word | null>(null);
   const [options, setOptions] = useState<string[]>([]);
   const [animClass, setAnimClass] = useState('');
@@ -49,7 +50,7 @@ export default function Game1({ onScore }: Props): React.ReactElement {
 
   return (
     <div ref={containerRef} className={`game-container ${animClass}`} style={{ display: 'block', borderColor: '#10b981' }}>
-      <h2 style={{ color: '#10b981', margin: 0 }}>Which word is this? 🔊</h2>
+      <h2 style={{ color: '#10b981', margin: 0 }}>{language === 'tr' ? 'Bu hangi kelime? 🔊' : 'Which word is this? 🔊'}</h2>
       <WordImage
         en={target?.en ?? ''}
         emoji={target?.emoji ?? '🐶'}
@@ -57,7 +58,7 @@ export default function Game1({ onScore }: Props): React.ReactElement {
         className="game-target"
         onClick={() => target && speakText(target.pt)}
       />
-      {target && <div className="game-target-label">{target.en}</div>}
+      {target && <div className="game-target-label">{language === 'tr' ? target.tr : target.en}</div>}
       <div className="game-options">
         {options.map((opt) => (
           <button key={opt} className="game-opt" onClick={() => handleAnswer(opt)}>

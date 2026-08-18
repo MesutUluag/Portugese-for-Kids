@@ -6,9 +6,10 @@ import '../styles/Game2.scss';
 
 interface Props {
   onScore: (pts: number) => void;
+  language: 'en' | 'tr';
 }
 
-export default function Game2({ onScore }: Props): React.ReactElement {
+export default function Game2({ onScore, language }: Props): React.ReactElement {
   const [target, setTarget] = useState<Word | null>(null);
   const [options, setOptions] = useState<Word[]>([]);
   const [animClass, setAnimClass] = useState('');
@@ -47,10 +48,10 @@ export default function Game2({ onScore }: Props): React.ReactElement {
 
   return (
     <div className={`game-container ${animClass}`} style={{ display: 'block', borderColor: '#ec4899' }}>
-      <h2 style={{ color: '#ec4899', margin: 0 }}>Tap to Listen! 🔊</h2>
+      <h2 style={{ color: '#ec4899', margin: 0 }}>{language === 'tr' ? 'Dinle! 🔊' : 'Tap to Listen! 🔊'}</h2>
       <div className="audio-speaker-btn" onClick={() => target && speakText(target.pt)}>🔊</div>
-      <p style={{ color: '#64748b', fontWeight: 'bold', margin: 0 }}>Which picture did you hear?</p>
-      {target && <p style={{ color: '#64748b', margin: '4px 0 0', fontSize: '14px' }}>{target.en}</p>}
+      <p style={{ color: '#64748b', fontWeight: 'bold', margin: 0 }}>{language === 'tr' ? 'Hangi resmi duydun?' : 'Which picture did you hear?'}</p>
+      {target && <p style={{ color: '#64748b', margin: '4px 0 0', fontSize: '14px' }}>{language === 'tr' ? target.tr : target.en}</p>}
       <div className="emoji-options">
         {options.map((opt) => (
           <div key={opt.pt} className="emoji-opt" onClick={() => handleAnswer(opt)}>
