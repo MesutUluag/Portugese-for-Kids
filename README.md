@@ -1,149 +1,163 @@
-# 🎈 Portuguese Kids Playground
+# 🇵🇹 Portuguese for Kids — Frontend
 
-🌐 **Live at: [mesutuluag.github.io/Portugese-for-Kids](https://mesutuluag.github.io/Portugese-for-Kids/)**
+An interactive language-learning app for children to practice Portuguese through games, flashcards, and AI-generated stories.
 
-An interactive Portuguese learning app for kids — no backend, fully static deployment on GitHub Pages.
-
-## Branches
-
-| Branch | Stack | Deploy |
-|---|---|---|
-| `main` | Pure HTML/CSS/JS — single file, zero build step | GitHub Pages (push to deploy) |
-| `react-vite` | **Vite + React 18 + TypeScript 5** | `npm run deploy` → GitHub Pages |
-
----
-
-## Features
-
-| Mode | Description |
-|---|---|
-| 🖼️ **Cards** | Flashcard grid with emoji, Portuguese word, and English translation. Searchable. |
-| 📖 **Story** | AI-generated A1-level Portuguese sentences with an animated scene illustration. |
-| 🎯 **Picture Game** | See an emoji, pick the correct Portuguese word from 4 options. |
-| 🎧 **Listen & Find** | Hear a word spoken aloud, tap the matching emoji. |
-| 🃏 **Memory Match** | Flip cards to find matching emoji pairs. |
-| ✍️ **Fill Blank** | Fill in the missing letter of a Portuguese word. |
-| 🧩 **Scramble** | Unscramble the letters to spell the correct word. |
-
----
-
-## AI Story Mode
-
-The Story mode uses a 3-tier AI fallback chain, probed **once at startup**:
-
-1. **Chrome Built-in AI (Gemini Nano)** — on-device, no internet needed *(requires flag)*
-2. **Pollinations AI** — free, no API key, no signup required
-3. **Template Engine** — offline fallback using built-in sentence templates
-
-### Enabling Chrome Built-in AI
-1. Open `chrome://flags/#prompt-api` → set **Prompt API** to **Enabled** → Relaunch
-2. Open `chrome://on-device-internals` → click **Load Default**
-3. Verify in DevTools: `await LanguageModel.availability()` → should return `"readily"`
-
-> **Note:** Chrome Built-in AI is blocked by enterprise MDM policies on managed devices. Pollinations AI will be used automatically as fallback when served over HTTP/HTTPS.
-
----
-
-## Running Locally
-
-### `main` branch — no build needed
-```bash
-# Python 3
-python3 -m http.server 8080
-```
-Open `http://localhost:8080` in Chrome.
-
-Or just open `index.html` directly in your browser (Story mode will use the template engine since `fetch()` is blocked on `file://`).
-
-### `react-vite` branch — Vite dev server
-
-> **Requires Node ≥ 18.** Use [nvm](https://github.com/nvm-sh/nvm) to manage versions.
-
-```bash
-git checkout react-vite
-nvm use 22          # or any Node ≥18
-npm install
-npm run dev         # http://localhost:5173
-```
-
----
-
-## Deployment
-
-### `main` branch
-The app is deployed via **GitHub Pages** directly from the `main` branch.
-Every `git push` to `main` automatically redeploys via the Pages branch setting.
-
-**Live URL:** https://mesutuluag.github.io/Portugese-for-Kids/
-
-### `react-vite` branch
-
-```bash
-# Build and deploy to GitHub Pages in one command
-npm run deploy
-```
-
-This runs `npm run build` (outputs to `dist/`) then `gh-pages -d dist` to push to the `gh-pages` branch.
-
-**Before first deploy**, confirm the `base` in [`vite.config.ts`](vite.config.ts) matches your repo name:
-```ts
-base: '/Portugese-for-Kids/',
-```
-
-Also enable GitHub Pages in repo **Settings → Pages → Source → Deploy from branch → `gh-pages`**.
+**Live app:** [mesutuluag.github.io/Portugese-for-Kids](https://mesutuluag.github.io/Portugese-for-Kids)
 
 ---
 
 ## Tech Stack
 
-### `main` branch
-- **Pure HTML/CSS/JS** — zero dependencies, zero build step
-- **Web Speech API** — text-to-speech for Portuguese pronunciation (`pt-PT`)
-- **Chrome Built-in AI API** — `window.LanguageModel` (Chrome 132+)
-- **Pollinations AI** — `https://text.pollinations.ai` (free LLM API)
+| Technology | Version | Purpose |
+|---|---|---|
+| React | 18.3.1 | UI framework |
+| TypeScript | 5.8.3 | Type safety |
+| Vite | 6.3.5 | Build tool & dev server |
+| SASS/SCSS | 1.102.0 | Mobile-first responsive styling |
+| gh-pages | 6.3.0 | GitHub Pages deployment |
 
-### `react-vite` branch
-- **React 18** + **TypeScript 5** + **Vite 6**
-- **gh-pages** — one-command GitHub Pages deployment
-- All original APIs preserved (Web Speech, Chrome AI, Pollinations)
-- Fully typed data models (`Word`, `StoryPage`, `Mode`)
+---
 
-### Source layout (`react-vite`)
+## Features
+
+- **7 Learning Modes** — flashcards, 5 games, and AI-generated story sentences
+- **Portuguese TTS** — Web Speech API with pt-PT voice detection and slow-mode playback
+- **AI Story Generation** — backend LLM (Gemini) + Chrome's built-in AI fallback, with curated template pages as a final fallback
+- **Multi-language UI** — English / Turkish toggle (🇬🇧 / 🇹🇷) with Chrome AI + MyMemory translation
+- **Dynamic Scene Themes** — emoji-to-color mapping drives CSS variables (night, rain, snow, ocean, sunset moods)
+- **Daily Study Tracker** — time spent today persisted in `localStorage`, pauses on tab-visibility change
+- **Image Fetching** — multi-source fallback chain: backend AI → Wikipedia → Wikimedia Commons → emoji
+- **Gamification** — score counter with bounce animation
+
+---
+
+## Learning Modes
+
+| Mode | Component | Description |
+|---|---|---|
+| 🖼️ Cards | `CardsMode` | Flashcard vocabulary review with shuffle |
+| 📖 Story | `StoryMode` | AI-generated story sentences with scene illustrations |
+| 🎯 Picture Game | `Game1` | Match a Portuguese word to the correct picture (3-choice MCQ) |
+| 🎧 Listen & Find | `Game2` | Hear a word spoken aloud, select the matching image |
+| 🃏 Memory Match | `Game3` | Flip cards to match Portuguese–English pairs |
+| ✍️ Fill in the Blank | `Game4` | Complete words with missing letters (supports accented chars: á é í ó ú ã õ ç) |
+| 🧩 Scramble | `Game5` | Unscramble letters to form the correct Portuguese word |
+
+---
+
+## Project Structure
+
 ```
 src/
-├── main.tsx
-├── App.tsx               # Mode routing + score state
-├── index.css             # Global styles
+├── App.tsx                     # Router, score, language toggle, time tracking
+├── index.scss                  # Mobile-first global styles
+├── main.tsx                    # Entry point
+├── components/
+│   ├── CardsMode.tsx
+│   ├── StoryMode.tsx
+│   ├── Game1.tsx – Game5.tsx
+│   ├── WordImage.tsx           # Wikipedia image fetch with emoji fallback
+│   ├── StoryIllustration.tsx   # Backend AI illustration + CSS scene fallback
+│   └── SceneProp.tsx           # Emoji → Wikipedia image mapper
 ├── data/
-│   └── words.ts          # All vocabulary + story data (typed)
-├── utils/
-│   ├── speech.ts         # Web Speech API + Google TTS fallback
-│   └── ai.ts             # Chrome AI / Pollinations / template chain
-└── components/
-    ├── CardsMode.tsx
-    ├── StoryMode.tsx
-    ├── Game1.tsx          # Picture Game
-    ├── Game2.tsx          # Listen & Find
-    ├── Game3.tsx          # Memory Match
-    ├── Game4.tsx          # Fill Blank
-    └── Game5.tsx          # Scramble
+│   └── words.ts                # Vocabulary DB, story subjects, actions, templates
+└── utils/
+    ├── ai.ts                   # Backend/Chrome AI story generation
+    ├── speech.ts               # Web Speech API wrapper (pt-PT)
+    ├── translate.ts            # EN→TR translation (Chrome AI → MyMemory)
+    ├── sceneTheme.ts           # Emoji-to-theme colour engine
+    ├── useWikiImage.ts         # React hook — Wikipedia image (cached)
+    ├── useWikimediaSearch.ts   # React hook — Wikimedia Commons search (cached)
+    ├── useBackendImage.ts      # React hook — backend AI image (429 handling)
+    └── usePollinationsImage.ts # React hook — Pollinations AI (rate-limit throttle)
 ```
 
 ---
 
-## Vocabulary
+## Data Model
 
-The app includes 130+ words and phrases across categories:
-- Verbs (to sleep, to play, to draw…)
-- Adjectives (happy, sad, tall, cheap…)
-- Family members 👨‍👩‍👧
-- Food & drink 🍎🥛🍷
-- Common phrases (está bem, faz sentido…)
+```ts
+interface Word {
+  pt: string;    // Portuguese
+  en: string;    // English
+  tr: string;    // Turkish
+  emoji: string; // Visual reference
+}
 
-## Games & Scoring
+interface StoryPage {
+  pt: string;          // Portuguese sentence
+  en: string;          // English translation
+  mainEmoji: string;   // Subject emoji
+  bgLeft: string;      // Left background emoji
+  bgRight: string;     // Right background emoji
+  imagePrompt?: string;// Custom AI image prompt (optional)
+}
+```
 
-Every correct answer earns ⭐ stars displayed in the score badge at the top. Animations provide instant feedback — green pulse for correct, red shake for wrong.
+**Exported datasets:** `kidsWords` (~200 words), `subjects`, `actions`, `templatePages`, `chromePhrases`
 
-## License
+**Vocabulary categories:** verbs, family, animals, food & drink, colours, numbers, body parts, and more.
 
-MIT — free to use, modify, and share.
+---
+
+## External APIs
+
+| Service | Used For |
+|---|---|
+| Backend (Cloud Run / `localhost:8081`) | Story & image generation |
+| Web Speech API | Portuguese TTS (built-in browser) |
+| Chrome AI API | Story generation + EN→TR translation (Chrome 131+) |
+| MyMemory | EN→TR translation fallback |
+| Wikipedia REST API | Word images |
+| Wikimedia Commons | Scene prop images |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js ≥ 18
+- npm ≥ 9
+
+### Install & Run
+
+```bash
+npm install
+npm run dev
+```
+
+App runs at `http://localhost:5173`.
+
+### Build
+
+```bash
+npm run build
+```
+
+Output in `dist/`.
+
+### Deploy to GitHub Pages
+
+```bash
+npm run deploy
+```
+
+---
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start Vite dev server |
+| `npm run build` | TypeScript compile + Vite production build |
+| `npm run preview` | Preview production build locally |
+| `npm run deploy` | Build and publish to GitHub Pages |
+
+---
+
+## Backend
+
+Story generation and AI image rendering are powered by the companion Spring Boot backend. See [Portugese-for-Kids-Backend](../../Portugese-for-Kids-Backend/README.md) for setup instructions.
+
+When the backend is unavailable, the app falls back to curated `templatePages` from `src/data/words.ts`.
