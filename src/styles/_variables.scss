@@ -30,6 +30,7 @@ $color-orange:      #f97316;
 $color-orange-light:#fed7aa;
 $color-cyan:        #06b6d4;
 $color-cyan-light:  #a5f3fc;
+
 $color-sky:         #0284c7;
 $color-sky-dark:    #0369a1;
 $color-red:         #ef4444;
@@ -53,6 +54,13 @@ $radius-circle: 50%;
 @mixin nav-btn($bg, $border-color) {
   background: $bg;
   color: $color-white;
+  // Dark outline on every side of each letter — cartoon/comic effect that
+  // also pushes the effective contrast well above 4.5:1 on all vivid colours.
+  text-shadow:
+    -1px -1px 0 rgba(0,0,0,0.55),
+     1px -1px 0 rgba(0,0,0,0.55),
+    -1px  1px 0 rgba(0,0,0,0.55),
+     1px  1px 0 rgba(0,0,0,0.55);
   border: 3px solid $border-color;
 }
 
