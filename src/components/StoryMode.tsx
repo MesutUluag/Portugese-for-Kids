@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { StoryPage } from '../data/words';
 import { AiState, getNewStoryPage } from '../utils/ai';
 import { speakText } from '../utils/speech';
+import { translateToTurkish } from '../utils/translate';
 import { getSceneTheme } from '../utils/sceneTheme';
 import StoryIllustration from './StoryIllustration';
 import '../styles/StoryMode.scss';
@@ -11,14 +12,16 @@ interface Props {
   aiLabel: string;
   aiColor: string;
   onAiChange: (label: string, color: string) => void;
+  language: 'en' | 'tr';
 }
 
-export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange }: Props): React.ReactElement {
+export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange, language }: Props): React.ReactElement {
   const [history, setHistory] = useState<StoryPage[]>([]);
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [slideDir, setSlideDir] = useState<'left' | 'right' | ''>('');
   const [pageKey, setPageKey] = useState(0);
+  const [trText, setTrText] = useState('');
   const initialized = useRef(false);
 
   useEffect(() => {
@@ -27,6 +30,17 @@ export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange }: Pro
     void loadFirst();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Translate the current page's English text to Turkish when language or page changes
+  useEffect(() => {
+    const en = history[index]?.en;
+    if (language === 'tr' && en) {
+      setTrText('');
+      void translateToTurkish(en).then(setTrText);
+    } else {
+      setTrText('');
+    }
+  }, [language, index, history]);
 
   async function loadFirst(): Promise<void> {
     setLoading(true);
@@ -105,7 +119,9 @@ export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange }: Pro
         <div key={`text-${pageKey}`} className={`story-text-pt story-text--enter ${slideClass}`}>
           {loading ? '🤖 Generating story...' : page?.pt ?? '...'}
         </div>
-        <div className="story-text-en">{loading ? '' : page?.en ?? ''}</div>
+        <div className="story-text-en">
+          {loading ? '' : language === 'tr' ? (trText || (page ? '🔄' : '')) : (page?.en ?? '')}
+        </div>
         <div className="story-nav">
           <button className="btn-story-action" onClick={handlePrev} disabled={index === 0}>
             ⬅️ Anterior

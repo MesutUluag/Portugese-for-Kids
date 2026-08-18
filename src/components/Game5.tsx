@@ -6,9 +6,10 @@ import '../styles/Game5.scss';
 
 interface Props {
   onScore: (pts: number) => void;
+  language: 'en' | 'tr';
 }
 
-export default function Game5({ onScore }: Props): React.ReactElement {
+export default function Game5({ onScore, language }: Props): React.ReactElement {
   const [target, setTarget] = useState<Word | null>(null);
   const [scrambled, setScrambled] = useState<string[]>([]);
   const [input, setInput] = useState<string[]>([]);
@@ -90,7 +91,7 @@ export default function Game5({ onScore }: Props): React.ReactElement {
 
   return (
     <div className={`game-container ${animClass}`} style={{ display: 'block', borderColor: '#f97316' }}>
-      <h2 style={{ color: '#f97316', margin: 0 }}>🧩 Unscramble Word</h2>
+      <h2 style={{ color: '#f97316', margin: 0 }}>🧩 {language === 'tr' ? 'Kelimeyi Bul' : 'Unscramble Word'}</h2>
       <WordImage
         en={target?.en ?? ''}
         emoji={target?.emoji ?? '🍎'}
@@ -99,7 +100,7 @@ export default function Game5({ onScore }: Props): React.ReactElement {
         onClick={() => target && speakText(target.pt)}
       />
       <div className="scramble-slots">{slots}</div>
-      <div className="hint-text">Meaning: {target?.en ?? ''}</div>
+      <div className="hint-text">{language === 'tr' ? 'Anlamı' : 'Meaning'}: {language === 'tr' ? (target?.tr ?? '') : (target?.en ?? '')}</div>
       <div className="scramble-letters">
         {scrambled.map((char, idx) => (
           <button

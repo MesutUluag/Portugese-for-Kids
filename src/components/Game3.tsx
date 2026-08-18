@@ -11,9 +11,10 @@ interface FlippedEntry {
 
 interface Props {
   onScore: (pts: number) => void;
+  language: 'en' | 'tr';
 }
 
-export default function Game3({ onScore }: Props): React.ReactElement {
+export default function Game3({ onScore, language }: Props): React.ReactElement {
   const [deck, setDeck] = useState<Word[]>([]);
   const [flipped, setFlipped] = useState<number[]>([]);
   const [matched, setMatched] = useState<number[]>([]);
@@ -65,8 +66,8 @@ export default function Game3({ onScore }: Props): React.ReactElement {
 
   return (
     <div className="game-container" style={{ display: 'block', borderColor: '#8b5cf6' }}>
-      <h2 style={{ color: '#8b5cf6', margin: 0 }}>🃏 Memory Match</h2>
-      <p style={{ color: '#64748b', margin: '5px 0' }}>Find matching emoji pairs!</p>
+      <h2 style={{ color: '#8b5cf6', margin: 0 }}>🃏 {language === 'tr' ? 'Hafıza Oyunu' : 'Memory Match'}</h2>
+      <p style={{ color: '#64748b', margin: '5px 0' }}>{language === 'tr' ? 'Eşleşen emoji çiftlerini bul!' : 'Find matching emoji pairs!'}</p>
       <div className="memory-grid">
         {deck.map((item, idx) => {
           const isFlipped = flipped.includes(idx) || matched.includes(idx);

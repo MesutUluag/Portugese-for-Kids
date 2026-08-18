@@ -20,8 +20,7 @@ export function speakText(text: string, options: SpeechOptions = {}): void {
     return;
   }
 
-  console.log('[Audio] speechSynthesis not available, trying ResponsiveVoice');
-  tryResponsiveVoice(text, options);
+  console.warn('[Audio] speechSynthesis not available in this browser');
 }
 
 function startUtterance(text: string, options: SpeechOptions): void {
@@ -75,8 +74,6 @@ function startUtterance(text: string, options: SpeechOptions): void {
         console.warn('[Audio] Speech blocked (interaction required):', text);
         return;
       }
-
-      tryResponsiveVoice(text, options);
     };
 
     // Store reference to prevent garbage collection in Chrome
@@ -93,33 +90,6 @@ function startUtterance(text: string, options: SpeechOptions): void {
     window.speechSynthesis.speak(utterance);
   } catch (error) {
     console.error('[Audio] ✗ Web Speech API error:', error);
-    tryResponsiveVoice(text, options);
   }
 }
 
-function tryResponsiveVoice(text: string, options: SpeechOptions): void {
-  if (typeof (window as any).responsiveVoice !== 'undefined') {
-    try {
-      console.log('[Audio] Using ResponsiveVoice for:', text);
-      (window as any).responsiveVoice.cancel();
-      (window as any).responsiveVoice.speak(text, 'Portuguese Female', {
-        pitch: 1.0,
-        rate: options.rate ?? 0.85,
-        volume: 1.0,
-        onfinish: () => console.log('[Audio] ✓ ResponsiveVoice finished'),
-        onerror: (err: any) => console.error('[Audio] ✗ ResponsiveVoice error:', err),
-      });
-    } catch (error) {
-      console.error('[Audio] ✗ ResponsiveVoice exception:', error);
-    }
-  }
-}
-
-// Log available voices once they load (async in some browsers)
-if ('speechSynthesis' in window) {
-  window.speechSynthesis.onvoiceschanged = () => {
-    const all = window.speechSynthesis.getVoices();
-    const pt  = all.filter((v) => v.lang.startsWith('pt'));
-    console.log(`[Audio] Voices loaded: ${all.length} total, ${pt.length} Portuguese`);
-  };
-}

@@ -3,7 +3,11 @@ import { kidsWords, Word } from '../data/words';
 import { speakText } from '../utils/speech';
 import '../styles/CardsMode.scss';
 
-export default function CardsMode(): React.ReactElement {
+interface Props {
+  language: 'en' | 'tr';
+}
+
+export default function CardsMode({ language }: Props): React.ReactElement {
   const [query, setQuery] = useState('');
   
   // Shuffle the words list once on mount so the learning cards appear in a fresh, randomized order each visit
@@ -13,7 +17,8 @@ export default function CardsMode(): React.ReactElement {
     ? shuffledWords.filter(
         (w) =>
           w.pt.toLowerCase().includes(query.toLowerCase()) ||
-          w.en.toLowerCase().includes(query.toLowerCase())
+          w.en.toLowerCase().includes(query.toLowerCase()) ||
+          w.tr.toLowerCase().includes(query.toLowerCase())
       )
     : shuffledWords;
 
@@ -29,14 +34,14 @@ export default function CardsMode(): React.ReactElement {
       <div className="kids-grid">
         {filtered.map((w) => (
           <div
-            key={w.pt}
+            key={`${w.pt}-${w.en}`}
             className="kids-card"
             onClick={() => speakText(w.pt)}
           >
             <span className="sound-icon">🔊</span>
             <span className="kids-emoji">{w.emoji}</span>
             <div className="kids-pt">{w.pt}</div>
-            <div className="kids-en">{w.en}</div>
+            <div className="kids-en">{language === 'tr' ? w.tr : w.en}</div>
           </div>
         ))}
       </div>
