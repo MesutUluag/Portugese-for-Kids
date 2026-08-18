@@ -100,7 +100,7 @@ export default function Game5({ onScore, language }: Props): React.ReactElement 
         onClick={() => target && speakText(target.pt)}
       />
       <div className="scramble-slots">{slots}</div>
-      <div className="hint-text">{language === 'tr' ? 'Anlamı' : 'Meaning'}: {language === 'tr' ? (target?.tr ?? '') : (target?.en ?? '')}</div>
+      <div className="hint-text">{language === 'tr' ? `Anlamı: ${target?.tr ?? ''}` : `Meaning: ${target?.en ?? ''}`}</div>
       <div className="scramble-letters">
         {scrambled.map((char, idx) => (
           <button
@@ -115,7 +115,7 @@ export default function Game5({ onScore, language }: Props): React.ReactElement 
       </div>
       <div className="scramble-controls">
         <button className="btn-nav" onClick={handlePrev} disabled={historyIdx <= 0}>◀</button>
-        <button className="btn-reset" onClick={handleReset}>🔄 Reset</button>
+        <button className="btn-reset" onClick={handleReset}>🔄 {language === 'tr' ? 'Sıfırla' : 'Reset'}</button>
         <button className="btn-nav" onClick={handleNext}>▶</button>
       </div>
     </div>

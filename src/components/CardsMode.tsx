@@ -27,7 +27,7 @@ export default function CardsMode({ language }: Props): React.ReactElement {
       <input
         type="text"
         className="search-box"
-        placeholder="🔍 Search word (e.g. dormir, dog, falar)..."
+        placeholder={language === 'tr' ? '🔍 Kelime ara (örn. dormir, köpek, falar)...' : '🔍 Search word (e.g. dormir, dog, falar)...'}
         value={query}
         onChange={(e) => setQuery(e.target.value)}
       />
