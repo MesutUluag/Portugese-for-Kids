@@ -2,7 +2,9 @@ import { StoryPage, templatePages } from '../data/words';
 
 export type AiState = 'backend' | 'template' | null;
 
-const BACKEND_URL = 'https://portugese-for-kids-backend-784137631227.us-central1.run.app/api/story';
+const BACKEND_URL = import.meta.env.DEV
+  ? 'http://127.0.0.1:8081/api/story'
+  : 'https://portugese-for-kids-backend-784137631227.us-central1.run.app/api/story';
 const SCHOOL_TOPICS = [
   'greeting the teacher',
   'greeting classmates',

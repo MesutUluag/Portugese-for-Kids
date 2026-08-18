@@ -88,6 +88,7 @@ function startUtterance(text: string, options: SpeechOptions): void {
       window.speechSynthesis.resume();
     }
 
+    window.speechSynthesis.cancel();
     console.log('[Audio] Calling window.speechSynthesis.speak() for:', text);
     window.speechSynthesis.speak(utterance);
   } catch (error) {
@@ -100,6 +101,7 @@ function tryResponsiveVoice(text: string, options: SpeechOptions): void {
   if (typeof (window as any).responsiveVoice !== 'undefined') {
     try {
       console.log('[Audio] Using ResponsiveVoice for:', text);
+      (window as any).responsiveVoice.cancel();
       (window as any).responsiveVoice.speak(text, 'Portuguese Female', {
         pitch: 1.0,
         rate: options.rate ?? 0.85,
