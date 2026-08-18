@@ -1,24 +1,25 @@
 import React from 'react';
 import { StoryPage } from '../data/words';
 import { SceneTheme } from '../utils/sceneTheme';
-import { usePollinationsImage } from '../utils/usePollinationsImage';
+import { useBackendImage } from '../utils/useBackendImage';
 
 interface Props {
   page: StoryPage;
   theme: SceneTheme;
-  pageKey: number;
+  pageKey?: number;
   sceneVars: React.CSSProperties;
 }
 
 function buildPrompt(page: StoryPage): string {
+  if (page.imagePrompt) return page.imagePrompt;
   const scene = page.en.replace(/[.,!?]/g, '').trim();
-  return `${scene}, colorful cute kids illustration, storybook art, bright colors, simple background`;
+  const character = page.mainEmoji ? `a child character ${page.mainEmoji}` : 'a child';
+  return `${character} in a classroom scene, ${scene}, colorful cute kids illustration, storybook art, bright colors, simple background, no text`;
 }
 
 export default function StoryIllustration({ page, pageKey, sceneVars }: Props): React.ReactElement {
   const prompt = buildPrompt(page);
-  const pollUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=780&height=360&nologo=true&seed=${pageKey}`;
-  const imgResult = usePollinationsImage(pollUrl);
+  const imgResult = useBackendImage(prompt);
 
   const photoActive = imgResult !== 'loading' && imgResult !== 'blocked';
   const hasPhoto = photoActive;
@@ -31,7 +32,7 @@ export default function StoryIllustration({ page, pageKey, sceneVars }: Props): 
         ...(hasPhoto ? {
           backgroundImage: `url(${imgResult})`,
           backgroundSize: 'cover',
-          backgroundPosition: 'center top',
+          backgroundPosition: 'center center',
         } : {}),
       }}
     >
