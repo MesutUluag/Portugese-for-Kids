@@ -117,6 +117,11 @@ h1 {
 .time-badge {
   background: $color-amber;
   color: $color-white;
+  text-shadow:
+    -1px -1px 0 rgba(0,0,0,0.55),
+     1px -1px 0 rgba(0,0,0,0.55),
+    -1px  1px 0 rgba(0,0,0,0.55),
+     1px  1px 0 rgba(0,0,0,0.55);
   padding: 8px 16px;
   border-radius: $radius-pill;
   font-size: 14px;

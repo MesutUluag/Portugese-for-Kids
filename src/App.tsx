@@ -79,7 +79,7 @@ export default function App(): React.ReactElement {
   ];
 
   return (
-    <div className="app">
+    <main className="app">
       <div className="app-header-row">
         <h1>🎈 Portuguese Kids Playground 🎨</h1>
         <button
@@ -115,7 +115,7 @@ export default function App(): React.ReactElement {
       {mode === 'game3' && <Game3 onScore={addScore} language={language} />}
       {mode === 'game4' && <Game4 onScore={addScore} language={language} />}
       {mode === 'game5' && <Game5 onScore={addScore} language={language} />}
-    </div>
+    </main>
   );
 }
 

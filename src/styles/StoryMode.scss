@@ -28,8 +28,8 @@
   --cloud-opacity: 1;
 
   border-radius: $radius-lg;
-  height: 220px;
-  margin-bottom: 12px;
+  height: 300px;
+  margin-bottom: 4px;
   position: relative;
   overflow: hidden;
   border: 3px solid #38bdf8;
@@ -39,8 +39,8 @@
   // On wider screens use aspect-ratio so the box always matches the 768x336 image exactly
   @media (min-width: 480px) {
     height: auto;
-    aspect-ratio: 768 / 336;
-    margin-bottom: 15px;
+    aspect-ratio: 768 / 460;
+    margin-bottom: 6px;
   }
 }
 
@@ -414,14 +414,14 @@
   font-size: 16px;
   font-weight: bold;
   color: $color-sky-dark;
-  margin-bottom: 8px;
+  margin-bottom: 2px;
   line-height: 1.4;
   min-height: 48px;
   @include flex-center;
 
   @media (min-width: 480px) {
     font-size: 20px;
-    margin-bottom: 10px;
+    margin-bottom: 2px;
     min-height: 56px;
   }
 }
