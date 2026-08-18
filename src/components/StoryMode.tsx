@@ -117,18 +117,18 @@ export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange, langu
           </button>
         </div>
         <div key={`text-${pageKey}`} className={`story-text-pt story-text--enter ${slideClass}`}>
-          {loading ? '🤖 Generating story...' : page?.pt ?? '...'}
+          {loading ? (language === 'tr' ? '🤖 Hikaye oluşturuluyor...' : '🤖 Generating story...') : page?.pt ?? '...'}
         </div>
         <div className="story-text-en">
           {loading ? '' : language === 'tr' ? (trText || (page ? '🔄' : '')) : (page?.en ?? '')}
         </div>
         <div className="story-nav">
           <button className="btn-story-action" onClick={handlePrev} disabled={index === 0}>
-            ⬅️ Anterior
+            {language === 'tr' ? '⬅️ Önceki' : '⬅️ Previous'}
           </button>
-          <span style={{ fontWeight: 'bold', color: '#0284c7' }}>Página {index + 1}</span>
+          <span style={{ fontWeight: 'bold', color: '#0284c7' }}>{language === 'tr' ? `Sayfa ${index + 1}` : `Page ${index + 1}`}</span>
           <button className="btn-story-action" onClick={() => void handleNext()} disabled={loading}>
-            Próximo ➡️
+            {language === 'tr' ? 'Sonraki ➡️' : 'Next ➡️'}
           </button>
         </div>
       </div>
