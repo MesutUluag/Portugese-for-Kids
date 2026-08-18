@@ -11,7 +11,7 @@ export function useBackendImage(prompt: string): 'loading' | 'blocked' | string 
     let cancelled = false;
     setResult('loading');
 
-    const url = `${IMAGE_BACKEND_URL}?imagePrompt=${encodeURIComponent(prompt)}`;
+    const url = `${IMAGE_BACKEND_URL}?imagePrompt=${encodeURIComponent(prompt)}&width=768&height=180`;
 
     fetch(url)
       .then((res) => {
