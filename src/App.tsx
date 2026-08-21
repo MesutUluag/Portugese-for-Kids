@@ -8,6 +8,7 @@ import Game2 from './components/Game2';
 import Game3 from './components/Game3';
 import Game4 from './components/Game4';
 import Game5 from './components/Game5';
+import Game6 from './components/Game6';
 
 export default function App(): React.ReactElement {
   const [mode, setMode] = useState<Mode>('cards');
@@ -76,6 +77,7 @@ export default function App(): React.ReactElement {
     { key: 'game3',  label: '🃏 Memory Match',  labelTr: '🃏 Hafıza Oyunu',   cls: 'btn-game3' },
     { key: 'game4',  label: '✍️ Fill Blank',    labelTr: '✍️ Boşluk Doldurma', cls: 'btn-game4' },
     { key: 'game5',  label: '🧩 Scramble',      labelTr: '🧩 Kelime Bul',     cls: 'btn-game5' },
+    { key: 'game6',  label: '🧩 Puzzle',         labelTr: '🧩 Yapboz',         cls: 'btn-game6' },
   ];
 
   return (
@@ -115,6 +117,7 @@ export default function App(): React.ReactElement {
       {mode === 'game3' && <Game3 onScore={addScore} language={language} />}
       {mode === 'game4' && <Game4 onScore={addScore} language={language} />}
       {mode === 'game5' && <Game5 onScore={addScore} language={language} />}
+      {mode === 'game6' && <Game6 onScore={addScore} language={language} />}
     </main>
   );
 }

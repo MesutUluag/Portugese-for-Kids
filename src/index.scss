@@ -217,5 +217,6 @@ h1 {
   &-game3 { @include nav-btn($color-purple, $color-purple-light);}
   &-game4 { @include nav-btn($color-blue,   $color-blue-light);  }
   &-game5 { @include nav-btn($color-orange, $color-orange-light);}
+  &-game6 { @include nav-btn($color-rose,   $color-pink-light);  }
   &-story { @include nav-btn($color-cyan,   $color-cyan-light);  }
 }

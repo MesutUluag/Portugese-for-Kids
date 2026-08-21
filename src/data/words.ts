@@ -14,7 +14,7 @@ export interface StoryPage {
   imagePrompt?: string;
 }
 
-export type Mode = 'cards' | 'story' | 'game1' | 'game2' | 'game3' | 'game4' | 'game5';
+export type Mode = 'cards' | 'story' | 'game1' | 'game2' | 'game3' | 'game4' | 'game5' | 'game6';
 
 export const kidsWords: Word[] = [
   // ── Core verbs ───────────────────────────────────────────────────────────────
