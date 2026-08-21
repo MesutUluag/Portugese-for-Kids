@@ -178,12 +178,16 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
   const previewTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   // 'scatter': animating pieces from board to tray (between preview and playing)
   const scatterRef      = useRef(false);
+  // spinner angle (driven by render loop — no re-render needed)
+  const spinnerAngleRef = useRef(0);
+  const imgLoadingRef   = useRef(false);
 
   const wikiUrl = useWikiImage(target?.en ?? '');
 
   // ── Load image into imgRef when wikiUrl changes ───────────────────────────
   useEffect(() => {
     if (!wikiUrl) {
+      // URL still resolving — keep spinner on, nothing else to do yet
       imgRef.current = null;
       return;
     }
@@ -191,11 +195,13 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
       clearTimeout(fallbackTimerRef.current);
       fallbackTimerRef.current = null;
     }
+    imgLoadingRef.current = true;
     let cancelled = false;
     const img = new window.Image();
     img.crossOrigin = 'anonymous';
     img.onload = () => {
       if (cancelled) return;
+      imgLoadingRef.current = false;
       imgRef.current = img;
       // Show preview for 1.5s then animate pieces out to tray
       phaseRef.current = 'preview';
@@ -224,7 +230,7 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
         });
       }, 1500);
     };
-    img.onerror = () => { if (!cancelled) imgRef.current = null; };
+    img.onerror = () => { if (!cancelled) { imgLoadingRef.current = false; imgRef.current = null; } };
     img.src = wikiUrl;
     return () => {
       cancelled = true;
@@ -250,6 +256,7 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
     targetRef.current = next;
     solvedRef.current = false;
     imgRef.current = null;
+    imgLoadingRef.current = true;   // show spinner immediately — URL + image both pending
     tweensRef.current = [];
     dragRef.current = null;
     phaseRef.current = 'preview';
@@ -260,14 +267,16 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
       const col = i % COLS;
       const row = Math.floor(i / ROWS);
       const slot = shuffled[i];
-      const tp = TRAY_POSITIONS[slot];
+      const solvedX = BOARD_X + col * PIECE_W;
+      const solvedY = BOARD_Y + row * PIECE_H;
       return {
         col, row,
-        x: tp.x, y: tp.y,
-        pw: TRAY_W, ph: TRAY_H,
-        rot: tp.rot,
-        solvedX: BOARD_X + col * PIECE_W,
-        solvedY: BOARD_Y + row * PIECE_H,
+        // Start on the board so nothing shows in the tray while the image loads
+        x: solvedX, y: solvedY,
+        pw: PIECE_W, ph: PIECE_H,
+        rot: 0,
+        solvedX,
+        solvedY,
         traySlot: slot,
         solved: false,
       };
@@ -455,6 +464,55 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
         }
       }
 
+      // ── Loading spinner: drawn on top of board after all pieces ─────────
+      if (imgLoadingRef.current) {
+        const cx = BOARD_X + BOARD_W / 2;
+        const cy = BOARD_Y + BOARD_H / 2;
+
+        // Soft frosted overlay over the board only
+        ctx.fillStyle = 'rgba(232, 212, 176, 0.55)';
+        ctx.fillRect(BOARD_X, BOARD_Y, BOARD_W, BOARD_H);
+
+        // Three concentric rings, each rotating at a different speed + direction
+        spinnerAngleRef.current += 0.045;
+        const a = spinnerAngleRef.current;
+
+        const rings: { r: number; w: number; color: string; speed: number; arc: number }[] = [
+          { r: 46, w: 7, color: '#c2844a', speed:  1.0,  arc: 1.5 * Math.PI }, // warm brown — outer
+          { r: 32, w: 7, color: '#a8692e', speed: -1.4,  arc: 1.2 * Math.PI }, // deep amber — mid (counter)
+          { r: 18, w: 7, color: '#d4a96a', speed:  1.9,  arc: 0.9 * Math.PI }, // sandy gold — inner
+        ];
+
+        ctx.lineCap = 'round';
+        for (const ring of rings) {
+          const start = a * ring.speed;
+          const end   = start + ring.arc;
+
+          // Glow pass (wide, faint)
+          ctx.save();
+          ctx.shadowColor  = ring.color;
+          ctx.shadowBlur   = 14;
+          ctx.lineWidth    = ring.w + 4;
+          ctx.strokeStyle  = ring.color + '55';
+          ctx.beginPath();
+          ctx.arc(cx, cy, ring.r, start, end);
+          ctx.stroke();
+          ctx.restore();
+
+          // Solid arc on top
+          ctx.save();
+          ctx.shadowColor  = ring.color;
+          ctx.shadowBlur   = 8;
+          ctx.lineWidth    = ring.w;
+          ctx.strokeStyle  = ring.color;
+          ctx.beginPath();
+          ctx.arc(cx, cy, ring.r, start, end);
+          ctx.stroke();
+          ctx.restore();
+        }
+        ctx.lineCap = 'butt';
+      }
+
       rafRef.current = requestAnimationFrame(render);
     }
 
@@ -570,16 +628,18 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
           </div>
         ) : (
           <>
-            <canvas
-              ref={canvasRef}
-              width={CANVAS_W}
-              height={CANVAS_H}
-              style={{ touchAction: 'none', cursor: dragRef.current ? 'grabbing' : 'grab' }}
-              onPointerDown={handlePointerDown}
-              onPointerMove={handlePointerMove}
-              onPointerUp={handlePointerUp}
-              onPointerLeave={handlePointerUp}
-            />
+            <div className="puzzle-canvas-wrapper">
+              <canvas
+                ref={canvasRef}
+                width={CANVAS_W}
+                height={CANVAS_H}
+                style={{ touchAction: 'none', cursor: dragRef.current ? 'grabbing' : 'grab' }}
+                onPointerDown={handlePointerDown}
+                onPointerMove={handlePointerMove}
+                onPointerUp={handlePointerUp}
+                onPointerLeave={handlePointerUp}
+              />
+            </div>
             <div className="puzzle-word-label">{target?.pt}</div>
             <div className="puzzle-subtitle">
               {target ? (language === 'tr' ? target.tr : target.en) : ''}

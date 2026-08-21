@@ -18,6 +18,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+// ─── Canvas + spinner wrapper ─────────────────────────────────────────────────
+.puzzle-canvas-wrapper {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
 
   canvas {
     border-radius: $radius-lg;
