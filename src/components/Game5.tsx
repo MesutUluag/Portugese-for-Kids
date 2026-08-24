@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { kidsWords, Word } from '../data/words';
-import { speakText } from '../utils/speech';
+import { cancelSpeech, speakText } from '../utils/speech';
 import WordImage from './WordImage';
 import '../styles/Game5.scss';
 
@@ -40,6 +40,7 @@ export default function Game5({ onScore, language }: Props): React.ReactElement 
   }, [loadWord]);
 
   useEffect(() => { loadNew(); }, [loadNew]);
+  useEffect(() => () => { cancelSpeech(); }, []);
 
   function handlePrev() {
     setHistoryIdx((idx) => {

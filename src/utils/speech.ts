@@ -10,6 +10,13 @@ type SpeechOptions = {
   rate?: number;
 };
 
+export function cancelSpeech(): void {
+  if ('speechSynthesis' in window && window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+  activeUtterance = null;
+}
+
 export function speakText(text: string, options: SpeechOptions = {}): void {
   console.log('[Audio] speakText called with:', text, options);
   if (!text || !text.trim()) return;

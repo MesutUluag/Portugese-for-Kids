@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { kidsWords, Word } from '../data/words';
-import { speakText } from '../utils/speech';
+import { cancelSpeech, speakText } from '../utils/speech';
 import WordImage from './WordImage';
 import '../styles/Game2.scss';
 
@@ -32,6 +32,7 @@ export default function Game2({ onScore, language }: Props): React.ReactElement 
   }, []);
 
   useEffect(() => { load(); }, [load]);
+  useEffect(() => () => { cancelSpeech(); }, []);
 
   function handleAnswer(opt: Word) {
     if (!target) return;

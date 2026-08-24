@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Volume2, Gauge } from 'lucide-react';
 import { StoryPage } from '../data/words';
 import { AiState, getNewStoryPage } from '../utils/ai';
-import { speakText } from '../utils/speech';
+import { cancelSpeech, speakText } from '../utils/speech';
 import { translateToTurkish } from '../utils/translate';
 import { getSceneTheme } from '../utils/sceneTheme';
 import StoryIllustration from './StoryIllustration';
@@ -29,6 +29,7 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
     void loadFirst();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  useEffect(() => () => { cancelSpeech(); }, []);
 
   // Translate the current page's English text to Turkish when language or page changes
   useEffect(() => {
