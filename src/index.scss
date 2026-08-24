@@ -82,6 +82,9 @@ body {
   min-width: 52px;
   color: #92400e;
   transition: transform 0.15s, background 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
   &:active { transform: translateY(-50%) scale(0.95); }
 

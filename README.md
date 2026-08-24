@@ -10,17 +10,19 @@ An interactive language-learning app for children to practice Portuguese through
 
 | Technology | Version | Purpose |
 |---|---|---|
-| React | 18.3.1 | UI framework |
+| React | 19.2.8 | UI framework |
 | TypeScript | 5.8.3 | Type safety |
 | Vite | 6.3.5 | Build tool & dev server |
 | SASS/SCSS | 1.102.0 | Mobile-first responsive styling |
+| @dnd-kit/core | 6.3.1 | Drag-and-drop primitives (Puzzle game) |
+| @dnd-kit/utilities | 3.2.2 | DnD helper utilities |
 | gh-pages | 6.3.0 | GitHub Pages deployment |
 
 ---
 
 ## Features
 
-- **7 Learning Modes** — flashcards, 5 games, and AI-generated story sentences
+- **8 Learning Modes** — flashcards, 6 games, and AI-generated story sentences
 - **Portuguese TTS** — Web Speech API with pt-PT voice detection and slow-mode playback
 - **AI Story Generation** — backend LLM (Gemini) + Chrome's built-in AI fallback, with curated template pages as a final fallback
 - **Multi-language UI** — English / Turkish toggle (🇬🇧 / 🇹🇷) with Chrome AI + MyMemory translation
@@ -42,6 +44,7 @@ An interactive language-learning app for children to practice Portuguese through
 | 🃏 Memory Match | `Game3` | Flip cards to match Portuguese–English pairs |
 | ✍️ Fill in the Blank | `Game4` | Complete words with missing letters (supports accented chars: á é í ó ú ã õ ç) |
 | 🧩 Scramble | `Game5` | Unscramble letters to form the correct Portuguese word |
+| 🧩 Jigsaw Puzzle | `Game6` | Drag jigsaw pieces onto a 3×3 canvas board to complete the word image |
 
 ---
 
@@ -55,7 +58,7 @@ src/
 ├── components/
 │   ├── CardsMode.tsx
 │   ├── StoryMode.tsx
-│   ├── Game1.tsx – Game5.tsx
+│   ├── Game1.tsx – Game6.tsx
 │   ├── WordImage.tsx           # Wikipedia image fetch with emoji fallback
 │   ├── StoryIllustration.tsx   # Backend AI illustration + CSS scene fallback
 │   └── SceneProp.tsx           # Emoji → Wikipedia image mapper
