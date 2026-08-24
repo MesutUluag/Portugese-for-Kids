@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { kidsWords, Word } from '../data/words';
-import { speakText } from '../utils/speech';
+import { cancelSpeech, speakText } from '../utils/speech';
 import WordImage from './WordImage';
 import '../styles/Game3.scss';
 
@@ -33,6 +33,7 @@ export default function Game3({ onScore, language }: Props): React.ReactElement 
   }, []);
 
   useEffect(() => { load(); }, [load]);
+  useEffect(() => () => { cancelSpeech(); }, []);
 
   function handleFlip(idx: number, item: Word) {
     if (blocked || flipped.includes(idx) || matched.includes(idx)) return;

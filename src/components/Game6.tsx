@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { kidsWords, Word } from '../data/words';
-import { speakText } from '../utils/speech';
+import { cancelSpeech, speakText } from '../utils/speech';
 import { useWikiImage } from '../utils/useWikiImage';
 import '../styles/Game6.scss';
 
@@ -289,6 +289,7 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
   }, []);
 
   useEffect(() => { load(); }, [load]);
+  useEffect(() => () => { cancelSpeech(); }, []);
 
   // ── Render loop ────────────────────────────────────────────────────────────
   useEffect(() => {

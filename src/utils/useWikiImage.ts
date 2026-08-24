@@ -66,7 +66,7 @@ const WIKI_ARTICLE: Record<string, string> = {
   'brother': 'Boy',
   'sister': 'Girl',
   'grandfather': 'Old_age',
-  'grandmother': 'Old_age',
+  'grandmother': 'Senescence',
   'uncle': 'Grandparent',
   'aunt': 'Grandparent',
   'cousin (m)': 'Grandparent',
