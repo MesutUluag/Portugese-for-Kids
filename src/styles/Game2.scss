@@ -70,6 +70,13 @@
     &:hover { background: #fce7f3; border-color: $color-pink; transform: scale(1.06); box-shadow: 0 4px 12px rgba(236,72,153,0.2); }
   }
 
+  &.correct {
+    background: $color-green-light;
+    border-color: $color-green;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.35);
+    transform: scale(1.04);
+  }
+
   @media (min-width: 480px) {
     padding: 12px;
     font-size: 50px;
