@@ -13,6 +13,7 @@ export default function Game2({ onScore, language }: Props): React.ReactElement 
   const [target, setTarget] = useState<Word | null>(null);
   const [options, setOptions] = useState<Word[]>([]);
   const [animClass, setAnimClass] = useState('');
+  const [correctPt, setCorrectPt] = useState<string | null>(null);
 
   const triggerAnim = (correct: boolean) => {
     setAnimClass(correct ? 'correct-anim' : 'wrong-anim');
@@ -22,6 +23,7 @@ export default function Game2({ onScore, language }: Props): React.ReactElement 
   const load = useCallback(() => {
     const t = kidsWords[Math.floor(Math.random() * kidsWords.length)];
     setTarget(t);
+    setCorrectPt(null);
     speakText(t.pt);
     const opts: Word[] = [t];
     while (opts.length < 4) {
@@ -35,8 +37,9 @@ export default function Game2({ onScore, language }: Props): React.ReactElement 
   useEffect(() => () => { cancelSpeech(); }, []);
 
   function handleAnswer(opt: Word) {
-    if (!target) return;
+    if (!target || correctPt) return;
     if (opt.pt === target.pt) {
+      setCorrectPt(target.pt);
       triggerAnim(true);
       onScore(10);
       speakText(target.pt);
@@ -54,11 +57,18 @@ export default function Game2({ onScore, language }: Props): React.ReactElement 
       <p style={{ color: '#64748b', fontWeight: 'bold', margin: 0 }}>{language === 'tr' ? 'Hangi resmi duydun?' : 'Which picture did you hear?'}</p>
       {target && <p style={{ color: '#64748b', margin: '4px 0 0', fontSize: '14px' }}>{language === 'tr' ? target.tr : target.en}</p>}
       <div className="emoji-options">
-        {options.map((opt) => (
-          <div key={opt.pt} className="emoji-opt" onClick={() => handleAnswer(opt)}>
-            <WordImage en={opt.en} emoji={opt.emoji} size={80} />
-          </div>
-        ))}
+        {options.map((opt) => {
+          const isCorrect = correctPt === opt.pt;
+          return (
+            <div
+              key={opt.pt}
+              className={`emoji-opt ${isCorrect ? 'correct' : ''}`}
+              onClick={() => handleAnswer(opt)}
+            >
+              <WordImage en={opt.en} emoji={opt.emoji} size={80} />
+            </div>
+          );
+        })}
       </div>
     </div>
   );

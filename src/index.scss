@@ -66,35 +66,43 @@ body {
   }
 }
 
-.btn-lang-toggle {
+// ─── Header controls (language + music toggle) ───────────────────────────────
+.header-controls {
   position: absolute;
   right: 0;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-30%);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
+.btn-lang-toggle {
   background: #fef3c7;
   border: 2px solid #d97706;
   border-radius: $radius-pill;
-  font-size: 13px;
+  font-size: 11px;
   font-weight: bold;
-  padding: 6px 10px;
+  padding: 4px 7px;
   cursor: pointer;
-  min-height: 36px;
-  min-width: 52px;
+  min-height: 28px;
+  min-width: 38px;
   color: #92400e;
   transition: transform 0.15s, background 0.15s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  &:active { transform: translateY(-50%) scale(0.95); }
+  &:active { transform: scale(0.95); }
 
   @media (hover: hover) {
     &:hover { background: #fde68a; }
   }
 
   @media (min-width: 480px) {
-    font-size: 14px;
-    padding: 7px 12px;
+    font-size: 12px;
+    padding: 5px 9px;
   }
 }
 
@@ -105,13 +113,13 @@ h1 {
   text-shadow: 1px 1px $color-amber-light;
   text-align: center;
   line-height: 1.2;
-  // Extra right padding so title text doesn't overlap the language button on small screens
-  padding-right: 60px;
+  // Extra right padding so title text doesn't overlap the stacked header buttons
+  padding-right: 54px;
 
   @media (min-width: 480px) {
     font-size: 24px;
     text-shadow: 2px 2px $color-amber-light;
-    padding-right: 70px;
+    padding-right: 62px;
   }
 }
 
