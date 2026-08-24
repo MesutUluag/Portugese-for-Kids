@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight, Volume2, Gauge } from 'lucide-react';
 import { StoryPage } from '../data/words';
 import { AiState, getNewStoryPage } from '../utils/ai';
 import { speakText } from '../utils/speech';
@@ -9,13 +10,11 @@ import '../styles/StoryMode.scss';
 
 interface Props {
   aiState: AiState;
-  aiLabel: string;
-  aiColor: string;
   onAiChange: (label: string, color: string) => void;
   language: 'en' | 'tr';
 }
 
-export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange, language }: Props): React.ReactElement {
+export default function StoryMode({ aiState, onAiChange, language }: Props): React.ReactElement {
   const [history, setHistory] = useState<StoryPage[]>([]);
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -96,7 +95,6 @@ export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange, langu
 
   return (
     <div className="game-container" style={{ display: 'block', borderColor: '#0284c7' }}>
-      <span className="badge-ai" style={{ background: aiColor }}>{aiLabel}</span>
       <div className="story-card">
         {page && theme
           ? <StoryIllustration
@@ -110,10 +108,10 @@ export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange, langu
         }
         <div className="story-audio-buttons">
           <button className="btn-story-audio" onClick={() => page && speakText(page.pt)} title="Listen to Sentence">
-            🔊
+            <Volume2 size={20} strokeWidth={2} />
           </button>
           <button className="btn-story-audio btn-story-audio--slow" onClick={() => page && speakText(page.pt, { rate: 0.3 })} title="Listen to Sentence Slowly">
-            🐢
+            <Gauge size={20} strokeWidth={2} />
           </button>
         </div>
         <div key={`text-${pageKey}`} className={`story-text-pt story-text--enter ${slideClass}`}>
@@ -124,11 +122,13 @@ export default function StoryMode({ aiState, aiLabel, aiColor, onAiChange, langu
         </div>
         <div className="story-nav">
           <button className="btn-story-action" onClick={handlePrev} disabled={index === 0}>
-            {language === 'tr' ? '⬅️ Önceki' : '⬅️ Previous'}
+            <ChevronLeft size={16} strokeWidth={2.5} style={{ marginRight: 4 }} />
+            Anterior
           </button>
-          <span style={{ fontWeight: 'bold', color: '#0284c7' }}>{language === 'tr' ? `Sayfa ${index + 1}` : `Page ${index + 1}`}</span>
+          <span style={{ fontWeight: 'bold', color: '#0284c7' }}>{`Página ${index + 1}`}</span>
           <button className="btn-story-action" onClick={() => void handleNext()} disabled={loading}>
-            {language === 'tr' ? 'Sonraki ➡️' : 'Next ➡️'}
+            Próxima
+            <ChevronRight size={16} strokeWidth={2.5} style={{ marginLeft: 4 }} />
           </button>
         </div>
       </div>

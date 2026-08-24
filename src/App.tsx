@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { LayoutGrid, BookOpen, Image, Headphones, Layers, PencilLine, Puzzle, Globe, Timer } from 'lucide-react';
 import { Mode } from './data/words';
 import { AiState, initAI } from './utils/ai';
 import CardsMode from './components/CardsMode';
@@ -15,8 +16,6 @@ export default function App(): React.ReactElement {
   const [_score, setScore] = useState(0);
   const [_bounce, setBounce] = useState(false);
   const [aiState, setAiState] = useState<AiState>(null);
-  const [aiLabel, setAiLabel] = useState('Checking Chrome Built-in AI...');
-  const [aiColor, setAiColor] = useState('#0284c7');
   const [language, setLanguage] = useState<'en' | 'tr'>('en');
 
   const [timeSpent, setTimeSpent] = useState<number>(() => {
@@ -34,10 +33,7 @@ export default function App(): React.ReactElement {
   });
 
   useEffect(() => {
-    void initAI((label, color) => {
-      setAiLabel(label);
-      setAiColor(color);
-    }).then((state) => setAiState(state));
+    void initAI((_label, _color) => {}).then((state) => setAiState(state));
   }, []);
 
   useEffect(() => {
@@ -69,35 +65,41 @@ export default function App(): React.ReactElement {
     setTimeout(() => setBounce(false), 300);
   }
 
-  const navButtons: { key: Mode; label: string; labelTr: string; cls: string }[] = [
-    { key: 'cards',  label: '🖼️ Cards',        labelTr: '🖼️ Kartlar',       cls: 'btn-kids'  },
-    { key: 'story',  label: '📖 Story',         labelTr: '📖 Hikaye',         cls: 'btn-story' },
-    { key: 'game1',  label: '🎯 Picture Game',  labelTr: '🎯 Resim Oyunu',    cls: 'btn-game1' },
-    { key: 'game2',  label: '🎧 Listen & Find', labelTr: '🎧 Dinle & Bul',    cls: 'btn-game2' },
-    { key: 'game3',  label: '🃏 Memory Match',  labelTr: '🃏 Hafıza Oyunu',   cls: 'btn-game3' },
-    { key: 'game4',  label: '✍️ Fill Blank',    labelTr: '✍️ Boşluk Doldurma', cls: 'btn-game4' },
-    { key: 'game5',  label: '🧩 Scramble',      labelTr: '🧩 Kelime Bul',     cls: 'btn-game5' },
-    { key: 'game6',  label: '🧩 Puzzle',         labelTr: '🧩 Yapboz',         cls: 'btn-game6' },
+  type NavButton = { key: Mode; label: string; labelTr: string; cls: string; icon: React.ReactNode };
+  const navButtons: NavButton[] = [
+    { key: 'cards',  label: 'Cards',        labelTr: 'Kartlar',        cls: 'btn-kids',   icon: <LayoutGrid  size={15} strokeWidth={2} /> },
+    { key: 'story',  label: 'Story',        labelTr: 'Hikaye',         cls: 'btn-story',  icon: <BookOpen    size={15} strokeWidth={2} /> },
+    { key: 'game1',  label: 'Picture Game', labelTr: 'Resim Oyunu',    cls: 'btn-game1',  icon: <Image       size={15} strokeWidth={2} /> },
+    { key: 'game2',  label: 'Listen & Find',labelTr: 'Dinle & Bul',    cls: 'btn-game2',  icon: <Headphones  size={15} strokeWidth={2} /> },
+    { key: 'game3',  label: 'Memory Match', labelTr: 'Hafıza Oyunu',   cls: 'btn-game3',  icon: <Layers      size={15} strokeWidth={2} /> },
+    { key: 'game4',  label: 'Fill Blank',   labelTr: 'Boşluk Doldurma',cls: 'btn-game4',  icon: <PencilLine  size={15} strokeWidth={2} /> },
+    { key: 'game5',  label: 'Scramble',     labelTr: 'Kelime Bul',     cls: 'btn-game5',  icon: <Puzzle      size={15} strokeWidth={2} /> },
+    { key: 'game6',  label: 'Puzzle',       labelTr: 'Yapboz',         cls: 'btn-game6',  icon: <Puzzle      size={15} strokeWidth={2} /> },
   ];
 
   return (
     <main className="app">
       <div className="app-header-row">
-        <h1>🎈 Portuguese Kids Playground 🎨</h1>
+        <h1>Portuguese Kids Playground</h1>
         <button
           className="btn-lang-toggle"
           onClick={() => setLanguage((l) => (l === 'en' ? 'tr' : 'en'))}
           title={language === 'en' ? 'Switch to Turkish' : 'İngilizceye geç'}
         >
-          {language === 'en' ? '🇹🇷 TR' : '🇬🇧 EN'}
+          <Globe size={14} strokeWidth={2} style={{ marginRight: 4 }} />
+          {language === 'en' ? 'TR' : 'EN'}
         </button>
       </div>
-      <div className="time-badge">⏱️ {language === 'tr' ? 'Bugün' : 'Time Today'}: {formatTime(timeSpent)}</div>
+      <div className="time-badge">
+        <Timer size={14} strokeWidth={2} style={{ marginRight: 4 }} />
+        {language === 'tr' ? 'Bugün' : 'Time Today'}: {formatTime(timeSpent)}
+      </div>
 
       <div className="nav-buttons">
-        {navButtons.map(({ key, label, labelTr, cls }) => (
+        {navButtons.map(({ key, label, labelTr, cls, icon }) => (
           <button key={key} className={`btn ${cls}${mode === key ? ' btn--active' : ''}`} onClick={() => setMode(key)}>
-            {language === 'tr' ? labelTr : label}
+            {icon}
+            <span style={{ marginLeft: 5 }}>{language === 'tr' ? labelTr : label}</span>
           </button>
         ))}
       </div>
@@ -106,9 +108,7 @@ export default function App(): React.ReactElement {
       {mode === 'story' && (
         <StoryMode
           aiState={aiState}
-          aiLabel={aiLabel}
-          aiColor={aiColor}
-          onAiChange={(label, color) => { setAiLabel(label); setAiColor(color); }}
+          onAiChange={(_label, _color) => {}}
           language={language}
         />
       )}
