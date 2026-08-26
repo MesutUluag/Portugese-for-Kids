@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { kidsWords, Word } from '../data/words';
 import { cancelSpeech, speakText } from '../utils/speech';
-import WordImage from './WordImage';
+import WordImage from '../commons/WordImage.tsx';
 import '../styles/Game3.scss';
 
 interface FlippedEntry {

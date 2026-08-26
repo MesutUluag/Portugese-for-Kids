@@ -4,17 +4,19 @@ import { StoryPage } from '../data/words';
 import { AiState, getNewStoryPage } from '../utils/ai';
 import { cancelSpeech, speakText } from '../utils/speech';
 import { translateToTurkish } from '../utils/translate';
-import { getSceneTheme } from '../utils/sceneTheme';
+import { getSceneTheme } from './sceneTheme';
+import { PrefetchResult, buildStoryImagePrompt } from './useStoryPrefetch';
 import StoryIllustration from './StoryIllustration';
-import '../styles/StoryMode.scss';
+import './StoryMode.scss';
 
 interface Props {
   aiState: AiState;
   onAiChange: (label: string, color: string) => void;
   language: 'en' | 'tr';
+  prefetch: PrefetchResult;
 }
 
-export default function StoryMode({ aiState, onAiChange, language }: Props): React.ReactElement {
+export default function StoryMode({ aiState, onAiChange, language, prefetch }: Props): React.ReactElement {
   const [history, setHistory] = useState<StoryPage[]>([]);
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -22,6 +24,7 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
   const [pageKey, setPageKey] = useState(0);
   const [trText, setTrText] = useState('');
   const initialized = useRef(false);
+  const { popQueue, triggerRefill, imageCache } = prefetch;
 
   useEffect(() => {
     if (initialized.current) return;
@@ -43,29 +46,54 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
   }, [language, index, history]);
 
   async function loadFirst(): Promise<void> {
-    setLoading(true);
-    const page = await getNewStoryPage(aiState, onAiChange);
+    // Try to use a prefetched story; if the queue is still empty (prefetch in flight),
+    // wait up to 6 s in 200 ms steps before falling back to on-demand fetch.
+    let page = popQueue();
+    if (!page) {
+      setLoading(true);
+      for (let i = 0; i < 30 && !page; i++) {
+        await new Promise<void>((r) => setTimeout(r, 200));
+        page = popQueue();
+      }
+      if (!page) {
+        page = await getNewStoryPage(aiState, onAiChange);
+      }
+      setLoading(false);
+    }
     setHistory([page]);
     setIndex(0);
-    setLoading(false);
     speakText(page.pt);
+    // Queue just emptied — immediately start prefetching the next story + image
+    triggerRefill();
   }
 
   async function handleNext(): Promise<void> {
     setSlideDir('left');
     const nextIndex = index + 1;
     if (nextIndex < history.length) {
+      // Navigating back through already-seen history — no queue consumed, no refill needed
       setIndex(nextIndex);
       setPageKey((k) => k + 1);
       speakText(history[nextIndex].pt);
     } else {
-      setLoading(true);
-      const page = await getNewStoryPage(aiState, onAiChange);
-      setHistory((h) => [...h, page]);
-      setIndex(nextIndex);
-      setPageKey((k) => k + 1);
-      setLoading(false);
-      speakText(page.pt);
+      // Consume from prefetch queue for instant display; fall back if queue is empty
+      const prefetched = popQueue();
+      if (prefetched) {
+        setHistory((h) => [...h, prefetched]);
+        setIndex(nextIndex);
+        setPageKey((k) => k + 1);
+        speakText(prefetched.pt);
+      } else {
+        setLoading(true);
+        const page = await getNewStoryPage(aiState, onAiChange);
+        setHistory((h) => [...h, page]);
+        setIndex(nextIndex);
+        setPageKey((k) => k + 1);
+        setLoading(false);
+        speakText(page.pt);
+      }
+      // Queue was consumed — immediately start prefetching the next story + image
+      triggerRefill();
     }
   }
 
@@ -101,9 +129,9 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
           ? <StoryIllustration
               key={pageKey}
               page={page}
-              theme={theme}
               pageKey={pageKey}
               sceneVars={sceneVars}
+              prefetchedImageUrl={imageCache.get(buildStoryImagePrompt(page))}
             />
           : <div className="story-illustration" style={sceneVars} />
         }

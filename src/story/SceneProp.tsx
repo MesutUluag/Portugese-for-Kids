@@ -1,6 +1,6 @@
 import React from 'react';
 import { useWikiImage } from '../utils/useWikiImage';
-import { emojiToSearchTerm } from '../utils/sceneTheme';
+import { emojiToSearchTerm } from './sceneTheme';
 
 interface Props {
   emoji: string;
