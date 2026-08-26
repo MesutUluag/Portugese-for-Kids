@@ -1,35 +1,27 @@
 import React from 'react';
 import { StoryPage } from '../data/words';
-import { SceneTheme } from '../utils/sceneTheme';
-import { useBackendImage } from '../utils/useBackendImage';
 
 interface Props {
   page: StoryPage;
-  theme: SceneTheme;
   pageKey?: number;
   sceneVars: React.CSSProperties;
+  /** Pre-fetched blob URL from the prefetch cache. Undefined = still loading. */
+  prefetchedImageUrl?: string;
 }
 
-function buildPrompt(page: StoryPage): string {
-  if (page.imagePrompt) return page.imagePrompt;
-  const scene = page.en.replace(/[.,!?]/g, '').trim();
-  const character = page.mainEmoji ? `a child character ${page.mainEmoji}` : 'a child';
-  return `${character} in a classroom scene, ${scene}, colorful cute kids illustration, storybook art, bright colors, simple background, no text`;
-}
-
-export default function StoryIllustration({ page, pageKey, sceneVars }: Props): React.ReactElement {
-  const prompt = buildPrompt(page);
-  const imgResult = useBackendImage(prompt);
+export default function StoryIllustration({ page, pageKey, sceneVars, prefetchedImageUrl }: Props): React.ReactElement {
+  // Image comes exclusively from the prefetch cache — no in-component fetch.
+  // The emoji placeholder is shown until the cache entry arrives via state update.
+  const imgResult = prefetchedImageUrl ?? 'loading';
 
   const photoActive = imgResult !== 'loading' && imgResult !== 'blocked';
-  const hasPhoto = photoActive;
 
   return (
     <div
-      className={`story-illustration story-illustration--transition${hasPhoto ? ' story-illustration--photo' : ''}`}
+      className={`story-illustration story-illustration--transition${photoActive ? ' story-illustration--photo' : ''}`}
       style={{
         ...sceneVars,
-        ...(hasPhoto ? {
+        ...(photoActive ? {
           backgroundImage: `url(${imgResult})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center center',
@@ -37,7 +29,7 @@ export default function StoryIllustration({ page, pageKey, sceneVars }: Props): 
       }}
     >
       {/* Overlay for readability over photo */}
-      {hasPhoto && <div className="story-photo-overlay" />}
+      {photoActive && <div className="story-photo-overlay" />}
 
       {/* CSS scene shown while AI photo hasn't loaded yet */}
       {!photoActive && <>

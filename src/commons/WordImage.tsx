@@ -1,5 +1,5 @@
 import React from 'react';
-import { useWikiImage } from '../utils/useWikiImage';
+import { useWikiImage } from '../utils/useWikiImage.ts';
 
 interface Props {
   en: string;
