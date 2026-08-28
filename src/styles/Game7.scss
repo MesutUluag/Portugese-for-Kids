@@ -292,15 +292,17 @@
 //         top=32/150≈21%,  bottom=93/150≈62% → height≈41%
 .cart-items-layer {
   position: absolute;
-  top: 21%;
+  // Extend upward so items in rows 2+ are not clipped above the basket rim.
+  // Original basket top ≈ 21%; pull the layer top up by ~30px worth (~20%)
+  // so up to 3 rows of rising items remain visible.
+  top: 0%;
   left: 23%;
   width: 57%;
-  height: 41%;
+  // Taller to cover the extra headroom above the basket
+  height: 62%;
   z-index: 1;
-  overflow: hidden;
+  overflow: visible;
   pointer-events: none;
-  // Isolate paint so items piling up don't repaint the cart frame
-  contain: strict;
 }
 
 .cart-item-emoji {
