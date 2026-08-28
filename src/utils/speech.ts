@@ -19,12 +19,23 @@ export function cancelSpeech(): void {
 
 export function speakText(text: string, options: SpeechOptions = {}): void {
   if (!text || !text.trim()) return;
-  if ('speechSynthesis' in window && window.speechSynthesis) {
-    startUtterance(text, options);
+  if (!('speechSynthesis' in window) || !window.speechSynthesis) return;
+
+  const voices = window.speechSynthesis.getVoices();
+  if (voices.length > 0) {
+    // Voices already loaded — speak immediately
+    startUtterance(text, voices, options);
+  } else {
+    // Chrome loads voices asynchronously; wait for the voiceschanged event
+    const onVoicesChanged = () => {
+      window.speechSynthesis.removeEventListener('voiceschanged', onVoicesChanged);
+      startUtterance(text, window.speechSynthesis.getVoices(), options);
+    };
+    window.speechSynthesis.addEventListener('voiceschanged', onVoicesChanged);
   }
 }
 
-function startUtterance(text: string, options: SpeechOptions): void {
+function startUtterance(text: string, voices: SpeechSynthesisVoice[], options: SpeechOptions): void {
   try {
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'pt-PT';
@@ -32,7 +43,6 @@ function startUtterance(text: string, options: SpeechOptions): void {
     utterance.pitch = 1.0;
     utterance.volume = 1.0;
 
-    const voices = window.speechSynthesis.getVoices();
     const portugueseVoice =
       voices.find((v) => v.lang.toLowerCase() === 'pt-pt') ??
       voices.find((v) => v.lang.toLowerCase().startsWith('pt') && !v.lang.toLowerCase().includes('br')) ??
@@ -54,11 +64,15 @@ function startUtterance(text: string, options: SpeechOptions): void {
 
     activeUtterance = utterance;
 
-    if (window.speechSynthesis.paused) window.speechSynthesis.resume();
+    // Chrome bug: cancel() + speak() in the same call stack silently drops the utterance.
+    // Deferring speak() by one tick after cancel() ensures Chrome actually fires it.
     window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(utterance);
+    setTimeout(() => {
+      if (activeUtterance === utterance) {
+        window.speechSynthesis.speak(utterance);
+      }
+    }, 50);
   } catch (error) {
     console.error('[Speech] Web Speech API error:', error);
   }
 }
-
