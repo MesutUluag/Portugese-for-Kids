@@ -24,6 +24,7 @@ export default function StoryMode({ aiState, onAiChange, language, prefetch }: P
   const [pageKey, setPageKey] = useState(0);
   const [trText, setTrText] = useState('');
   const initialized = useRef(false);
+  const pendingSpeakRef = useRef<string | null>(null);
   const { popQueue, triggerRefill, imageCache } = prefetch;
 
   useEffect(() => {
@@ -33,6 +34,28 @@ export default function StoryMode({ aiState, onAiChange, language, prefetch }: P
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => () => { cancelSpeech(); }, []);
+
+  // Speak pending text on the first user interaction after mount.
+  // Chrome blocks speechSynthesis.speak() until a gesture has occurred;
+  // loadFirst() is async so the original gesture context is lost by the time
+  // the story text arrives. This listener fires on the very next tap/click.
+  useEffect(() => {
+    function onFirstInteraction() {
+      const text = pendingSpeakRef.current;
+      if (text) {
+        pendingSpeakRef.current = null;
+        speakText(text);
+      }
+      document.removeEventListener('click', onFirstInteraction);
+      document.removeEventListener('keydown', onFirstInteraction);
+    }
+    document.addEventListener('click', onFirstInteraction);
+    document.addEventListener('keydown', onFirstInteraction);
+    return () => {
+      document.removeEventListener('click', onFirstInteraction);
+      document.removeEventListener('keydown', onFirstInteraction);
+    };
+  }, []);
 
   // Translate the current page's English text to Turkish when language or page changes
   useEffect(() => {
@@ -62,8 +85,9 @@ export default function StoryMode({ aiState, onAiChange, language, prefetch }: P
     }
     setHistory([page]);
     setIndex(0);
-    speakText(page.pt);
-    // Queue just emptied — immediately start prefetching the next story + image
+    // Chrome blocks speak() after an async gap (gesture context has expired).
+    // Queue the text; the interaction listener above will fire it on the next tap.
+    pendingSpeakRef.current = page.pt;
     triggerRefill();
   }
 
