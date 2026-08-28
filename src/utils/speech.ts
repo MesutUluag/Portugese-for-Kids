@@ -34,8 +34,10 @@ function startUtterance(text: string, options: SpeechOptions): void {
 
     const voices = window.speechSynthesis.getVoices();
     const portugueseVoice =
-      voices.find((v) => v.lang === 'pt-PT') ??
-      voices.find((v) => v.lang.startsWith('pt')) ??
+      voices.find((v) => v.lang.toLowerCase() === 'pt-pt') ??
+      voices.find((v) => v.lang.toLowerCase().startsWith('pt') && !v.lang.toLowerCase().includes('br')) ??
+      voices.find((v) => v.name.toLowerCase().includes('portugal')) ??
+      voices.find((v) => v.lang.toLowerCase().startsWith('pt')) ??
       voices.find((v) => v.name.toLowerCase().includes('portuguese'));
 
     if (portugueseVoice) utterance.voice = portugueseVoice;

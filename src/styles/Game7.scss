@@ -1,0 +1,476 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Game7 — O Mercado (Market Game)
+// ─────────────────────────────────────────────────────────────────────────────
+
+@use './_variables.scss' as *;
+@use './common.scss';
+
+// ── Root ─────────────────────────────────────────────────────────────────────
+.game7 {
+  border-color: $color-sky !important;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+
+  @media (min-width: 400px) { gap: 7px;  padding: 11px; }
+  @media (min-width: 480px) { gap: 10px; padding: 15px; }
+}
+
+// ── Header ───────────────────────────────────────────────────────────────────
+.market-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.market-header__right {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.market-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: $radius-pill;
+  font-weight: bold;
+  font-size: 12px;
+  box-shadow: $shadow-sm;
+  white-space: nowrap;
+
+  @media (min-width: 480px) { font-size: 13px; padding: 5px 12px; }
+
+  &--level { background: #f59e0b; color: #fff; border: 2px solid #d97706; }
+  &--coins { background: #fef9c3; color: #713f12; border: 2px solid #fde047; }
+  &--stars { background: #92400e; color: #fef3c7; border: 2px solid #b45309; }
+}
+
+.btn-limpar {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 5px 9px;
+  border: 2px solid #d97706;
+  border-radius: $radius-pill;
+  background: #fef3c7;
+  color: #92400e;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: $shadow-sm;
+  white-space: nowrap;
+  transition: background 0.12s, transform 0.1s;
+
+  &:active { transform: scale(0.93); }
+  @media (hover: hover) { &:hover { background: #fde68a; } }
+  @media (min-width: 480px) { font-size: 12px; }
+}
+
+// ── Mascot Row ────────────────────────────────────────────────────────────────
+.mascot-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// ── Bunny Mascot ─────────────────────────────────────────────────────────────
+.bunny-mascot {
+  flex-shrink: 0;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  &:focus-visible { outline: 2px solid $color-orange; border-radius: $radius-md; }
+}
+
+.bunny-stars {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  white-space: nowrap;
+  z-index: 20;
+  pointer-events: none;
+}
+
+.bunny-svg {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.18));
+  // Scale down on very small screens
+  width: 66px;
+  height: auto;
+
+  @media (min-width: 400px) { width: 78px; }
+  @media (min-width: 480px) { width: 88px; }
+}
+
+// ── Speech Card ───────────────────────────────────────────────────────────────
+.speech-card {
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  border: 3px solid #fbbf24;
+  border-radius: $radius-xl;
+  padding: 8px 10px;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.22);
+  position: relative;
+  // Framer Motion drives x/scale/opacity; will-change keeps it on its own layer
+  will-change: transform, opacity;
+}
+
+.speech-card__row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// CSS arrow pointing left toward the bunny
+.speech-card__arrow-border {
+  position: absolute;
+  left: -12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0; height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 12px solid #fbbf24;
+}
+
+.speech-card__arrow-fill {
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0; height: 0;
+  border-top: 8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right: 9px solid #fff;
+}
+
+.speech-card__text {
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  font-weight: 900;
+  color: #451a03;
+  line-height: 1.3;
+
+  @media (min-width: 400px) { font-size: 15px; }
+  @media (min-width: 480px) { font-size: 18px; }
+}
+
+.btn-ouvir {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: $radius-circle;
+  background: $color-amber;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.45);
+  transition: transform 0.12s, background 0.12s;
+
+  &:active { transform: scale(0.88); }
+  @media (hover: hover) { &:hover { background: #d97706; transform: scale(1.08); } }
+}
+
+// ── Progress Badge ────────────────────────────────────────────────────────────
+.cart-progress-badge {
+  display: inline-flex;
+  align-self: center;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.92);
+  backdrop-filter: blur(4px);
+  border: 2px solid #f59e0b;
+  border-radius: $radius-pill;
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #451a03;
+  box-shadow: $shadow-sm;
+
+  &__icon     { font-size: 20px; line-height: 1; @media (min-width: 400px) { font-size: 24px; } }
+  &__fraction { font-size: 13px; font-weight: 900; @media (min-width: 400px) { font-size: 15px; } }
+  &__total    { font-size: 11px; font-weight: 600; color: #78350f; }
+
+  &__check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px; height: 18px;
+    background: #10b981;
+    color: #fff;
+    border-radius: $radius-circle;
+    font-size: 11px;
+    font-weight: 900;
+    box-shadow: 0 2px 5px rgba(16, 185, 129, 0.4);
+  }
+}
+
+// ── Cart Zone ─────────────────────────────────────────────────────────────────
+// overflow is intentionally NOT hidden here — the entering cart slides in from
+// -150vw (off-screen) and overflow:hidden would clip it until it reached the
+// zone edge, making it look like it teleports in from the side of the zone
+// instead of smoothly rolling in from off-screen.
+// The exiting cart is rendered at fixed position so it is already unclipped.
+.market-cart-zone {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// ── Realistic Cart ────────────────────────────────────────────────────────────
+.cart-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(80vw, 260px);
+  user-select: none;
+
+  @media (min-width: 400px) { width: 280px; }
+  @media (min-width: 480px) { width: 320px; }
+}
+
+.cart-ground-shadow {
+  position: absolute;
+  bottom: 2px;
+  width: 220px;
+  height: 12px;
+  background: rgba(0, 0, 0, 0.22);
+  border-radius: 50%;
+  filter: blur(4px);
+  z-index: 0;
+}
+
+.cart-frame {
+  position: relative;
+  width: 100%;
+  height: 130px;
+
+  @media (min-width: 400px) { height: 148px; }
+  @media (min-width: 480px) { height: 165px; }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.cart-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+
+  &--back  { z-index: 0; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.12)); }
+  &--front { z-index: 2; }
+}
+
+// Item pile — sits between the two SVG layers, aligned to basket interior
+// SVG viewBox 260×150; basket trapezoid: M30 30 L225 30 L210 95 L45 95 Z
+// Child seat flap covers x:32–55, so usable interior starts at x≈60
+// Usable: left=60/260≈23%, right=208/260≈80% → width≈57%
+//         top=32/150≈21%,  bottom=93/150≈62% → height≈41%
+.cart-items-layer {
+  position: absolute;
+  top: 21%;
+  left: 23%;
+  width: 57%;
+  height: 41%;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  // Isolate paint so items piling up don't repaint the cart frame
+  contain: strict;
+}
+
+.cart-item-emoji {
+  position: absolute;
+  bottom: 2px;
+  font-size: 28px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25));
+  user-select: none;
+  pointer-events: none;
+  transform-origin: bottom center;
+
+  @media (min-width: 480px) { font-size: 32px; }
+}
+
+// ── Shelf — wooden dark brown ─────────────────────────────────────────────────
+.market-shelf {
+  background: linear-gradient(180deg, #854d0e 0%, #713f12 60%, #542d0c 100%);
+  border-top: 5px solid #a16207;
+  border-bottom: 7px solid #3b1f07;
+  border-left: 2px solid #7c3a0a;
+  border-right: 2px solid #7c3a0a;
+  border-radius: $radius-xl;
+  padding: 8px 8px 10px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+
+  @media (min-width: 480px) { padding: 10px 10px 12px; }
+}
+
+.market-shelf__label {
+  text-align: center;
+  font-weight: 900;
+  font-size: 11px;
+  color: #fde68a;
+  letter-spacing: 0.14em;
+  margin-bottom: 6px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  text-transform: uppercase;
+
+  @media (min-width: 480px) { font-size: 12px; margin-bottom: 8px; }
+}
+
+// Inner shelf plank surface
+.shelf-plank {
+  background: linear-gradient(180deg, rgba(120,53,15,0.4) 0%, rgba(69,26,3,0.7) 100%);
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.4);
+  border-radius: $radius-lg;
+  padding: 8px;
+}
+
+// Responsive grid: auto-fills columns based on available width
+// <360px → 2 cols (4 rows), 360–479px → 4 cols (2 rows), ≥480px → 4 cols
+.shelf-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+
+  @media (min-width: 360px) { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+  @media (min-width: 480px) { gap: 8px; }
+}
+
+// ── Market Item — standalone product on shelf ─────────────────────────────────
+.market-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  position: relative;
+  padding: 6px 2px 2px;
+  -webkit-user-drag: none;
+  will-change: transform;
+
+  &:active { cursor: grabbing; }
+
+  // Hover lift via CSS (supplements Framer Motion whileHover)
+  @media (hover: hover) {
+    &:hover .market-item__icon { transform: translateY(-3px); }
+    &:hover .market-item__shadow { opacity: 0.55; transform: scaleX(0.85); }
+  }
+}
+
+// Blurred oval ground shadow under each product
+.market-item__shadow {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 10px;
+  background: rgba(0,0,0,0.28);
+  border-radius: 50%;
+  filter: blur(3px);
+  transition: opacity 0.15s, transform 0.15s;
+  pointer-events: none;
+}
+
+.market-item__icon {
+  font-size: 26px;
+  line-height: 1;
+  display: block;
+  filter:
+    drop-shadow(0 4px 6px rgba(0,0,0,0.35))
+    drop-shadow(0 1px 2px rgba(0,0,0,0.15));
+  pointer-events: none;
+  user-select: none;
+  margin-bottom: 3px;
+  transition: transform 0.15s;
+  position: relative;
+  z-index: 1;
+
+  @media (min-width: 400px) { font-size: 30px; margin-bottom: 4px; }
+  @media (min-width: 480px) { font-size: 36px; margin-bottom: 5px; }
+}
+
+// Parchment / market label tag
+.market-item__tag {
+  background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1.5px solid rgba(120, 53, 15, 0.5);
+  color: #451a03;
+  font-size: 9px;
+  font-weight: 900;
+  padding: 2px 5px;
+
+  @media (min-width: 400px) { font-size: 10px; padding: 2px 6px; }
+  border-radius: $radius-pill;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  z-index: 1;
+  position: relative;
+
+  @media (min-width: 480px) { font-size: 11px; padding: 3px 7px; }
+}
+
+// ── Flying item (tap-to-cart arc animation) ───────────────────────────────────
+.flying-item {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  font-size: 36px;
+  line-height: 1;
+  // No CSS transform — Framer Motion drives x/y entirely
+  filter: drop-shadow(0 6px 10px rgba(0,0,0,0.35));
+  will-change: transform, opacity;
+  // Each flying emoji gets its own composited layer — avoids triggering layout
+  // on surrounding elements during the arc animation.
+  contain: layout style;
+}
+
+// ── Confetti ──────────────────────────────────────────────────────────────────
+.confetti-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: inherit;
+  z-index: 30;
+}
+
+.confetti-particle {
+  position: absolute;
+  display: block;
+}
