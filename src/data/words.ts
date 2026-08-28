@@ -14,7 +14,92 @@ export interface StoryPage {
   imagePrompt?: string;
 }
 
-export type Mode = 'cards' | 'story' | 'game1' | 'game2' | 'game3' | 'game4' | 'game5' | 'game6';
+export type Mode = 'cards' | 'story' | 'game1' | 'game2' | 'game3' | 'game4' | 'game5' | 'game6' | 'game7';
+
+export interface MarketItem {
+  id: string;
+  ptName: string;
+  pluralName: string;
+  gender: 'm' | 'f';
+  icon: string;       // emoji fallback (always set)
+  iconSrc?: string;   // optional SVG/PNG path — used instead of emoji when set
+  category: string;
+  colorKey: string;
+  iconBg?: string;    // optional background colour behind the icon
+  unit?: 'kg' | 'piece'; // defaults to 'piece'; 'kg' items are ordered by weight
+}
+
+export const marketItems: MarketItem[] = [
+  // ── Fruits (kg) ───────────────────────────────────────────────────────────────
+  { id: 'apple',      ptName: 'Maçã',      pluralName: 'maçãs',      gender: 'f', icon: '🍎', category: 'Frutas',     colorKey: 'red',     unit: 'kg' },
+  { id: 'banana',     ptName: 'Banana',    pluralName: 'bananas',    gender: 'f', icon: '🍌', category: 'Frutas',     colorKey: 'amber',   unit: 'kg' },
+  { id: 'strawberry', ptName: 'Morango',   pluralName: 'morangos',   gender: 'm', icon: '🍓', category: 'Frutas',     colorKey: 'rose',    unit: 'kg' },
+  { id: 'orange',     ptName: 'Laranja',   pluralName: 'laranjas',   gender: 'f', icon: '🍊', category: 'Frutas',     colorKey: 'orange',  unit: 'kg' },
+  { id: 'grapes',     ptName: 'Uva',       pluralName: 'uvas',       gender: 'f', icon: '🍇', category: 'Frutas',     colorKey: 'purple',  unit: 'kg' },
+  { id: 'watermelon', ptName: 'Melancia',  pluralName: 'melancias',  gender: 'f', icon: '🍉', category: 'Frutas',     colorKey: 'emerald', unit: 'kg' },
+  { id: 'pear',       ptName: 'Pêra',      pluralName: 'pêras',      gender: 'f', icon: '🍐', category: 'Frutas',     colorKey: 'lime',    unit: 'kg' },
+  { id: 'lemon',      ptName: 'Limão',     pluralName: 'limões',     gender: 'm', icon: '🍋', category: 'Frutas',     colorKey: 'yellow',  unit: 'kg' },
+  { id: 'mango',      ptName: 'Manga',     pluralName: 'mangas',     gender: 'f', icon: '🥭', category: 'Frutas',     colorKey: 'orange',  unit: 'kg' },
+  { id: 'peach',      ptName: 'Pêssego',   pluralName: 'pêssegos',   gender: 'm', icon: '🍑', category: 'Frutas',     colorKey: 'orange',  unit: 'kg' },
+  { id: 'cherry',     ptName: 'Cereja',    pluralName: 'cerejas',    gender: 'f', icon: '🍒', category: 'Frutas',     colorKey: 'red',     unit: 'kg' },
+  { id: 'pineapple',  ptName: 'Ananás',    pluralName: 'ananases',   gender: 'm', icon: '🍍', category: 'Frutas',     colorKey: 'yellow',  unit: 'kg' },
+  { id: 'coconut',    ptName: 'Coco',      pluralName: 'cocos',      gender: 'm', icon: '🥥', category: 'Frutas',     colorKey: 'amber',   unit: 'kg' },
+  { id: 'kiwi',       ptName: 'Kiwi',      pluralName: 'kiwis',      gender: 'm', icon: '🥝', category: 'Frutas',     colorKey: 'lime',    unit: 'kg' },
+  { id: 'blueberry',  ptName: 'Mirtilo',   pluralName: 'mirtilos',   gender: 'm', icon: '🫐', category: 'Frutas',     colorKey: 'purple',  unit: 'kg' },
+  { id: 'melon',      ptName: 'Melão',     pluralName: 'melões',     gender: 'm', icon: '🍈', category: 'Frutas',     colorKey: 'lime',    unit: 'kg' },
+  // ── Bakery (piece) ────────────────────────────────────────────────────────────
+  { id: 'bread',      ptName: 'Pão',       pluralName: 'pães',       gender: 'm', icon: '🍞', category: 'Padaria',    colorKey: 'amber'   },
+  { id: 'croissant',  ptName: 'Croissant', pluralName: 'croissants', gender: 'm', icon: '🥐', category: 'Padaria',    colorKey: 'yellow'  },
+  { id: 'cookie',     ptName: 'Bolacha',   pluralName: 'bolachas',   gender: 'f', icon: '🍪', category: 'Padaria',    colorKey: 'amber'   },
+  { id: 'cake',           ptName: 'Bolo',         pluralName: 'bolos',         gender: 'm', icon: '🍰', category: 'Padaria', colorKey: 'pink'   },
+  { id: 'pastel_nata',    ptName: 'Pastel de Nata', pluralName: 'Pastéis de Nata', gender: 'm', icon: '🥧', iconSrc: `${import.meta.env.BASE_URL}items/pastel_nata.svg`, category: 'Padaria', colorKey: 'amber'  },
+  // ── Dairy (piece) ─────────────────────────────────────────────────────────────
+  { id: 'milk',       ptName: 'Leite',     pluralName: 'leites',     gender: 'm', icon: '🥛', category: 'Lacticínios',colorKey: 'sky'     },
+  { id: 'cheese',     ptName: 'Queijo',    pluralName: 'queijos',    gender: 'm', icon: '🧀', category: 'Lacticínios',colorKey: 'yellow'  },
+  { id: 'egg',        ptName: 'Ovo',       pluralName: 'ovos',       gender: 'm', icon: '🥚', category: 'Lacticínios',colorKey: 'orange'  },
+  { id: 'yogurt',     ptName: 'Iogurte',   pluralName: 'iogurtes',   gender: 'm', icon: '🫙', category: 'Lacticínios',colorKey: 'sky',    iconBg: '#ffffff' },
+  { id: 'butter',     ptName: 'Manteiga',  pluralName: 'manteigas',  gender: 'f', icon: '🧈', category: 'Lacticínios',colorKey: 'yellow'  },
+  // ── Drinks (piece) ────────────────────────────────────────────────────────────
+  { id: 'water',      ptName: 'Água',      pluralName: 'águas',      gender: 'f', icon: '🫙', category: 'Bebidas',    colorKey: 'sky',    iconBg: '#ffffff' },
+  { id: 'juice',      ptName: 'Sumo',      pluralName: 'sumos',      gender: 'm', icon: '🧃', category: 'Bebidas',    colorKey: 'yellow'  },
+  { id: 'wine',       ptName: 'Vinho',     pluralName: 'vinhos',     gender: 'm', icon: '🍷', category: 'Bebidas', colorKey: 'red'   },
+  { id: 'beer',       ptName: 'Cerveja',   pluralName: 'cervejas',   gender: 'f', icon: '🍺', category: 'Bebidas', colorKey: 'amber' },
+  { id: 'coffee',     ptName: 'Café',      pluralName: 'cafés',      gender: 'm', icon: '☕', category: 'Bebidas',    colorKey: 'amber'   },
+  // ── Vegetables (kg) ───────────────────────────────────────────────────────────
+  { id: 'broccoli',   ptName: 'Brócolis',  pluralName: 'brócolis',   gender: 'm', icon: '🥦', category: 'Legumes',    colorKey: 'green',   unit: 'kg' },
+  { id: 'carrot',     ptName: 'Cenoura',   pluralName: 'cenouras',   gender: 'f', icon: '🥕', category: 'Legumes',    colorKey: 'orange',  unit: 'kg' },
+  { id: 'tomato',     ptName: 'Tomate',    pluralName: 'tomates',    gender: 'm', icon: '🍅', category: 'Legumes',    colorKey: 'red',     unit: 'kg' },
+  { id: 'corn',       ptName: 'Milho',     pluralName: 'milhos',     gender: 'm', icon: '🌽', category: 'Legumes',    colorKey: 'yellow',  unit: 'kg' },
+  { id: 'potato',     ptName: 'Batata',    pluralName: 'batatas',    gender: 'f', icon: '🥔', category: 'Legumes',    colorKey: 'amber',   unit: 'kg' },
+  { id: 'onion',      ptName: 'Cebola',    pluralName: 'cebolas',    gender: 'f', icon: '🧅', category: 'Legumes',    colorKey: 'yellow',  unit: 'kg' },
+  { id: 'lettuce',    ptName: 'Alface',    pluralName: 'alfaces',    gender: 'f', icon: '🥬', category: 'Legumes',    colorKey: 'green',   unit: 'kg' },
+  { id: 'pepper',     ptName: 'Pimento',   pluralName: 'pimentos',   gender: 'm', icon: '🫑', category: 'Legumes',    colorKey: 'green',   unit: 'kg' },
+  { id: 'cucumber',   ptName: 'Pepino',    pluralName: 'pepinos',    gender: 'm', icon: '🥒', category: 'Legumes',    colorKey: 'green',   unit: 'kg' },
+  { id: 'mushroom',   ptName: 'Cogumelo',  pluralName: 'cogumelos',  gender: 'm', icon: '🍄', category: 'Legumes',    colorKey: 'amber',   unit: 'kg' },
+  { id: 'garlic',     ptName: 'Alho',      pluralName: 'alhos',      gender: 'm', icon: '🧄', category: 'Legumes',    colorKey: 'yellow',  unit: 'kg' },
+  { id: 'eggplant',   ptName: 'Beringela', pluralName: 'beringelas', gender: 'f', icon: '🍆', category: 'Legumes',    colorKey: 'purple',  unit: 'kg' },
+  { id: 'avocado',    ptName: 'Abacate',   pluralName: 'abacates',   gender: 'm', icon: '🥑', category: 'Legumes',    colorKey: 'green',   unit: 'kg' },
+  // ── Meat & Fish (kg) ──────────────────────────────────────────────────────────
+  { id: 'fish',       ptName: 'Peixe',     pluralName: 'peixes',     gender: 'm', icon: '🐟', category: 'Peixaria',   colorKey: 'cyan',    unit: 'kg' },
+  { id: 'bacalhau',   ptName: 'Bacalhau',  pluralName: 'bacalhaus',  gender: 'm', icon: '🐠', iconSrc: `${import.meta.env.BASE_URL}items/bacalhau.svg`, category: 'Peixaria', colorKey: 'sky',    unit: 'kg' },
+  { id: 'shrimp',     ptName: 'Camarão',   pluralName: 'camarões',   gender: 'm', icon: '🦐', category: 'Peixaria', colorKey: 'orange', unit: 'kg' },
+  { id: 'chicken',    ptName: 'Frango',    pluralName: 'frangos',    gender: 'm', icon: '🍗', category: 'Talho',      colorKey: 'amber',   unit: 'kg' },
+  { id: 'meat',       ptName: 'Carne',     pluralName: 'carnes',     gender: 'f', icon: '🥩', category: 'Talho',      colorKey: 'red',     unit: 'kg' },
+  { id: 'chourico',   ptName: 'Chouriço',  pluralName: 'chouriços',  gender: 'm', icon: '🌭', iconSrc: `${import.meta.env.BASE_URL}items/chourico.svg`, category: 'Talho', colorKey: 'red',    unit: 'kg' },
+  // ── Grocery staples (piece) ───────────────────────────────────────────────────
+  { id: 'rice',       ptName: 'Arroz',     pluralName: 'arrozes',    gender: 'm', icon: '🍚', category: 'Mercearia',  colorKey: 'sky',    iconBg: '#ffffff' },
+  { id: 'pasta',      ptName: 'Massa',     pluralName: 'massas',     gender: 'f', icon: '🍝', category: 'Mercearia',  colorKey: 'yellow'  },
+  { id: 'beans',      ptName: 'Feijão',    pluralName: 'feijões',    gender: 'm', icon: '🫘', category: 'Mercearia', colorKey: 'red'   },
+  { id: 'azeitona',   ptName: 'Azeitona',  pluralName: 'azeitonas',  gender: 'f', icon: '🫒', category: 'Mercearia',  colorKey: 'lime'    },
+  { id: 'honey',      ptName: 'Mel',       pluralName: 'méis',       gender: 'm', icon: '🍯', category: 'Doces',      colorKey: 'amber'   },
+  { id: 'jam',        ptName: 'Compota',   pluralName: 'compotas',   gender: 'f', icon: '🫙', iconSrc: `${import.meta.env.BASE_URL}items/compota2.svg`, category: 'Doces', colorKey: 'rose' },
+  // ── Sweets & Snacks (piece) ───────────────────────────────────────────────────
+  { id: 'icecream',   ptName: 'Gelado',    pluralName: 'gelados',    gender: 'm', icon: '🍦', category: 'Doces',      colorKey: 'pink'    },
+  { id: 'chocolate',  ptName: 'Chocolate', pluralName: 'chocolates', gender: 'm', icon: '🍫', category: 'Doces',      colorKey: 'amber'   },
+  { id: 'popcorn',    ptName: 'Pipoca',    pluralName: 'pipocas',    gender: 'f', icon: '🍿', category: 'Snacks',     colorKey: 'yellow'  },
+  { id: 'candy',      ptName: 'Rebuçado',  pluralName: 'rebuçados',  gender: 'm', icon: '🍬', category: 'Doces',      colorKey: 'pink'    },
+  { id: 'lollipop',   ptName: 'Chupa-Chupa',pluralName:'chupa-chupas',gender:'m', icon: '🍭', category: 'Doces',      colorKey: 'rose'    },
+];
 
 export const kidsWords: Word[] = [
   // ── Core verbs ───────────────────────────────────────────────────────────────

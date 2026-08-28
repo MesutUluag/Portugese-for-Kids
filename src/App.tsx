@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { LayoutGrid, BookOpen, Image, Headphones, Layers, PencilLine, Puzzle, Globe, Timer, Volume2, VolumeX } from 'lucide-react';
+import { LayoutGrid, BookOpen, Image, Headphones, Layers, PencilLine, Puzzle, Globe, Timer, Volume2, VolumeX, ShoppingCart } from 'lucide-react';
 import { Mode } from './data/words';
 import { AiState, initAI } from './utils/ai';
 import { useStoryPrefetch } from './story/useStoryPrefetch';
@@ -11,6 +11,7 @@ import Game3 from './components/Game3';
 import Game4 from './components/Game4';
 import Game5 from './components/Game5';
 import Game6 from './components/Game6';
+import Game7 from './components/Game7';
 
 const MUSIC_TRACKS = [
   'alex-morgan-kids-background-music-579469.mp3',
@@ -152,6 +153,7 @@ export default function App(): React.ReactElement {
     { key: 'game4',  label: 'Fill Blank',   labelTr: 'Boşluk Doldurma',cls: 'btn-game4',  icon: <PencilLine  size={15} strokeWidth={2} /> },
     { key: 'game5',  label: 'Scramble',     labelTr: 'Kelime Bul',     cls: 'btn-game5',  icon: <Puzzle      size={15} strokeWidth={2} /> },
     { key: 'game6',  label: 'Puzzle',       labelTr: 'Yapboz',         cls: 'btn-game6',  icon: <Puzzle      size={15} strokeWidth={2} /> },
+    { key: 'game7',  label: 'Market',       labelTr: 'Market Oyunu',   cls: 'btn-game7',  icon: <ShoppingCart size={15} strokeWidth={2} /> },
   ];
 
   return (
@@ -210,6 +212,7 @@ export default function App(): React.ReactElement {
       {mode === 'game4' && <Game4 onScore={addScore} language={language} />}
       {mode === 'game5' && <Game5 onScore={addScore} language={language} />}
       {mode === 'game6' && <Game6 onScore={addScore} language={language} />}
+      {mode === 'game7' && <Game7 onScore={addScore} language={language} />}
     </main>
   );
 }
