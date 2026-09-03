@@ -561,3 +561,39 @@
   display: inline-block;
   margin-bottom: 10px;
 }
+
+// ─── Context selector ─────────────────────────────────────────────────────────
+.story-context-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+
+  @media (min-width: 480px) {
+    margin-bottom: 12px;
+  }
+}
+
+.story-context-select {
+  appearance: none;
+  -webkit-appearance: none;
+  background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230284c7' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 10px center;
+  border: 2px solid $color-sky;
+  border-radius: 999px;
+  color: $color-sky-dark;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  padding: 9px 36px 9px 16px;
+  text-align: center;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25);
+  }
+
+  @media (min-width: 480px) {
+    font-size: 18px;
+    padding: 10px 38px 10px 18px;
+  }
+}
