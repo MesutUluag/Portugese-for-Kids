@@ -28,9 +28,10 @@ interface Props {
   aiState: AiState;
   onAiChange: (label: string, color: string) => void;
   language: 'en' | 'tr';
+  prefetchPromise?: Promise<StoryPage>;
 }
 
-export default function StoryMode({ aiState, onAiChange, language }: Props): React.ReactElement {
+export default function StoryMode({ aiState, onAiChange, language, prefetchPromise }: Props): React.ReactElement {
   const [context, setContext] = useState<StoryContext>('school');
   const [history, setHistory] = useState<StoryPage[]>([]);
   const [index, setIndex] = useState(0);
@@ -42,7 +43,7 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
   const pendingSpeakRef = useRef<string | null>(null);
   const prefetchedReplyRef = useRef<StoryPage | null>(null);
   const prefetchingReply = useRef(false);
-  const { popQueue, imageCache } = useStoryPrefetch(aiState, onAiChange, context);
+  const { popQueue, triggerRefill, imageCache } = useStoryPrefetch(aiState, onAiChange, context);
 
   useEffect(() => {
     if (initialized.current) return;
@@ -103,9 +104,18 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
   }, [language, index, history]);
 
   async function loadFirst(): Promise<void> {
-    // Try to use a prefetched story; if the queue is still empty (prefetch in flight),
-    // wait up to 6 s in 200 ms steps before falling back to on-demand fetch.
-    let page = popQueue();
+    // 1. Use the promise started at app-load if available (fastest path)
+    // 2. Fall back to polling the prefetch queue (hook started its own fetch)
+    // 3. Last resort: fetch on demand
+    let page: StoryPage | undefined;
+    if (prefetchPromise) {
+      setLoading(true);
+      try { page = await prefetchPromise; } catch { /* fall through */ }
+      setLoading(false);
+    }
+    if (!page) {
+      page = popQueue();
+    }
     if (!page) {
       setLoading(true);
       for (let i = 0; i < 30 && !page; i++) {
@@ -153,16 +163,26 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
     } else {
       const capturedIndex = index;
       const currentSentence = history[capturedIndex]?.pt;
-      // Use the prefetched reply if it's ready, otherwise fetch live
-      const prefetched = prefetchedReplyRef.current;
-      prefetchedReplyRef.current = null;
-      if (prefetched) {
-        setHistory((h) => [...h, prefetched]);
+      // 1. Use a prefetched queue item if available (instant, no wait)
+      const queued = popQueue();
+      if (queued) {
+        setHistory((h) => [...h, queued]);
         setIndex(capturedIndex + 1);
         setPageKey((k) => k + 1);
-        speakText(prefetched.pt);
-        // Prefetch the reply to this page in the background
-        void prefetchReply(prefetched.pt);
+        speakText(queued.pt);
+        triggerRefill();
+        // Prefetch the contextual reply to this page in the background
+        void prefetchReply(queued.pt);
+      // 2. Use the prefetched reply ref if ready (fetched while user was reading)
+      } else if (prefetchedReplyRef.current) {
+        const reply = prefetchedReplyRef.current;
+        prefetchedReplyRef.current = null;
+        setHistory((h) => [...h, reply]);
+        setIndex(capturedIndex + 1);
+        setPageKey((k) => k + 1);
+        speakText(reply.pt);
+        void prefetchReply(reply.pt);
+      // 3. Fall back to a live fetch
       } else {
         setLoading(true);
         const page = await getNewStoryPage(aiState, onAiChange, context, currentSentence);
@@ -171,7 +191,6 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
         setPageKey((k) => k + 1);
         setLoading(false);
         speakText(page.pt);
-        // Prefetch the reply to this page in the background
         void prefetchReply(page.pt);
       }
     }

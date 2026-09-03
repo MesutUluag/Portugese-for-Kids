@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { LayoutGrid, BookOpen, Image, Headphones, Layers, PencilLine, Puzzle, Globe, Timer, Volume2, VolumeX, ShoppingCart } from 'lucide-react';
-import { Mode } from './data/words';
-import { AiState, initAI } from './utils/ai';
+import { Mode, StoryPage } from './data/words';
+import { AiState, initAI, getNewStoryPage } from './utils/ai';
 import CardsMode from './components/CardsMode';
 import StoryMode from './story/StoryMode';
 import Game1 from './components/Game1';
@@ -26,6 +26,7 @@ export default function App(): React.ReactElement {
   const [_score, setScore] = useState(0);
   const [_bounce, setBounce] = useState(false);
   const [aiState, setAiState] = useState<AiState>(null);
+  const storyPrefetchRef = useRef<Promise<StoryPage> | null>(null);
   const [language, setLanguage] = useState<'en' | 'tr'>('en');
   const [musicEnabled, setMusicEnabled] = useState(true);
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -54,7 +55,11 @@ export default function App(): React.ReactElement {
   });
 
   useEffect(() => {
-    void initAI((_label, _color) => {}).then((state) => setAiState(state));
+    void initAI((_label, _color) => {}).then((state) => {
+      setAiState(state);
+      // Start fetching the first story immediately so it's ready when the user opens Story
+      storyPrefetchRef.current = getNewStoryPage(state, () => {}, 'school');
+    });
   }, []);
 
   useEffect(() => {
@@ -201,6 +206,7 @@ export default function App(): React.ReactElement {
           aiState={aiState}
           onAiChange={(_label, _color) => {}}
           language={language}
+          prefetchPromise={storyPrefetchRef.current ?? undefined}
         />
       )}
       {mode === 'game1' && <Game1 onScore={addScore} language={language} />}

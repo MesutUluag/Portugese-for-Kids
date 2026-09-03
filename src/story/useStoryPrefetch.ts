@@ -58,20 +58,11 @@ export function useStoryPrefetch(
     await prefetchImage(page);
   }
 
-  // Fetch the first story + image as soon as aiState is ready, or when context changes.
+  // Reset queue and image cache when context changes; revoke blob URLs on unmount.
   useEffect(() => {
     if (!aiState) return;
-
-    // Reset queue and cache on context change
     queueRef.current = [];
     setImageCache(new Map());
-
-    void getNewStoryPage(aiState, onAiChange, context).then((page) => {
-      queueRef.current = [page];
-      void prefetchImage(page);
-    });
-
-    // Revoke all blob URLs on unmount to avoid memory leaks
     return () => {
       blobUrls.current.forEach((url) => URL.revokeObjectURL(url));
     };
