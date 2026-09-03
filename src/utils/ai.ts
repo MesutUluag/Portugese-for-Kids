@@ -32,7 +32,6 @@ const CONTEXT_TOPICS: Record<StoryContext, readonly string[]> = {
     'asking for help with schoolwork',
     'asking to borrow a pencil rubber or ruler',
     'asking where a book notebook or bag is',
-    'asking to go to the bathroom',
     'talking to a friend at break time or in the playground',
     'asking a friend to play or sit together',
     'talking at lunch about food or the day',
@@ -301,18 +300,23 @@ async function fetchWithTimeout(url: string, options: RequestInit, ms: number): 
 async function fetchBackendStory(
   context: StoryContext = 'school',
   previousSentence?: string,
+  conversationHistory?: string[],
 ): Promise<StoryPage> {
-  const body: Record<string, string> = { context };
+  const body: Record<string, unknown> = { context };
   if (previousSentence) {
-    // Reply turn: the topic is already set by the conversation — just pass the previous
-    // sentence. The backend system prompt handles the "generate a natural reply" instruction.
-    body.prompt = previousSentence;
+    // Reply turn: send a neutral instruction as the prompt so the sentence is not
+    // duplicated in the assembled user message. The backend appends the previous
+    // sentence itself via the previousSentence field.
+    body.prompt = 'Continue the conversation.';
     body.previousSentence = previousSentence;
   } else {
     // First turn: pick a random topic to seed the sentence.
     const topics = CONTEXT_TOPICS[context];
     const topic = topics[Math.floor(Math.random() * topics.length)];
     body.prompt = `Generate one sentence about ${topic}.`;
+  }
+  if (conversationHistory && conversationHistory.length > 0) {
+    body.conversationHistory = conversationHistory;
   }
   const res = await fetchWithTimeout(BACKEND_URL, {
     method: 'POST',
@@ -335,10 +339,11 @@ export async function getNewStoryPage(
   onStatusChange: (text: string, color: string) => void,
   context: StoryContext = 'school',
   previousSentence?: string,
+  conversationHistory?: string[],
 ): Promise<StoryPage> {
   if (aiState === 'backend') {
     try {
-      return await fetchBackendStory(context, previousSentence);
+      return await fetchBackendStory(context, previousSentence, conversationHistory);
     } catch (e) {
       console.warn('Backend story failed, falling back to template:', e);
       onStatusChange('🧩 Template Engine (Backend AI failed)', '#0284c7');

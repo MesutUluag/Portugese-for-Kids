@@ -9,6 +9,35 @@ import { buildStoryImagePrompt, useStoryPrefetch } from './useStoryPrefetch';
 import StoryIllustration from './StoryIllustration';
 import './StoryMode.scss';
 
+const HISTORY_STORAGE_KEY = (context: StoryContext) => `story_history_${context}`;
+const MAX_STORED_HISTORY = 30; // sentences per context kept in localStorage
+
+function loadStoredHistory(context: StoryContext): string[] {
+  try {
+    const raw = localStorage.getItem(HISTORY_STORAGE_KEY(context));
+    return raw ? (JSON.parse(raw) as string[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(context: StoryContext, history: StoryPage[]): void {
+  try {
+    const sentences = history.map((p) => p.pt).slice(-MAX_STORED_HISTORY);
+    localStorage.setItem(HISTORY_STORAGE_KEY(context), JSON.stringify(sentences));
+  } catch {
+    // localStorage unavailable — non-fatal
+  }
+}
+
+function clearStoredHistory(context: StoryContext): void {
+  try {
+    localStorage.removeItem(HISTORY_STORAGE_KEY(context));
+  } catch {
+    // localStorage unavailable — non-fatal
+  }
+}
+
 const CONTEXTS: { value: StoryContext; label: string; labelTr: string; emoji: string }[] = [
   { value: 'school',       label: 'School',       labelTr: 'Okul',          emoji: '🏫' },
   { value: 'restaurant',   label: 'Restaurant',   labelTr: 'Restoran',      emoji: '🍽️' },
@@ -60,6 +89,12 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
     const id = ++loadIdRef.current;
     const isContextSwitch = id > 1; // first run is the initial load
 
+    // Clear stored history for the previous context when the user explicitly switches.
+    // We want a fresh conversation in the new context, not carry-over from the old one.
+    if (isContextSwitch) {
+      clearStoredHistory(context);
+    }
+
     setHistory([]);
     setIndex(0);
     setTrText('');
@@ -93,6 +128,12 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
     };
   }, []);
 
+  // Persist history to localStorage whenever it changes
+  useEffect(() => {
+    if (history.length > 0) saveHistory(context, history);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history]);
+
   // Translate the current page's English text to Turkish when language or page changes
   useEffect(() => {
     const en = history[index]?.en;
@@ -114,7 +155,8 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
     }
     if (!page) {
       setLoading(true);
-      page = await getNewStoryPage(aiState, onAiChange, context);
+      const storedHistory = loadStoredHistory(context);
+      page = await getNewStoryPage(aiState, onAiChange, context, undefined, storedHistory);
     }
 
     // A newer loadFirst call has started (e.g. context changed mid-fetch) — discard this result.
@@ -135,16 +177,16 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
       pendingSpeakRef.current = page.pt;
     }
     // Start prefetching the reply to this first page in the background
-    void prefetchReply(page.pt);
+    void prefetchReply(page.pt, [page!.pt]);
   }
 
   /** Fetch the reply to `sentence` in the background and cache it in prefetchedReplyRef. */
-  async function prefetchReply(sentence: string): Promise<void> {
+  async function prefetchReply(sentence: string, currentHistory: string[]): Promise<void> {
     if (prefetchingReply.current) return;
     prefetchingReply.current = true;
     prefetchedReplyRef.current = null;
     try {
-      const reply = await getNewStoryPage(aiState, onAiChange, context, sentence);
+      const reply = await getNewStoryPage(aiState, onAiChange, context, sentence, currentHistory);
       prefetchedReplyRef.current = reply;
     } catch {
       // non-fatal — handleNext will fall back to a live fetch
@@ -164,27 +206,30 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
     } else {
       const capturedIndex = index;
       const currentSentence = history[capturedIndex]?.pt;
+      const currentHistory = history.map((p) => p.pt);
       // 1. Use the prefetched contextual reply if ready (fetched while user was reading)
       if (prefetchedReplyRef.current) {
         const reply = prefetchedReplyRef.current;
         prefetchedReplyRef.current = null;
-        setHistory((h) => [...h, reply]);
+        const newHistory = [...history, reply];
+        setHistory(newHistory);
         setIndex(capturedIndex + 1);
         setPageKey((k) => k + 1);
         prefetchImage(reply);
         speakText(reply.pt);
-        void prefetchReply(reply.pt);
+        void prefetchReply(reply.pt, newHistory.map((p) => p.pt));
       // 2. Fall back to a live fetch
       } else {
         setLoading(true);
-        const page = await getNewStoryPage(aiState, onAiChange, context, currentSentence);
-        setHistory((h) => [...h, page]);
+        const page = await getNewStoryPage(aiState, onAiChange, context, currentSentence, currentHistory);
+        const newHistory = [...history, page];
+        setHistory(newHistory);
         setIndex(capturedIndex + 1);
         setPageKey((k) => k + 1);
         setLoading(false);
         prefetchImage(page);
         speakText(page.pt);
-        void prefetchReply(page.pt);
+        void prefetchReply(page.pt, newHistory.map((p) => p.pt));
       }
     }
   }
