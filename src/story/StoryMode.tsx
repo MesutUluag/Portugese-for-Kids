@@ -132,25 +132,18 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
       speakText(history[nextIndex].pt);
     } else {
       const currentSentence = history[index]?.pt;
-      // Consume from prefetch queue for instant display; fall back if queue is empty.
-      // Prefetched pages are generic openers — if we have a current sentence, skip the
-      // queue and fetch a contextual reply live so conversation flow is preserved.
-      const prefetched = currentSentence ? undefined : popQueue();
-      if (prefetched) {
-        setHistory((h) => [...h, prefetched]);
-        setIndex(nextIndex);
-        setPageKey((k) => k + 1);
-        speakText(prefetched.pt);
-      } else {
-        setLoading(true);
-        const page = await getNewStoryPage(aiState, onAiChange, context, currentSentence);
-        setHistory((h) => [...h, page]);
-        setIndex(nextIndex);
-        setPageKey((k) => k + 1);
-        setLoading(false);
-        speakText(page.pt);
-      }
-      // Queue was consumed — immediately start prefetching the next story + image
+      // Always discard any prefetched opener from the queue — it is a generic sentence,
+      // not a reply to currentSentence, so we never display it. Discarding it keeps the
+      // queue count correct so triggerRefill knows it needs to fetch one more.
+      popQueue();
+      setLoading(true);
+      const page = await getNewStoryPage(aiState, onAiChange, context, currentSentence);
+      setHistory((h) => [...h, page]);
+      setIndex(nextIndex);
+      setPageKey((k) => k + 1);
+      setLoading(false);
+      speakText(page.pt);
+      // Queue slot was consumed — prefetch the next one in the background
       triggerRefill();
     }
   }
