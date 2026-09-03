@@ -14,7 +14,7 @@ const CONTEXTS: { value: StoryContext; label: string; labelTr: string; emoji: st
   { value: 'restaurant',   label: 'Restaurant',   labelTr: 'Restoran',      emoji: '🍽️' },
   { value: 'bank',         label: 'Bank',         labelTr: 'Banka',         emoji: '🏦' },
   { value: 'hospital',     label: 'Hospital',     labelTr: 'Hastane',       emoji: '🏥' },
-  { value: 'bakery',       label: 'Bakery',       labelTr: 'Fırın',         emoji: '🥐' },
+  { value: 'cafe',         label: 'Café',         labelTr: 'Kafe',          emoji: '☕' },
   { value: 'airport',      label: 'Airport',      labelTr: 'Havalimanı',    emoji: '✈️' },
   { value: 'market',       label: 'Market',       labelTr: 'Market',        emoji: '🛒' },
   { value: 'aima',         label: 'AIMA',         labelTr: 'AIMA',          emoji: '🏛️' },
@@ -105,10 +105,10 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
   }, [language, index, history]);
 
   async function loadFirst(speakImmediately = false): Promise<void> {
-    // 1. Use the promise started at app-load if available (fastest path)
-    // 2. Fall back to a live fetch
+    // Use the app-load prefetch only on the very first load (school context).
+    // On context switches always fetch fresh so we get the correct context.
     let page: StoryPage | undefined;
-    if (prefetchPromise) {
+    if (!speakImmediately && prefetchPromise) {
       setLoading(true);
       try { page = await prefetchPromise; } catch { /* fall through */ }
       setLoading(false);

@@ -6,7 +6,7 @@ export type StoryContext =
   | 'restaurant'
   | 'bank'
   | 'hospital'
-  | 'bakery'
+  | 'cafe'
   | 'airport'
   | 'market'
   | 'aima'
@@ -108,23 +108,23 @@ const CONTEXT_TOPICS: Record<StoryContext, readonly string[]> = {
     'asking where the pharmacy is',
     'saying thank you to the doctor or nurse and goodbye',
   ],
-  bakery: [
-    'greeting the baker',
-    'asking what is available today',
-    'asking what a specific item is called or what it contains',
-    'ordering bread such as a baguette or pão de mistura',
-    'ordering a Portuguese pastry such as a pastel de nata bola de berlim or croissant',
-    'ordering a cake slice or bolo',
-    'saying how many items you want',
-    'asking to try a sample before buying',
-    'asking if something is fresh or just out of the oven',
-    'asking if something contains nuts or allergens',
-    'asking the price of one or several items',
-    'saying it is for the whole family',
+  cafe: [
+    'greeting the barista or waiter',
+    'asking for a table inside or outside',
+    'ordering a coffee such as um café um galão or um meia de leite',
+    'ordering a tea or hot chocolate',
+    'ordering a juice such as orange or pineapple',
+    'ordering a snack such as a torrada tosta mista or pastel de nata',
+    'asking what is available or what the daily special is',
+    'asking if something contains milk nuts or allergens',
+    'asking the price of a drink or snack',
+    'asking for the Wi-Fi password',
+    'asking where the bathroom is',
+    'asking for the bill',
     'paying with cash or card',
-    'asking for a bag or a box',
     'asking for a receipt',
-    'complimenting the baker on their products',
+    'saying the coffee is too hot too cold or too strong',
+    'complimenting the food or drink',
     'saying thank you and goodbye',
   ],
   airport: [

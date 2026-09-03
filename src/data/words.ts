@@ -605,35 +605,34 @@ export const templatePagesByContext: Record<string, StoryPage[]> = {
     { pt: "Obrigado, doutora!", en: "Thank you, doctor!", mainEmoji: "😊", bgLeft: "🏥", bgRight: "❤️" },
   ],
 
-  bakery: [
-    // Greeting the baker
-    { pt: "Bom dia! O que têm hoje?", en: "Good morning! What do you have today?", mainEmoji: "😊", bgLeft: "🥐", bgRight: "👩‍🍳" },
-    { pt: "Olá! Quero comprar pão.", en: "Hello! I want to buy bread.", mainEmoji: "🍞", bgLeft: "🥐", bgRight: "👩‍🍳" },
-    { pt: "O que é isto?", en: "What is this?", mainEmoji: "❓", bgLeft: "🥐", bgRight: "👩‍🍳" },
-    { pt: "Tem amêndoas?", en: "Does it contain almonds?", mainEmoji: "🌰", bgLeft: "🥐", bgRight: "❓" },
-    // Ordering bread
-    { pt: "Quero uma baguete, por favor.", en: "I would like a baguette, please.", mainEmoji: "🥖", bgLeft: "👩‍🍳", bgRight: "😋" },
-    { pt: "Quero um pão de mistura.", en: "I would like a mixed-grain bread.", mainEmoji: "🍞", bgLeft: "👩‍🍳", bgRight: "😊" },
-    { pt: "Dois pães, por favor.", en: "Two breads, please.", mainEmoji: "🍞", bgLeft: "🥐", bgRight: "👩‍🍳" },
-    // Ordering pastries
-    { pt: "Quero dois pastéis de nata, por favor.", en: "I would like two custard tarts, please.", mainEmoji: "🥐", bgLeft: "🍞", bgRight: "👩‍🍳" },
-    { pt: "Pode dar-me um croissant?", en: "Can you give me a croissant?", mainEmoji: "🥐", bgLeft: "🍞", bgRight: "😋" },
-    { pt: "Quero uma bola de berlim.", en: "I would like a Berlin doughnut.", mainEmoji: "🍩", bgLeft: "🥐", bgRight: "😋" },
-    { pt: "Posso provar antes de comprar?", en: "Can I try before buying?", mainEmoji: "😋", bgLeft: "🥐", bgRight: "👩‍🍳" },
-    // Cake
-    { pt: "Quanto custa este bolo?", en: "How much does this cake cost?", mainEmoji: "🎂", bgLeft: "🥐", bgRight: "❓" },
-    { pt: "Uma fatia de bolo, por favor.", en: "A slice of cake, please.", mainEmoji: "🍰", bgLeft: "🥐", bgRight: "😋" },
-    // Freshness and compliments
-    { pt: "Está fresco?", en: "Is it fresh?", mainEmoji: "✨", bgLeft: "🍞", bgRight: "❓" },
-    { pt: "Acabou de sair do forno?", en: "Did it just come out of the oven?", mainEmoji: "🔥", bgLeft: "🥐", bgRight: "❓" },
-    { pt: "Parece delicioso!", en: "It looks delicious!", mainEmoji: "😋", bgLeft: "🥐", bgRight: "⭐" },
-    { pt: "Está muito bom, parabéns!", en: "It is very good, well done!", mainEmoji: "👏", bgLeft: "🥐", bgRight: "😊" },
-    // Paying
-    { pt: "É para a família toda.", en: "It is for the whole family.", mainEmoji: "👨‍👩‍👧", bgLeft: "🥐", bgRight: "😊" },
-    { pt: "Posso pagar com cartão?", en: "Can I pay by card?", mainEmoji: "💳", bgLeft: "🥐", bgRight: "👩‍🍳" },
-    { pt: "Pode dar-me um saco?", en: "Can you give me a bag?", mainEmoji: "🛍️", bgLeft: "🥐", bgRight: "👩‍🍳" },
-    { pt: "Pode dar-me um recibo?", en: "Can you give me a receipt?", mainEmoji: "🧾", bgLeft: "🥐", bgRight: "👩‍🍳" },
-    { pt: "Obrigado! Até logo.", en: "Thank you! Goodbye.", mainEmoji: "👋", bgLeft: "🥐", bgRight: "😊" },
+  cafe: [
+    // Greeting
+    { pt: "Bom dia! Uma mesa para dois, por favor.", en: "Good morning! A table for two, please.", mainEmoji: "😊", bgLeft: "☕", bgRight: "🪑" },
+    { pt: "Preferem dentro ou fora?", en: "Do you prefer inside or outside?", mainEmoji: "🌞", bgLeft: "☕", bgRight: "🪑" },
+    // Ordering coffee
+    { pt: "Um café, por favor.", en: "A coffee, please.", mainEmoji: "☕", bgLeft: "🥐", bgRight: "👩‍🍳" },
+    { pt: "Um galão e uma torrada, por favor.", en: "A galão and a toast, please.", mainEmoji: "☕", bgLeft: "🥐", bgRight: "👩‍🍳" },
+    { pt: "Um meia de leite, por favor.", en: "A meia de leite, please.", mainEmoji: "☕", bgLeft: "🥛", bgRight: "👩‍🍳" },
+    // Other drinks
+    { pt: "Um chá de limão, por favor.", en: "A lemon tea, please.", mainEmoji: "🍵", bgLeft: "☕", bgRight: "😊" },
+    { pt: "Um chocolate quente, por favor.", en: "A hot chocolate, please.", mainEmoji: "🍫", bgLeft: "☕", bgRight: "😋" },
+    { pt: "Um sumo de laranja, por favor.", en: "An orange juice, please.", mainEmoji: "🍊", bgLeft: "☕", bgRight: "😊" },
+    // Snacks
+    { pt: "Uma tosta mista, por favor.", en: "A ham and cheese toastie, please.", mainEmoji: "🥪", bgLeft: "☕", bgRight: "😋" },
+    { pt: "Um pastel de nata, por favor.", en: "A custard tart, please.", mainEmoji: "🥐", bgLeft: "☕", bgRight: "😋" },
+    { pt: "O que têm para comer?", en: "What do you have to eat?", mainEmoji: "❓", bgLeft: "☕", bgRight: "👩‍🍳" },
+    // Asking questions
+    { pt: "Tem leite no café?", en: "Does the coffee have milk?", mainEmoji: "🥛", bgLeft: "☕", bgRight: "❓" },
+    { pt: "Qual é a senha do Wi-Fi?", en: "What is the Wi-Fi password?", mainEmoji: "📶", bgLeft: "☕", bgRight: "❓" },
+    { pt: "Onde é a casa de banho?", en: "Where is the bathroom?", mainEmoji: "🚻", bgLeft: "☕", bgRight: "❓" },
+    { pt: "Quanto custa um galão?", en: "How much does a galão cost?", mainEmoji: "❓", bgLeft: "☕", bgRight: "🪙" },
+    // Feedback and paying
+    { pt: "O café está muito quente.", en: "The coffee is very hot.", mainEmoji: "🔥", bgLeft: "☕", bgRight: "😬" },
+    { pt: "Está muito bom!", en: "It is very good!", mainEmoji: "😋", bgLeft: "☕", bgRight: "⭐" },
+    { pt: "A conta, por favor.", en: "The bill, please.", mainEmoji: "🧾", bgLeft: "☕", bgRight: "👩‍🍳" },
+    { pt: "Posso pagar com cartão?", en: "Can I pay by card?", mainEmoji: "💳", bgLeft: "☕", bgRight: "👩‍🍳" },
+    { pt: "Pode dar-me um recibo?", en: "Can you give me a receipt?", mainEmoji: "🧾", bgLeft: "☕", bgRight: "👩‍🍳" },
+    { pt: "Obrigado! Até logo.", en: "Thank you! Goodbye.", mainEmoji: "👋", bgLeft: "☕", bgRight: "😊" },
   ],
   airport: [
     // Check-in
