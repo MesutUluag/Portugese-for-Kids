@@ -43,7 +43,7 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
   const pendingSpeakRef = useRef<string | null>(null);
   const prefetchedReplyRef = useRef<StoryPage | null>(null);
   const prefetchingReply = useRef(false);
-  const { popQueue, triggerRefill, imageCache } = useStoryPrefetch(aiState, onAiChange, context);
+  const { prefetchImage, imageCache } = useStoryPrefetch(aiState, onAiChange, context);
 
   useEffect(() => {
     if (initialized.current) return;
@@ -52,7 +52,8 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // When context changes (after first mount), clear history and load fresh
+  // When context changes (after first mount), clear history and load fresh.
+  // A gesture has already occurred (user clicked the dropdown), so we speak directly.
   const isFirstMount = useRef(true);
   useEffect(() => {
     if (isFirstMount.current) {
@@ -65,7 +66,7 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
     cancelSpeech();
     prefetchedReplyRef.current = null;
     prefetchingReply.current = false;
-    void loadFirst();
+    void loadFirst(/* speakImmediately */ true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context]);
   useEffect(() => () => { cancelSpeech(); }, []);
@@ -103,10 +104,9 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
     }
   }, [language, index, history]);
 
-  async function loadFirst(): Promise<void> {
+  async function loadFirst(speakImmediately = false): Promise<void> {
     // 1. Use the promise started at app-load if available (fastest path)
-    // 2. Fall back to polling the prefetch queue (hook started its own fetch)
-    // 3. Last resort: fetch on demand
+    // 2. Fall back to a live fetch
     let page: StoryPage | undefined;
     if (prefetchPromise) {
       setLoading(true);
@@ -114,25 +114,23 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
       setLoading(false);
     }
     if (!page) {
-      page = popQueue();
-    }
-    if (!page) {
       setLoading(true);
-      for (let i = 0; i < 30 && !page; i++) {
-        await new Promise<void>((r) => setTimeout(r, 200));
-        page = popQueue();
-      }
-      if (!page) {
-        page = await getNewStoryPage(aiState, onAiChange, context);
-      }
+      page = await getNewStoryPage(aiState, onAiChange, context);
       setLoading(false);
     }
     setHistory((prev) => prev.length === 0 ? [page!] : [page!]);
     setIndex(0);
     setPageKey((k) => k + 1);
-    // Chrome blocks speak() after an async gap (gesture context has expired).
-    // Queue the text; the interaction listener above will fire it on the next tap.
-    pendingSpeakRef.current = page.pt;
+    prefetchImage(page!);
+    if (speakImmediately) {
+      // Gesture already occurred (e.g. user clicked the context dropdown),
+      // so speak() is allowed immediately.
+      speakText(page.pt);
+    } else {
+      // On first mount Chrome blocks speak() after an async gap (gesture context
+      // is lost). Queue it; the interaction listener fires it on the next tap.
+      pendingSpeakRef.current = page.pt;
+    }
     // Start prefetching the reply to this first page in the background
     void prefetchReply(page.pt);
   }
@@ -163,26 +161,17 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
     } else {
       const capturedIndex = index;
       const currentSentence = history[capturedIndex]?.pt;
-      // 1. Use a prefetched queue item if available (instant, no wait)
-      const queued = popQueue();
-      if (queued) {
-        setHistory((h) => [...h, queued]);
-        setIndex(capturedIndex + 1);
-        setPageKey((k) => k + 1);
-        speakText(queued.pt);
-        triggerRefill();
-        // Prefetch the contextual reply to this page in the background
-        void prefetchReply(queued.pt);
-      // 2. Use the prefetched reply ref if ready (fetched while user was reading)
-      } else if (prefetchedReplyRef.current) {
+      // 1. Use the prefetched contextual reply if ready (fetched while user was reading)
+      if (prefetchedReplyRef.current) {
         const reply = prefetchedReplyRef.current;
         prefetchedReplyRef.current = null;
         setHistory((h) => [...h, reply]);
         setIndex(capturedIndex + 1);
         setPageKey((k) => k + 1);
+        prefetchImage(reply);
         speakText(reply.pt);
         void prefetchReply(reply.pt);
-      // 3. Fall back to a live fetch
+      // 2. Fall back to a live fetch
       } else {
         setLoading(true);
         const page = await getNewStoryPage(aiState, onAiChange, context, currentSentence);
@@ -190,6 +179,7 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
         setIndex(capturedIndex + 1);
         setPageKey((k) => k + 1);
         setLoading(false);
+        prefetchImage(page);
         speakText(page.pt);
         void prefetchReply(page.pt);
       }

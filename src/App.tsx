@@ -26,18 +26,20 @@ export default function App(): React.ReactElement {
   const [_score, setScore] = useState(0);
   const [_bounce, setBounce] = useState(false);
   const [aiState, setAiState] = useState<AiState>(null);
-  // Initialised once (not on StrictMode double-invoke) by passing a factory to useRef.
-  // getNewStoryPage is called immediately so the fetch is in-flight before StoryMode mounts.
-  const storyPrefetchRef = useRef<Promise<StoryPage>>(
-    getNewStoryPage('backend', () => {}, 'school')
-  );
+  // Lazy-initialise once: useRef(value) evaluates `value` on every render even though
+  // React only uses it on the first render, so wrapping in a ref-guarded pattern ensures
+  // the fetch fires exactly once regardless of how often App re-renders.
+  const storyPrefetchRef = useRef<Promise<StoryPage> | null>(null);
+  if (storyPrefetchRef.current === null) {
+    storyPrefetchRef.current = getNewStoryPage('backend', () => {}, 'school');
+  }
   const [language, setLanguage] = useState<'en' | 'tr'>('en');
-  const [musicEnabled, setMusicEnabled] = useState(true);
+  const [musicEnabled, setMusicEnabled] = useState(!import.meta.env.DEV);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const lastTrackRef = useRef<string | null>(
     MUSIC_TRACKS[Math.floor(Math.random() * MUSIC_TRACKS.length)]
   );
-  const musicEnabledRef = useRef(true);
+  const musicEnabledRef = useRef(!import.meta.env.DEV);
 
   function buildTrackUrl(track: string): string {
     const basePath = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
@@ -206,7 +208,7 @@ export default function App(): React.ReactElement {
           aiState={aiState}
           onAiChange={(_label, _color) => {}}
           language={language}
-          prefetchPromise={storyPrefetchRef.current}
+          prefetchPromise={storyPrefetchRef.current ?? undefined}
         />
       )}
       {mode === 'game1' && <Game1 onScore={addScore} language={language} />}
