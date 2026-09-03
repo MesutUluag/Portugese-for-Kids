@@ -65,7 +65,6 @@ const CONTEXT_TOPICS: Record<StoryContext, readonly string[]> = {
     'asking for the bill',
     'asking if you can pay by card',
     'saying you have finished eating',
-    'asking where the bathroom is',
     'saying thank you to the waiter and goodbye',
   ],
   bank: [
@@ -85,7 +84,6 @@ const CONTEXT_TOPICS: Record<StoryContext, readonly string[]> = {
     'asking someone to explain more slowly',
     'saying you do not understand',
     'asking where to sign a form',
-    'asking where the bathroom is',
     'saying thank you and goodbye',
   ],
   hospital: [
@@ -119,7 +117,6 @@ const CONTEXT_TOPICS: Record<StoryContext, readonly string[]> = {
     'asking if something contains milk nuts or allergens',
     'asking the price of a drink or snack',
     'asking for the Wi-Fi password',
-    'asking where the bathroom is',
     'asking for the bill',
     'paying with cash or card',
     'asking for a receipt',
@@ -188,7 +185,6 @@ const CONTEXT_TOPICS: Record<StoryContext, readonly string[]> = {
     'asking what the next step is and when to come back',
     'saying you need a form and asking where to get one',
     'asking about the status of your application',
-    'asking where the bathroom is',
     'saying thank you and goodbye',
   ],
   bus: [
@@ -306,14 +302,17 @@ async function fetchBackendStory(
   context: StoryContext = 'school',
   previousSentence?: string,
 ): Promise<StoryPage> {
-  const topics = CONTEXT_TOPICS[context];
-  const topic = topics[Math.floor(Math.random() * topics.length)];
-  const body: Record<string, string> = {
-    prompt: `Generate one useful ${context} sentence for ${context === 'school' ? 'kids' : 'parents'} about ${topic}.`,
-    context,
-  };
+  const body: Record<string, string> = { context };
   if (previousSentence) {
+    // Reply turn: the topic is already set by the conversation — just pass the previous
+    // sentence. The backend system prompt handles the "generate a natural reply" instruction.
+    body.prompt = previousSentence;
     body.previousSentence = previousSentence;
+  } else {
+    // First turn: pick a random topic to seed the sentence.
+    const topics = CONTEXT_TOPICS[context];
+    const topic = topics[Math.floor(Math.random() * topics.length)];
+    body.prompt = `Generate one sentence about ${topic}.`;
   }
   const res = await fetchWithTimeout(BACKEND_URL, {
     method: 'POST',

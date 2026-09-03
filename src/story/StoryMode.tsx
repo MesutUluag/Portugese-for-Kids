@@ -39,34 +39,34 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
   const [slideDir, setSlideDir] = useState<'left' | 'right' | ''>('');
   const [pageKey, setPageKey] = useState(0);
   const [trText, setTrText] = useState('');
-  const initialized = useRef(false);
+  // loadId is a per-render identity for the active context. Changing context
+  // increments it; any in-flight fetch that sees a stale id discards its result.
+  const loadIdRef = useRef(0);
   const pendingSpeakRef = useRef<string | null>(null);
   const prefetchedReplyRef = useRef<StoryPage | null>(null);
   const prefetchingReply = useRef(false);
   const { prefetchImage, imageCache } = useStoryPrefetch(aiState, onAiChange, context);
 
+  // Single effect watching context. On the very first run this IS the initial load.
+  // On subsequent runs it is a genuine context change triggered by the user.
+  // The loadId token ensures only the latest fetch ever commits its result.
+  const contextRef = useRef<StoryContext | null>(null);
   useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
-    void loadFirst();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // StrictMode fires this twice for the same context value on mount.
+    // Skip the duplicate by checking if context actually changed.
+    if (contextRef.current === context) return;
+    contextRef.current = context;
 
-  // When context changes (after first mount), clear history and load fresh.
-  // A gesture has already occurred (user clicked the dropdown), so we speak directly.
-  const isFirstMount = useRef(true);
-  useEffect(() => {
-    if (isFirstMount.current) {
-      isFirstMount.current = false;
-      return;
-    }
+    const id = ++loadIdRef.current;
+    const isContextSwitch = id > 1; // first run is the initial load
+
     setHistory([]);
     setIndex(0);
     setTrText('');
     cancelSpeech();
     prefetchedReplyRef.current = null;
     prefetchingReply.current = false;
-    void loadFirst(/* speakImmediately */ true);
+    void loadFirst(isContextSwitch, id);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context]);
   useEffect(() => () => { cancelSpeech(); }, []);
@@ -104,21 +104,24 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
     }
   }, [language, index, history]);
 
-  async function loadFirst(speakImmediately = false): Promise<void> {
+  async function loadFirst(speakImmediately = false, id = loadIdRef.current): Promise<void> {
     // Use the app-load prefetch only on the very first load (school context).
     // On context switches always fetch fresh so we get the correct context.
     let page: StoryPage | undefined;
     if (!speakImmediately && prefetchPromise) {
       setLoading(true);
       try { page = await prefetchPromise; } catch { /* fall through */ }
-      setLoading(false);
     }
     if (!page) {
       setLoading(true);
       page = await getNewStoryPage(aiState, onAiChange, context);
-      setLoading(false);
     }
-    setHistory((prev) => prev.length === 0 ? [page!] : [page!]);
+
+    // A newer loadFirst call has started (e.g. context changed mid-fetch) — discard this result.
+    if (id !== loadIdRef.current) return;
+
+    setLoading(false);
+    setHistory([page!]);
     setIndex(0);
     setPageKey((k) => k + 1);
     prefetchImage(page!);
