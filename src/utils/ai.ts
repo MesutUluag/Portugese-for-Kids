@@ -297,6 +297,8 @@ async function fetchWithTimeout(url: string, options: RequestInit, ms: number): 
   }
 }
 
+const MAX_CONVERSATION_HISTORY = 10;
+
 async function fetchBackendStory(
   context: StoryContext = 'school',
   previousSentence?: string,
@@ -316,7 +318,8 @@ async function fetchBackendStory(
     body.prompt = `Generate one sentence about ${topic}.`;
   }
   if (conversationHistory && conversationHistory.length > 0) {
-    body.conversationHistory = conversationHistory;
+    // Keep only the most recent MAX_CONVERSATION_HISTORY items to cap payload size.
+    body.conversationHistory = conversationHistory.slice(-MAX_CONVERSATION_HISTORY);
   }
   const res = await fetchWithTimeout(BACKEND_URL, {
     method: 'POST',
@@ -329,9 +332,15 @@ async function fetchBackendStory(
   return parseStoryJson(data.content ?? '');
 }
 
-function generateTemplateStoryPage(context: StoryContext = 'school'): StoryPage {
+function generateTemplateStoryPage(context: StoryContext = 'school', previousSentence?: string): StoryPage {
   const pages = templatePagesByContext[context] ?? templatePagesByContext.school;
-  return pages[Math.floor(Math.random() * pages.length)];
+  if (previousSentence) {
+    const reply = pages.find((p) => p.replyTo === previousSentence);
+    if (reply) return reply;
+  }
+  // No direct reply found (or first turn): pick a random opener (no replyTo)
+  const openers = pages.filter((p) => !p.replyTo);
+  return openers[Math.floor(Math.random() * openers.length)];
 }
 
 export async function getNewStoryPage(
@@ -350,5 +359,5 @@ export async function getNewStoryPage(
     }
   }
 
-  return generateTemplateStoryPage(context);
+  return generateTemplateStoryPage(context, previousSentence);
 }
