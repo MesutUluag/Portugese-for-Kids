@@ -131,8 +131,11 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
       setPageKey((k) => k + 1);
       speakText(history[nextIndex].pt);
     } else {
-      // Consume from prefetch queue for instant display; fall back if queue is empty
-      const prefetched = popQueue();
+      const currentSentence = history[index]?.pt;
+      // Consume from prefetch queue for instant display; fall back if queue is empty.
+      // Prefetched pages are generic openers — if we have a current sentence, skip the
+      // queue and fetch a contextual reply live so conversation flow is preserved.
+      const prefetched = currentSentence ? undefined : popQueue();
       if (prefetched) {
         setHistory((h) => [...h, prefetched]);
         setIndex(nextIndex);
@@ -140,7 +143,7 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
         speakText(prefetched.pt);
       } else {
         setLoading(true);
-        const page = await getNewStoryPage(aiState, onAiChange, context);
+        const page = await getNewStoryPage(aiState, onAiChange, context, currentSentence);
         setHistory((h) => [...h, page]);
         setIndex(nextIndex);
         setPageKey((k) => k + 1);

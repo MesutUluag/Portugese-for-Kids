@@ -302,18 +302,23 @@ async function fetchWithTimeout(url: string, options: RequestInit, ms: number): 
   }
 }
 
-async function fetchBackendStory(context: StoryContext = 'school'): Promise<StoryPage> {
+async function fetchBackendStory(
+  context: StoryContext = 'school',
+  previousSentence?: string,
+): Promise<StoryPage> {
   const topics = CONTEXT_TOPICS[context];
   const topic = topics[Math.floor(Math.random() * topics.length)];
+  const body: Record<string, string> = {
+    prompt: `Generate one useful ${context} sentence for ${context === 'school' ? 'kids' : 'parents'} about ${topic}.`,
+    context,
+  };
+  if (previousSentence) {
+    body.previousSentence = previousSentence;
+  }
   const res = await fetchWithTimeout(BACKEND_URL, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      prompt: `Generate one useful ${context} sentence for ${context === 'school' ? 'kids' : 'parents'} about ${topic}.`,
-      context,
-    }),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
   }, 25000);
 
   if (!res.ok) throw new Error(`Backend AI error: ${res.status}`);
@@ -330,10 +335,11 @@ export async function getNewStoryPage(
   aiState: AiState,
   onStatusChange: (text: string, color: string) => void,
   context: StoryContext = 'school',
+  previousSentence?: string,
 ): Promise<StoryPage> {
   if (aiState === 'backend') {
     try {
-      return await fetchBackendStory(context);
+      return await fetchBackendStory(context, previousSentence);
     } catch (e) {
       console.warn('Backend story failed, falling back to template:', e);
       onStatusChange('🧩 Template Engine (Backend AI failed)', '#0284c7');
