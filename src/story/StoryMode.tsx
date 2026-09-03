@@ -40,7 +40,9 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
   const [trText, setTrText] = useState('');
   const initialized = useRef(false);
   const pendingSpeakRef = useRef<string | null>(null);
-  const { popQueue, triggerRefill, imageCache } = useStoryPrefetch(aiState, onAiChange, context);
+  const prefetchedReplyRef = useRef<StoryPage | null>(null);
+  const prefetchingReply = useRef(false);
+  const { popQueue, imageCache } = useStoryPrefetch(aiState, onAiChange, context);
 
   useEffect(() => {
     if (initialized.current) return;
@@ -60,6 +62,8 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
     setIndex(0);
     setTrText('');
     cancelSpeech();
+    prefetchedReplyRef.current = null;
+    prefetchingReply.current = false;
     void loadFirst();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context]);
@@ -119,32 +123,57 @@ export default function StoryMode({ aiState, onAiChange, language }: Props): Rea
     // Chrome blocks speak() after an async gap (gesture context has expired).
     // Queue the text; the interaction listener above will fire it on the next tap.
     pendingSpeakRef.current = page.pt;
-    triggerRefill();
+    // Start prefetching the reply to this first page in the background
+    void prefetchReply(page.pt);
+  }
+
+  /** Fetch the reply to `sentence` in the background and cache it in prefetchedReplyRef. */
+  async function prefetchReply(sentence: string): Promise<void> {
+    if (prefetchingReply.current) return;
+    prefetchingReply.current = true;
+    prefetchedReplyRef.current = null;
+    try {
+      const reply = await getNewStoryPage(aiState, onAiChange, context, sentence);
+      prefetchedReplyRef.current = reply;
+    } catch {
+      // non-fatal — handleNext will fall back to a live fetch
+    } finally {
+      prefetchingReply.current = false;
+    }
   }
 
   async function handleNext(): Promise<void> {
     setSlideDir('left');
     const nextIndex = index + 1;
     if (nextIndex < history.length) {
-      // Navigating back through already-seen history — no queue consumed, no refill needed
+      // Navigating back through already-seen history — no fetch needed
       setIndex(nextIndex);
       setPageKey((k) => k + 1);
       speakText(history[nextIndex].pt);
     } else {
-      const currentSentence = history[index]?.pt;
-      // Always discard any prefetched opener from the queue — it is a generic sentence,
-      // not a reply to currentSentence, so we never display it. Discarding it keeps the
-      // queue count correct so triggerRefill knows it needs to fetch one more.
-      popQueue();
-      setLoading(true);
-      const page = await getNewStoryPage(aiState, onAiChange, context, currentSentence);
-      setHistory((h) => [...h, page]);
-      setIndex(nextIndex);
-      setPageKey((k) => k + 1);
-      setLoading(false);
-      speakText(page.pt);
-      // Queue slot was consumed — prefetch the next one in the background
-      triggerRefill();
+      const capturedIndex = index;
+      const currentSentence = history[capturedIndex]?.pt;
+      // Use the prefetched reply if it's ready, otherwise fetch live
+      const prefetched = prefetchedReplyRef.current;
+      prefetchedReplyRef.current = null;
+      if (prefetched) {
+        setHistory((h) => [...h, prefetched]);
+        setIndex(capturedIndex + 1);
+        setPageKey((k) => k + 1);
+        speakText(prefetched.pt);
+        // Prefetch the reply to this page in the background
+        void prefetchReply(prefetched.pt);
+      } else {
+        setLoading(true);
+        const page = await getNewStoryPage(aiState, onAiChange, context, currentSentence);
+        setHistory((h) => [...h, page]);
+        setIndex(capturedIndex + 1);
+        setPageKey((k) => k + 1);
+        setLoading(false);
+        speakText(page.pt);
+        // Prefetch the reply to this page in the background
+        void prefetchReply(page.pt);
+      }
     }
   }
 
