@@ -408,7 +408,8 @@ export const actions: StoryAction[] = [
 
 // Curated fallback sentences — every subject+action pair is realistic and contextually correct.
 // Used when AI is unavailable so we never show nonsensical combinations.
-export const templatePages: StoryPage[] = [
+export const templatePagesByContext: Record<string, StoryPage[]> = {
+  school: [
   // Greeting the teacher
   { pt: "Bom dia, professora!", en: "Good morning, teacher!", mainEmoji: "👩‍🏫", bgLeft: "🏫", bgRight: "☀️" },
   { pt: "Boa tarde, professor!", en: "Good afternoon, teacher!", mainEmoji: "👨‍🏫", bgLeft: "🏫", bgRight: "🌤️" },
@@ -490,7 +491,349 @@ export const templatePages: StoryPage[] = [
   { pt: "Repitam depois de mim.", en: "Repeat after me.", mainEmoji: "🔄", bgLeft: "🏫", bgRight: "👩‍🏫" },
   { pt: "Venham cá, por favor.", en: "Come here, please.", mainEmoji: "👋", bgLeft: "🏫", bgRight: "👩‍🏫" },
   { pt: "Façam uma fila.", en: "Line up.", mainEmoji: "🚶", bgLeft: "🏫", bgRight: "👩‍🏫" },
-];
+  // Borrowing and classroom items
+  { pt: "Posso pedir um lápis emprestado?", en: "Can I borrow a pencil?", mainEmoji: "✏️", bgLeft: "🏫", bgRight: "🙏" },
+  { pt: "Tens uma borracha?", en: "Do you have a rubber?", mainEmoji: "🧒", bgLeft: "✏️", bgRight: "❓" },
+  { pt: "Em que página estamos?", en: "What page are we on?", mainEmoji: "📖", bgLeft: "🏫", bgRight: "❓" },
+  { pt: "Qual é o exercício?", en: "Which exercise is it?", mainEmoji: "📓", bgLeft: "✏️", bgRight: "❓" },
+  // Emotions and apologies
+  { pt: "Desculpa, foi sem querer.", en: "Sorry, it was an accident.", mainEmoji: "😢", bgLeft: "🏫", bgRight: "🤝" },
+  { pt: "O teu trabalho é muito bonito!", en: "Your work is very nice!", mainEmoji: "⭐", bgLeft: "🏫", bgRight: "😊" },
+  { pt: "Esqueci-me do caderno em casa.", en: "I forgot my notebook at home.", mainEmoji: "😬", bgLeft: "🏫", bgRight: "📓" },
+  // Sou de
+  { pt: "Sou do Brasil.", en: "I am from Brazil.", mainEmoji: "🌍", bgLeft: "🏫", bgRight: "😊" },
+  { pt: "Falo português e inglês.", en: "I speak Portuguese and English.", mainEmoji: "💬", bgLeft: "🏫", bgRight: "😊" },
+  ],
+
+  restaurant: [
+    // Arriving
+    { pt: "Boa tarde! Uma mesa para dois, por favor.", en: "Good afternoon! A table for two, please.", mainEmoji: "🍽️", bgLeft: "👨‍🍳", bgRight: "🪑" },
+    { pt: "Uma mesa para quatro pessoas, por favor.", en: "A table for four people, please.", mainEmoji: "🪑", bgLeft: "🍽️", bgRight: "👨‍🍳" },
+    { pt: "Olá! Temos uma reserva.", en: "Hello! We have a reservation.", mainEmoji: "😊", bgLeft: "🍽️", bgRight: "👨‍🍳" },
+    // Menu
+    { pt: "Pode trazer a ementa, por favor?", en: "Can you bring the menu, please?", mainEmoji: "📋", bgLeft: "🍽️", bgRight: "👨‍🍳" },
+    { pt: "O que é o prato do dia?", en: "What is the dish of the day?", mainEmoji: "🤔", bgLeft: "🍽️", bgRight: "❓" },
+    { pt: "O que me recomenda?", en: "What do you recommend?", mainEmoji: "🤔", bgLeft: "🍽️", bgRight: "👨‍🍳" },
+    { pt: "Este prato tem glúten?", en: "Does this dish contain gluten?", mainEmoji: "❓", bgLeft: "🍽️", bgRight: "👨‍🍳" },
+    { pt: "O que é isto?", en: "What is this?", mainEmoji: "❓", bgLeft: "📋", bgRight: "🍽️" },
+    // Ordering starters
+    { pt: "Para começar, quero uma sopa.", en: "To start, I would like a soup.", mainEmoji: "🍲", bgLeft: "🥄", bgRight: "😋" },
+    { pt: "Quero uma salada, por favor.", en: "I would like a salad, please.", mainEmoji: "🥗", bgLeft: "🍽️", bgRight: "👨‍🍳" },
+    // Ordering mains
+    { pt: "Para mim, o frango grelhado.", en: "For me, the grilled chicken.", mainEmoji: "🍗", bgLeft: "🍽️", bgRight: "😋" },
+    { pt: "Quero o peixe do dia, por favor.", en: "I would like the fish of the day, please.", mainEmoji: "🐟", bgLeft: "🍽️", bgRight: "👨‍🍳" },
+    { pt: "Uma massa com queijo, por favor.", en: "A pasta with cheese, please.", mainEmoji: "🍝", bgLeft: "🧀", bgRight: "😋" },
+    // Ordering drinks
+    { pt: "Quero um sumo de laranja, por favor.", en: "I would like an orange juice, please.", mainEmoji: "🍊", bgLeft: "🍽️", bgRight: "👨‍🍳" },
+    { pt: "Pode trazer mais água, por favor?", en: "Can you bring more water, please?", mainEmoji: "💧", bgLeft: "🍽️", bgRight: "🥤" },
+    { pt: "Um leite com chocolate, por favor.", en: "A chocolate milk, please.", mainEmoji: "🥛", bgLeft: "🍫", bgRight: "😋" },
+    // Ordering dessert
+    { pt: "Quero um gelado de baunilha.", en: "I would like a vanilla ice cream.", mainEmoji: "🍦", bgLeft: "🍽️", bgRight: "😋" },
+    { pt: "Tem bolo de chocolate?", en: "Do you have chocolate cake?", mainEmoji: "🎂", bgLeft: "🍽️", bgRight: "❓" },
+    // Extras and changes
+    { pt: "Pode trazer mais pão, por favor?", en: "Can you bring more bread, please?", mainEmoji: "🍞", bgLeft: "🧈", bgRight: "👨‍🍳" },
+    { pt: "Quero mudar o meu pedido.", en: "I would like to change my order.", mainEmoji: "🔄", bgLeft: "🍽️", bgRight: "👨‍🍳" },
+    { pt: "Quanto tempo demora?", en: "How long will it take?", mainEmoji: "⏱️", bgLeft: "🍽️", bgRight: "❓" },
+    // Reactions
+    { pt: "Está muito bom!", en: "This is very good!", mainEmoji: "😋", bgLeft: "🍽️", bgRight: "👍" },
+    { pt: "Não gosto disto.", en: "I don't like this.", mainEmoji: "😕", bgLeft: "🍽️", bgRight: "👎" },
+    { pt: "Está muito quente.", en: "It is very hot.", mainEmoji: "🔥", bgLeft: "🍽️", bgRight: "😬" },
+    { pt: "Estava delicioso!", en: "It was delicious!", mainEmoji: "😋", bgLeft: "🍴", bgRight: "⭐" },
+    // Bill and leaving
+    { pt: "A conta, por favor.", en: "The bill, please.", mainEmoji: "💳", bgLeft: "🍽️", bgRight: "👨‍🍳" },
+    { pt: "Posso pagar com cartão?", en: "Can I pay by card?", mainEmoji: "💳", bgLeft: "🍽️", bgRight: "❓" },
+    { pt: "Já acabei, obrigado.", en: "I have finished, thank you.", mainEmoji: "✅", bgLeft: "🍽️", bgRight: "😊" },
+    { pt: "Onde é a casa de banho?", en: "Where is the bathroom?", mainEmoji: "🚻", bgLeft: "🍽️", bgRight: "❓" },
+    { pt: "Obrigado! Foi muito bom.", en: "Thank you! It was very good.", mainEmoji: "😊", bgLeft: "🍽️", bgRight: "👋" },
+  ],
+
+  bank: [
+    // Greeting
+    { pt: "Bom dia! Pode ajudar-me?", en: "Good morning! Can you help me?", mainEmoji: "😊", bgLeft: "🏦", bgRight: "👋" },
+    { pt: "Boa tarde! Preciso de ajuda.", en: "Good afternoon! I need help.", mainEmoji: "🙋", bgLeft: "🏦", bgRight: "🤝" },
+    // ATM and hours
+    { pt: "Onde fica a caixa multibanco?", en: "Where is the ATM?", mainEmoji: "🏧", bgLeft: "🏦", bgRight: "❓" },
+    { pt: "Como funciona a caixa multibanco?", en: "How does the ATM work?", mainEmoji: "🏧", bgLeft: "🏦", bgRight: "❓" },
+    { pt: "A que horas abre o banco?", en: "What time does the bank open?", mainEmoji: "🕘", bgLeft: "🏦", bgRight: "❓" },
+    { pt: "A que horas fecha o banco?", en: "What time does the bank close?", mainEmoji: "🕔", bgLeft: "🏦", bgRight: "❓" },
+    // Waiting in line
+    { pt: "Posso tirar uma senha, por favor?", en: "Can I take a number ticket, please?", mainEmoji: "🎫", bgLeft: "🏦", bgRight: "👨‍💼" },
+    { pt: "Quanto tempo tenho de esperar?", en: "How long do I have to wait?", mainEmoji: "⏳", bgLeft: "🏦", bgRight: "❓" },
+    // Transactions
+    { pt: "Quero levantar dinheiro.", en: "I want to withdraw money.", mainEmoji: "💵", bgLeft: "🏦", bgRight: "💳" },
+    { pt: "Quero depositar dinheiro.", en: "I want to deposit money.", mainEmoji: "🏦", bgLeft: "💵", bgRight: "👨‍💼" },
+    { pt: "Quero abrir uma conta bancária.", en: "I want to open a bank account.", mainEmoji: "🏦", bgLeft: "📋", bgRight: "👨‍💼" },
+    { pt: "Qual é o saldo da minha conta?", en: "What is the balance of my account?", mainEmoji: "💰", bgLeft: "🏦", bgRight: "❓" },
+    { pt: "Pode dar-me um recibo, por favor?", en: "Can you give me a receipt, please?", mainEmoji: "🧾", bgLeft: "🏦", bgRight: "👨‍💼" },
+    { pt: "Preciso de um extrato bancário.", en: "I need a bank statement.", mainEmoji: "📄", bgLeft: "🏦", bgRight: "👨‍💼" },
+    // Understanding forms
+    { pt: "O que significa esta palavra?", en: "What does this word mean?", mainEmoji: "📝", bgLeft: "🏦", bgRight: "❓" },
+    { pt: "Pode explicar mais devagar?", en: "Can you explain more slowly?", mainEmoji: "🐢", bgLeft: "🏦", bgRight: "👂" },
+    { pt: "Não percebi. Pode repetir?", en: "I didn't understand. Can you repeat?", mainEmoji: "😕", bgLeft: "🏦", bgRight: "🔄" },
+    { pt: "Onde assino?", en: "Where do I sign?", mainEmoji: "✍️", bgLeft: "🏦", bgRight: "📝" },
+    { pt: "Onde é a casa de banho?", en: "Where is the bathroom?", mainEmoji: "🚻", bgLeft: "🏦", bgRight: "❓" },
+    { pt: "Obrigado! Até logo.", en: "Thank you! Goodbye.", mainEmoji: "👋", bgLeft: "🏦", bgRight: "😊" },
+  ],
+
+  hospital: [
+    // Checking in
+    { pt: "Bom dia! Tenho uma consulta.", en: "Good morning! I have an appointment.", mainEmoji: "📋", bgLeft: "🏥", bgRight: "👩‍⚕️" },
+    { pt: "O meu nome é Tomás.", en: "My name is Tomás.", mainEmoji: "🧒", bgLeft: "🏥", bgRight: "📋" },
+    { pt: "Tenho sete anos.", en: "I am seven years old.", mainEmoji: "🎂", bgLeft: "🏥", bgRight: "👩‍⚕️" },
+    { pt: "Onde é a sala de espera?", en: "Where is the waiting room?", mainEmoji: "❓", bgLeft: "🏥", bgRight: "🪑" },
+    { pt: "Quanto tempo tenho de esperar?", en: "How long do I have to wait?", mainEmoji: "⏳", bgLeft: "🏥", bgRight: "❓" },
+    { pt: "A minha data de nascimento é dois de março.", en: "My date of birth is the second of March.", mainEmoji: "📅", bgLeft: "🏥", bgRight: "📋" },
+    // Saying where it hurts
+    { pt: "A minha barriga dói.", en: "My tummy hurts.", mainEmoji: "🤒", bgLeft: "🏥", bgRight: "👩‍⚕️" },
+    { pt: "A minha cabeça dói muito.", en: "My head hurts a lot.", mainEmoji: "🤕", bgLeft: "🏥", bgRight: "💊" },
+    { pt: "A minha garganta dói.", en: "My throat hurts.", mainEmoji: "😣", bgLeft: "🏥", bgRight: "👩‍⚕️" },
+    { pt: "O meu ouvido dói.", en: "My ear hurts.", mainEmoji: "👂", bgLeft: "🏥", bgRight: "💊" },
+    { pt: "A minha perna dói.", en: "My leg hurts.", mainEmoji: "🦵", bgLeft: "🏥", bgRight: "👩‍⚕️" },
+    { pt: "Tenho febre.", en: "I have a fever.", mainEmoji: "🌡️", bgLeft: "🏥", bgRight: "💊" },
+    { pt: "Tenho tosse.", en: "I have a cough.", mainEmoji: "😷", bgLeft: "🏥", bgRight: "💊" },
+    { pt: "Não consigo dormir.", en: "I cannot sleep.", mainEmoji: "😴", bgLeft: "🏥", bgRight: "👩‍⚕️" },
+    { pt: "Sinto-me muito mal.", en: "I feel very sick.", mainEmoji: "🤢", bgLeft: "🏥", bgRight: "👩‍⚕️" },
+    // Doctor instructions
+    { pt: "Abra a boca, por favor.", en: "Open your mouth, please.", mainEmoji: "👩‍⚕️", bgLeft: "🏥", bgRight: "💡" },
+    { pt: "Respire fundo.", en: "Take a deep breath.", mainEmoji: "💨", bgLeft: "🏥", bgRight: "👩‍⚕️" },
+    // Questions and feelings
+    { pt: "Preciso de tomar um medicamento?", en: "Do I need to take a medicine?", mainEmoji: "💊", bgLeft: "🏥", bgRight: "❓" },
+    { pt: "Quantos dias preciso de descansar?", en: "How many days do I need to rest?", mainEmoji: "🛏️", bgLeft: "🏥", bgRight: "❓" },
+    { pt: "Posso voltar à escola?", en: "Can I go back to school?", mainEmoji: "🏫", bgLeft: "🏥", bgRight: "❓" },
+    { pt: "Onde fica a farmácia?", en: "Where is the pharmacy?", mainEmoji: "💊", bgLeft: "🏥", bgRight: "❓" },
+    { pt: "Estou com medo.", en: "I am scared.", mainEmoji: "😨", bgLeft: "🏥", bgRight: "🤝" },
+    { pt: "Obrigado, doutora!", en: "Thank you, doctor!", mainEmoji: "😊", bgLeft: "🏥", bgRight: "❤️" },
+  ],
+
+  bakery: [
+    // Greeting the baker
+    { pt: "Bom dia! O que têm hoje?", en: "Good morning! What do you have today?", mainEmoji: "😊", bgLeft: "🥐", bgRight: "👩‍🍳" },
+    { pt: "Olá! Quero comprar pão.", en: "Hello! I want to buy bread.", mainEmoji: "🍞", bgLeft: "🥐", bgRight: "👩‍🍳" },
+    { pt: "O que é isto?", en: "What is this?", mainEmoji: "❓", bgLeft: "🥐", bgRight: "👩‍🍳" },
+    { pt: "Tem amêndoas?", en: "Does it contain almonds?", mainEmoji: "🌰", bgLeft: "🥐", bgRight: "❓" },
+    // Ordering bread
+    { pt: "Quero uma baguete, por favor.", en: "I would like a baguette, please.", mainEmoji: "🥖", bgLeft: "👩‍🍳", bgRight: "😋" },
+    { pt: "Quero um pão de mistura.", en: "I would like a mixed-grain bread.", mainEmoji: "🍞", bgLeft: "👩‍🍳", bgRight: "😊" },
+    { pt: "Dois pães, por favor.", en: "Two breads, please.", mainEmoji: "🍞", bgLeft: "🥐", bgRight: "👩‍🍳" },
+    // Ordering pastries
+    { pt: "Quero dois pastéis de nata, por favor.", en: "I would like two custard tarts, please.", mainEmoji: "🥐", bgLeft: "🍞", bgRight: "👩‍🍳" },
+    { pt: "Pode dar-me um croissant?", en: "Can you give me a croissant?", mainEmoji: "🥐", bgLeft: "🍞", bgRight: "😋" },
+    { pt: "Quero uma bola de berlim.", en: "I would like a Berlin doughnut.", mainEmoji: "🍩", bgLeft: "🥐", bgRight: "😋" },
+    { pt: "Posso provar antes de comprar?", en: "Can I try before buying?", mainEmoji: "😋", bgLeft: "🥐", bgRight: "👩‍🍳" },
+    // Cake
+    { pt: "Quanto custa este bolo?", en: "How much does this cake cost?", mainEmoji: "🎂", bgLeft: "🥐", bgRight: "❓" },
+    { pt: "Uma fatia de bolo, por favor.", en: "A slice of cake, please.", mainEmoji: "🍰", bgLeft: "🥐", bgRight: "😋" },
+    // Freshness and compliments
+    { pt: "Está fresco?", en: "Is it fresh?", mainEmoji: "✨", bgLeft: "🍞", bgRight: "❓" },
+    { pt: "Acabou de sair do forno?", en: "Did it just come out of the oven?", mainEmoji: "🔥", bgLeft: "🥐", bgRight: "❓" },
+    { pt: "Parece delicioso!", en: "It looks delicious!", mainEmoji: "😋", bgLeft: "🥐", bgRight: "⭐" },
+    { pt: "Está muito bom, parabéns!", en: "It is very good, well done!", mainEmoji: "👏", bgLeft: "🥐", bgRight: "😊" },
+    // Paying
+    { pt: "É para a família toda.", en: "It is for the whole family.", mainEmoji: "👨‍👩‍👧", bgLeft: "🥐", bgRight: "😊" },
+    { pt: "Posso pagar com cartão?", en: "Can I pay by card?", mainEmoji: "💳", bgLeft: "🥐", bgRight: "👩‍🍳" },
+    { pt: "Pode dar-me um saco?", en: "Can you give me a bag?", mainEmoji: "🛍️", bgLeft: "🥐", bgRight: "👩‍🍳" },
+    { pt: "Pode dar-me um recibo?", en: "Can you give me a receipt?", mainEmoji: "🧾", bgLeft: "🥐", bgRight: "👩‍🍳" },
+    { pt: "Obrigado! Até logo.", en: "Thank you! Goodbye.", mainEmoji: "👋", bgLeft: "🥐", bgRight: "😊" },
+  ],
+  airport: [
+    // Check-in
+    { pt: "Onde é o check-in, por favor?", en: "Where is the check-in, please?", mainEmoji: "🧳", bgLeft: "✈️", bgRight: "❓" },
+    { pt: "Aqui está o meu bilhete.", en: "Here is my ticket.", mainEmoji: "🎫", bgLeft: "✈️", bgRight: "👨‍✈️" },
+    { pt: "Temos duas malas para despachar.", en: "We have two bags to check in.", mainEmoji: "🧳", bgLeft: "✈️", bgRight: "👨‍✈️" },
+    { pt: "A minha mala está muito pesada.", en: "My bag is very heavy.", mainEmoji: "😬", bgLeft: "🧳", bgRight: "⚖️" },
+    { pt: "Onde deixamos a bagagem?", en: "Where do we drop off the luggage?", mainEmoji: "🧳", bgLeft: "✈️", bgRight: "❓" },
+    { pt: "Onde é o controlo de segurança?", en: "Where is the security check?", mainEmoji: "🔍", bgLeft: "✈️", bgRight: "❓" },
+    // Gate and boarding
+    { pt: "Onde é o nosso portão?", en: "Where is our gate?", mainEmoji: "✈️", bgLeft: "🛫", bgRight: "❓" },
+    { pt: "A que horas começa o embarque?", en: "When does boarding start?", mainEmoji: "⏰", bgLeft: "✈️", bgRight: "❓" },
+    { pt: "O nosso avião parte em breve.", en: "Our plane leaves soon.", mainEmoji: "🛫", bgLeft: "⏰", bgRight: "✈️" },
+    { pt: "Podemos embarcar já?", en: "Can we board now?", mainEmoji: "🎫", bgLeft: "✈️", bgRight: "👨‍✈️" },
+    // Airport amenities
+    { pt: "Onde é a casa de banho?", en: "Where is the bathroom?", mainEmoji: "🚻", bgLeft: "✈️", bgRight: "❓" },
+    { pt: "Estou com fome. Onde há um café?", en: "I am hungry. Where is a café?", mainEmoji: "😋", bgLeft: "✈️", bgRight: "☕" },
+    // On the plane
+    { pt: "Posso sentar à janela?", en: "Can I sit by the window?", mainEmoji: "🪟", bgLeft: "✈️", bgRight: "😄" },
+    { pt: "Quanto tempo dura o voo?", en: "How long is the flight?", mainEmoji: "⏱️", bgLeft: "✈️", bgRight: "❓" },
+    { pt: "Pode trazer-me água, por favor?", en: "Can you bring me water, please?", mainEmoji: "💧", bgLeft: "✈️", bgRight: "👨‍✈️" },
+    { pt: "Sinto-me mal no avião.", en: "I feel sick on the plane.", mainEmoji: "🤢", bgLeft: "✈️", bgRight: "👨‍✈️" },
+    // Arrival
+    { pt: "Onde se levanta a bagagem?", en: "Where do we collect the luggage?", mainEmoji: "🧳", bgLeft: "🛬", bgRight: "❓" },
+    { pt: "Onde é a paragem de táxi?", en: "Where is the taxi stop?", mainEmoji: "🚕", bgLeft: "🛬", bgRight: "❓" },
+    { pt: "Estou muito contente por voar!", en: "I am very happy to fly!", mainEmoji: "😄", bgLeft: "✈️", bgRight: "⭐" },
+    { pt: "Adeus! Boa viagem.", en: "Goodbye! Have a good trip.", mainEmoji: "👋", bgLeft: "✈️", bgRight: "❤️" },
+  ],
+
+  market: [
+    // Greeting and navigation
+    { pt: "Bom dia! Pode ajudar-me?", en: "Good morning! Can you help me?", mainEmoji: "😊", bgLeft: "🛒", bgRight: "🏪" },
+    { pt: "Onde está o pão?", en: "Where is the bread?", mainEmoji: "🍞", bgLeft: "🛒", bgRight: "❓" },
+    { pt: "Onde fica a secção de frutas?", en: "Where is the fruit section?", mainEmoji: "🍎", bgLeft: "🛒", bgRight: "❓" },
+    { pt: "Onde está o leite?", en: "Where is the milk?", mainEmoji: "🥛", bgLeft: "🛒", bgRight: "❓" },
+    // Asking about products
+    { pt: "Quanto custa um quilo de maçãs?", en: "How much does a kilo of apples cost?", mainEmoji: "🍎", bgLeft: "🛒", bgRight: "❓" },
+    { pt: "Tem laranjas frescas?", en: "Do you have fresh oranges?", mainEmoji: "🍊", bgLeft: "🛒", bgRight: "🏪" },
+    { pt: "É fresco ou congelado?", en: "Is it fresh or frozen?", mainEmoji: "❓", bgLeft: "🛒", bgRight: "🏪" },
+    { pt: "Quando expira?", en: "When does it expire?", mainEmoji: "📅", bgLeft: "🛒", bgRight: "❓" },
+    { pt: "Tem alguma oferta hoje?", en: "Do you have any offers today?", mainEmoji: "🏷️", bgLeft: "🛒", bgRight: "🏪" },
+    // Ordering amounts
+    { pt: "Quero dois quilos de tomates.", en: "I would like two kilos of tomatoes.", mainEmoji: "🍅", bgLeft: "🛒", bgRight: "👩‍🌾" },
+    { pt: "Pode dar-me um litro de leite?", en: "Can you give me a litre of milk?", mainEmoji: "🥛", bgLeft: "🛒", bgRight: "🏪" },
+    { pt: "Só quero um, obrigado.", en: "I only want one, thank you.", mainEmoji: "☝️", bgLeft: "🛒", bgRight: "😊" },
+    { pt: "Não quero este, obrigado.", en: "I don't want this one, thank you.", mainEmoji: "🙅", bgLeft: "🛒", bgRight: "😊" },
+    // Price and paying
+    { pt: "Está muito caro.", en: "It is very expensive.", mainEmoji: "💰", bgLeft: "🛒", bgRight: "😕" },
+    { pt: "Aceitam cartão?", en: "Do you accept card?", mainEmoji: "💳", bgLeft: "🛒", bgRight: "❓" },
+    { pt: "Pode dar-me um saco, por favor?", en: "Can you give me a bag, please?", mainEmoji: "🛍️", bgLeft: "🛒", bgRight: "🏪" },
+    { pt: "Pode dar-me um recibo?", en: "Can you give me a receipt?", mainEmoji: "🧾", bgLeft: "🛒", bgRight: "🏪" },
+    { pt: "Esqueci-me de qualquer coisa.", en: "I forgot something.", mainEmoji: "😬", bgLeft: "🛒", bgRight: "❓" },
+    { pt: "Aqui está o dinheiro.", en: "Here is the money.", mainEmoji: "💵", bgLeft: "🛒", bgRight: "🏪" },
+    { pt: "Tem troco?", en: "Do you have change?", mainEmoji: "🪙", bgLeft: "🛒", bgRight: "❓" },
+    { pt: "Obrigado! Até logo.", en: "Thank you! Goodbye.", mainEmoji: "👋", bgLeft: "🛒", bgRight: "😊" },
+  ],
+
+  aima: [
+    // Greeting and arrival
+    { pt: "Bom dia! Tenho uma marcação.", en: "Good morning! I have an appointment.", mainEmoji: "📋", bgLeft: "🏛️", bgRight: "👨‍💼" },
+    { pt: "A minha marcação é para as dez horas.", en: "My appointment is at ten o'clock.", mainEmoji: "🕙", bgLeft: "🏛️", bgRight: "📋" },
+    // Identity
+    { pt: "O meu nome é Sofia.", en: "My name is Sofia.", mainEmoji: "🧒", bgLeft: "🏛️", bgRight: "📋" },
+    { pt: "A minha data de nascimento é cinco de junho.", en: "My date of birth is the fifth of June.", mainEmoji: "📅", bgLeft: "🏛️", bgRight: "📋" },
+    { pt: "Sou do Brasil.", en: "I am from Brazil.", mainEmoji: "🌍", bgLeft: "🏛️", bgRight: "👨‍💼" },
+    { pt: "A minha nacionalidade é brasileira.", en: "My nationality is Brazilian.", mainEmoji: "🌍", bgLeft: "🏛️", bgRight: "📋" },
+    { pt: "Venho pedir a autorização de residência.", en: "I am here to apply for a residence permit.", mainEmoji: "📄", bgLeft: "🏛️", bgRight: "👨‍💼" },
+    // Waiting
+    { pt: "Onde devo esperar?", en: "Where should I wait?", mainEmoji: "🪑", bgLeft: "🏛️", bgRight: "❓" },
+    { pt: "Quanto tempo tenho de esperar?", en: "How long do I have to wait?", mainEmoji: "⏳", bgLeft: "🏛️", bgRight: "❓" },
+    // Understanding
+    { pt: "Não percebi. Pode repetir?", en: "I didn't understand. Can you repeat?", mainEmoji: "😕", bgLeft: "🏛️", bgRight: "🔄" },
+    { pt: "Pode falar mais devagar?", en: "Can you speak more slowly?", mainEmoji: "🐢", bgLeft: "🏛️", bgRight: "👂" },
+    { pt: "Pode escrever, por favor?", en: "Can you write it down, please?", mainEmoji: "✍️", bgLeft: "🏛️", bgRight: "📝" },
+    { pt: "Preciso de um intérprete.", en: "I need an interpreter.", mainEmoji: "🗣️", bgLeft: "🏛️", bgRight: "👨‍💼" },
+    // Documents
+    { pt: "Onde entrego os documentos?", en: "Where do I hand in the documents?", mainEmoji: "📄", bgLeft: "🏛️", bgRight: "❓" },
+    { pt: "Quais documentos são necessários?", en: "Which documents are needed?", mainEmoji: "📋", bgLeft: "🏛️", bgRight: "❓" },
+    { pt: "Tenho todos os documentos.", en: "I have all the documents.", mainEmoji: "✅", bgLeft: "🏛️", bgRight: "📋" },
+    { pt: "Falta-me um documento.", en: "I am missing one document.", mainEmoji: "😟", bgLeft: "🏛️", bgRight: "📄" },
+    { pt: "Preciso de um formulário.", en: "I need a form.", mainEmoji: "📝", bgLeft: "🏛️", bgRight: "👨‍💼" },
+    { pt: "Qual é o próximo passo?", en: "What is the next step?", mainEmoji: "❓", bgLeft: "🏛️", bgRight: "👨‍💼" },
+    { pt: "Quando devo voltar?", en: "When should I come back?", mainEmoji: "📅", bgLeft: "🏛️", bgRight: "❓" },
+    { pt: "Obrigado! Até logo.", en: "Thank you! Goodbye.", mainEmoji: "👋", bgLeft: "🏛️", bgRight: "😊" },
+  ],
+
+  bus: [
+    // At the bus stop
+    { pt: "Bom dia, senhor motorista!", en: "Good morning, driver!", mainEmoji: "👋", bgLeft: "🚌", bgRight: "☀️" },
+    { pt: "Este autocarro vai para o centro?", en: "Does this bus go to the centre?", mainEmoji: "🚌", bgLeft: "🛑", bgRight: "❓" },
+    { pt: "Qual é o número do autocarro para o hospital?", en: "What is the bus number to the hospital?", mainEmoji: "🚌", bgLeft: "🛑", bgRight: "❓" },
+    { pt: "Onde é a paragem de autocarro?", en: "Where is the bus stop?", mainEmoji: "🛑", bgLeft: "🚌", bgRight: "❓" },
+    { pt: "A que horas chega o próximo autocarro?", en: "When does the next bus arrive?", mainEmoji: "⏰", bgLeft: "🚌", bgRight: "❓" },
+    { pt: "De quanto em quanto tempo passa o autocarro?", en: "How often does the bus run?", mainEmoji: "🕐", bgLeft: "🚌", bgRight: "❓" },
+    // Tickets
+    { pt: "Um bilhete, por favor.", en: "One ticket, please.", mainEmoji: "🎫", bgLeft: "🚌", bgRight: "👨‍✈️" },
+    { pt: "Quanto custa o bilhete?", en: "How much does the ticket cost?", mainEmoji: "💰", bgLeft: "🚌", bgRight: "❓" },
+    { pt: "Onde valido o bilhete?", en: "Where do I validate the ticket?", mainEmoji: "🎫", bgLeft: "🚌", bgRight: "❓" },
+    // On the bus
+    { pt: "Este lugar está livre?", en: "Is this seat free?", mainEmoji: "🪑", bgLeft: "🚌", bgRight: "❓" },
+    { pt: "Quantas paragens faltam?", en: "How many stops are left?", mainEmoji: "🗺️", bgLeft: "🚌", bgRight: "❓" },
+    { pt: "Pode parar aqui, por favor?", en: "Can you stop here, please?", mainEmoji: "✋", bgLeft: "🚌", bgRight: "👨‍✈️" },
+    { pt: "Quero sair na próxima paragem.", en: "I want to get off at the next stop.", mainEmoji: "🚶", bgLeft: "🚌", bgRight: "🛑" },
+    { pt: "Apanhei o autocarro errado.", en: "I took the wrong bus.", mainEmoji: "😟", bgLeft: "🚌", bgRight: "🗺️" },
+    { pt: "Onde posso apanhar o metro?", en: "Where can I take the metro?", mainEmoji: "🚇", bgLeft: "🚌", bgRight: "❓" },
+    { pt: "O autocarro circula ao domingo?", en: "Does the bus run on Sunday?", mainEmoji: "📅", bgLeft: "🚌", bgRight: "❓" },
+    { pt: "Obrigado! Boa viagem.", en: "Thank you! Safe travels.", mainEmoji: "😊", bgLeft: "🚌", bgRight: "👋" },
+  ],
+
+  pharmacy: [
+    // Greeting
+    { pt: "Bom dia! Pode ajudar-me?", en: "Good morning! Can you help me?", mainEmoji: "💊", bgLeft: "🏥", bgRight: "👩‍⚕️" },
+    // Prescriptions
+    { pt: "Tenho receita médica.", en: "I have a prescription.", mainEmoji: "📋", bgLeft: "💊", bgRight: "👩‍⚕️" },
+    { pt: "Quero este medicamento, por favor.", en: "I would like this medicine, please.", mainEmoji: "💊", bgLeft: "📋", bgRight: "👩‍⚕️" },
+    { pt: "Este medicamento precisa de receita?", en: "Does this medicine need a prescription?", mainEmoji: "❓", bgLeft: "💊", bgRight: "👩‍⚕️" },
+    // Symptoms
+    { pt: "Tem alguma coisa para a febre?", en: "Do you have something for fever?", mainEmoji: "🌡️", bgLeft: "💊", bgRight: "👩‍⚕️" },
+    { pt: "Tem alguma coisa para a tosse?", en: "Do you have something for a cough?", mainEmoji: "😷", bgLeft: "💊", bgRight: "👩‍⚕️" },
+    { pt: "Tem alguma coisa para a dor de cabeça?", en: "Do you have something for a headache?", mainEmoji: "🤕", bgLeft: "💊", bgRight: "❓" },
+    { pt: "Tenho dor de garganta.", en: "I have a sore throat.", mainEmoji: "😣", bgLeft: "💊", bgRight: "👩‍⚕️" },
+    { pt: "O meu ouvido dói.", en: "My ear hurts.", mainEmoji: "👂", bgLeft: "💊", bgRight: "👩‍⚕️" },
+    { pt: "Tenho dores no estômago.", en: "I have stomach pain.", mainEmoji: "🤢", bgLeft: "💊", bgRight: "👩‍⚕️" },
+    // First aid
+    { pt: "Preciso de um penso rápido.", en: "I need a plaster.", mainEmoji: "🩹", bgLeft: "💊", bgRight: "👩‍⚕️" },
+    { pt: "Tem creme antisséptico?", en: "Do you have antiseptic cream?", mainEmoji: "🧴", bgLeft: "💊", bgRight: "❓" },
+    { pt: "Preciso de protetor solar.", en: "I need sunscreen.", mainEmoji: "☀️", bgLeft: "💊", bgRight: "👩‍⚕️" },
+    // Safety and dosage
+    { pt: "É seguro para crianças?", en: "Is it safe for children?", mainEmoji: "🧒", bgLeft: "💊", bgRight: "❓" },
+    { pt: "Tem efeitos secundários?", en: "Are there side effects?", mainEmoji: "❓", bgLeft: "💊", bgRight: "👩‍⚕️" },
+    { pt: "Quantas vezes por dia?", en: "How many times a day?", mainEmoji: "🕐", bgLeft: "💊", bgRight: "❓" },
+    { pt: "Posso tomar com comida?", en: "Can I take it with food?", mainEmoji: "🍽️", bgLeft: "💊", bgRight: "❓" },
+    // Price and recommendation
+    { pt: "Quanto custa?", en: "How much does it cost?", mainEmoji: "💰", bgLeft: "💊", bgRight: "❓" },
+    { pt: "Tem um genérico mais barato?", en: "Do you have a cheaper generic?", mainEmoji: "💰", bgLeft: "💊", bgRight: "👩‍⚕️" },
+    { pt: "O que me recomenda?", en: "What do you recommend?", mainEmoji: "🤔", bgLeft: "💊", bgRight: "👩‍⚕️" },
+    { pt: "Obrigado! Até logo.", en: "Thank you! Goodbye.", mainEmoji: "👋", bgLeft: "💊", bgRight: "😊" },
+  ],
+
+  gas_station: [
+    // Fuel
+    { pt: "Bom dia! Pode encher o depósito?", en: "Good morning! Can you fill up the tank?", mainEmoji: "⛽", bgLeft: "🚗", bgRight: "👨‍🔧" },
+    { pt: "Vinte euros de gasolina, por favor.", en: "Twenty euros of petrol, please.", mainEmoji: "⛽", bgLeft: "💵", bgRight: "🚗" },
+    { pt: "Este carro usa gasóleo ou gasolina?", en: "Does this car use diesel or petrol?", mainEmoji: "❓", bgLeft: "⛽", bgRight: "🚗" },
+    { pt: "Qual é o preço por litro?", en: "What is the price per litre?", mainEmoji: "💰", bgLeft: "⛽", bgRight: "❓" },
+    // Paying
+    { pt: "Bomba número três, por favor.", en: "Pump number three, please.", mainEmoji: "⛽", bgLeft: "🚗", bgRight: "👨‍🔧" },
+    { pt: "Onde se paga?", en: "Where do you pay?", mainEmoji: "💳", bgLeft: "⛽", bgRight: "❓" },
+    { pt: "Posso pagar com cartão?", en: "Can I pay by card?", mainEmoji: "💳", bgLeft: "⛽", bgRight: "👨‍🔧" },
+    { pt: "Só aceitam dinheiro?", en: "Do you only accept cash?", mainEmoji: "💵", bgLeft: "⛽", bgRight: "❓" },
+    { pt: "Pode dar-me um recibo?", en: "Can you give me a receipt?", mainEmoji: "🧾", bgLeft: "⛽", bgRight: "👨‍🔧" },
+    // Amenities
+    { pt: "Onde é a casa de banho, por favor?", en: "Where is the bathroom, please?", mainEmoji: "🚻", bgLeft: "⛽", bgRight: "❓" },
+    { pt: "Tem loja aqui?", en: "Do you have a shop here?", mainEmoji: "🏪", bgLeft: "⛽", bgRight: "❓" },
+    { pt: "Quero um café e uma sandes.", en: "I would like a coffee and a sandwich.", mainEmoji: "☕", bgLeft: "⛽", bgRight: "🏪" },
+    { pt: "Onde fica a bomba de ar?", en: "Where is the air pump?", mainEmoji: "🔧", bgLeft: "⛽", bgRight: "❓" },
+    { pt: "Tem lavagem de carro?", en: "Do you have a car wash?", mainEmoji: "🚗", bgLeft: "⛽", bgRight: "💧" },
+    // Directions and goodbye
+    { pt: "Pode dizer-me como chegar à autoestrada?", en: "Can you tell me how to get to the motorway?", mainEmoji: "🛣️", bgLeft: "⛽", bgRight: "🗺️" },
+    { pt: "Há algum mecânico perto?", en: "Is there a mechanic nearby?", mainEmoji: "🔧", bgLeft: "🚗", bgRight: "❓" },
+    { pt: "Obrigado! Boa viagem.", en: "Thank you! Safe travels.", mainEmoji: "👋", bgLeft: "⛽", bgRight: "🚗" },
+  ],
+
+  traffic: [
+    // Journey questions
+    { pt: "Já estamos quase lá?", en: "Are we nearly there yet?", mainEmoji: "🚗", bgLeft: "🛣️", bgRight: "❓" },
+    { pt: "Quanto tempo falta?", en: "How long is left?", mainEmoji: "⏱️", bgLeft: "🚗", bgRight: "❓" },
+    { pt: "Quantos quilómetros faltam?", en: "How many kilometres are left?", mainEmoji: "🗺️", bgLeft: "🚗", bgRight: "❓" },
+    { pt: "Há muito trânsito hoje.", en: "There is a lot of traffic today.", mainEmoji: "🚦", bgLeft: "🚗", bgRight: "😕" },
+    { pt: "Há um engarrafamento.", en: "There is a traffic jam.", mainEmoji: "🚗", bgLeft: "🚦", bgRight: "😕" },
+    { pt: "Estou aborrecido. Podemos ouvir música?", en: "I am bored. Can we listen to music?", mainEmoji: "😑", bgLeft: "🚗", bgRight: "🎵" },
+    // Stops and needs
+    { pt: "Preciso de parar urgentemente.", en: "I need to stop urgently.", mainEmoji: "✋", bgLeft: "🚗", bgRight: "🛑" },
+    { pt: "Preciso de ir à casa de banho.", en: "I need to go to the bathroom.", mainEmoji: "🚻", bgLeft: "🚗", bgRight: "❗" },
+    { pt: "Estou enjoado.", en: "I feel sick.", mainEmoji: "🤢", bgLeft: "🚗", bgRight: "💨" },
+    { pt: "Posso beber água?", en: "Can I have some water?", mainEmoji: "💧", bgLeft: "🚗", bgRight: "🥤" },
+    // Parking
+    { pt: "Onde podemos estacionar?", en: "Where can we park?", mainEmoji: "🅿️", bgLeft: "🚗", bgRight: "❓" },
+    { pt: "O estacionamento é pago?", en: "Is parking paid?", mainEmoji: "💰", bgLeft: "🅿️", bgRight: "❓" },
+    // Fuel
+    { pt: "O carro precisa de gasolina.", en: "The car needs petrol.", mainEmoji: "⛽", bgLeft: "🚗", bgRight: "😬" },
+    // Directions
+    { pt: "O que significa este sinal?", en: "What does this sign mean?", mainEmoji: "🛑", bgLeft: "🚗", bgRight: "❓" },
+    { pt: "Siga em frente.", en: "Go straight ahead.", mainEmoji: "⬆️", bgLeft: "🚗", bgRight: "🛣️" },
+    { pt: "Vire à direita aqui.", en: "Turn right here.", mainEmoji: "➡️", bgLeft: "🚗", bgRight: "🗺️" },
+    { pt: "Vire à esquerda.", en: "Turn left.", mainEmoji: "⬅️", bgLeft: "🚗", bgRight: "🗺️" },
+    { pt: "Perdemos a saída.", en: "We missed the exit.", mainEmoji: "😬", bgLeft: "🚗", bgRight: "🗺️" },
+    { pt: "Estamos perdidos.", en: "We are lost.", mainEmoji: "😟", bgLeft: "🚗", bgRight: "🗺️" },
+    // Safety
+    { pt: "O cinto de segurança está posto.", en: "The seatbelt is on.", mainEmoji: "🔒", bgLeft: "🚗", bgRight: "✅" },
+    { pt: "Põe o cinto, por favor.", en: "Put on your seatbelt, please.", mainEmoji: "🔒", bgLeft: "🚗", bgRight: "👩‍👦" },
+    { pt: "Há um radar ali.", en: "There is a speed camera there.", mainEmoji: "📷", bgLeft: "🚗", bgRight: "⚠️" },
+    { pt: "Vejo uma ambulância!", en: "I see an ambulance!", mainEmoji: "🚑", bgLeft: "🚗", bgRight: "🚨" },
+    { pt: "O sinal está vermelho.", en: "The light is red.", mainEmoji: "🔴", bgLeft: "🚦", bgRight: "🚗" },
+    { pt: "Que paisagem bonita!", en: "What a beautiful landscape!", mainEmoji: "🌄", bgLeft: "🚗", bgRight: "😄" },
+  ],
+};
+
+/** Flat list of school template pages — kept for backwards compatibility with chromePhrases fallback. */
+export const templatePages: StoryPage[] = templatePagesByContext.school;
 
 export const chromePhrases: StoryPage[] = [
   { pt: "O gato bebe leite.", en: "The cat drinks milk.", mainEmoji: "🐱", bgLeft: "🥛", bgRight: "🍼" },

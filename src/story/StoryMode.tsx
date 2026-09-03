@@ -1,22 +1,37 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Volume2, Gauge } from 'lucide-react';
 import { StoryPage } from '../data/words';
-import { AiState, getNewStoryPage } from '../utils/ai';
+import { AiState, StoryContext, getNewStoryPage } from '../utils/ai';
 import { cancelSpeech, speakText } from '../utils/speech';
 import { translateToTurkish } from '../utils/translate';
 import { getSceneTheme } from './sceneTheme';
-import { PrefetchResult, buildStoryImagePrompt } from './useStoryPrefetch';
+import { buildStoryImagePrompt, useStoryPrefetch } from './useStoryPrefetch';
 import StoryIllustration from './StoryIllustration';
 import './StoryMode.scss';
+
+const CONTEXTS: { value: StoryContext; label: string; labelTr: string; emoji: string }[] = [
+  { value: 'school',       label: 'School',       labelTr: 'Okul',          emoji: '🏫' },
+  { value: 'restaurant',   label: 'Restaurant',   labelTr: 'Restoran',      emoji: '🍽️' },
+  { value: 'bank',         label: 'Bank',         labelTr: 'Banka',         emoji: '🏦' },
+  { value: 'hospital',     label: 'Hospital',     labelTr: 'Hastane',       emoji: '🏥' },
+  { value: 'bakery',       label: 'Bakery',       labelTr: 'Fırın',         emoji: '🥐' },
+  { value: 'airport',      label: 'Airport',      labelTr: 'Havalimanı',    emoji: '✈️' },
+  { value: 'market',       label: 'Market',       labelTr: 'Market',        emoji: '🛒' },
+  { value: 'aima',         label: 'AIMA',         labelTr: 'AIMA',          emoji: '🏛️' },
+  { value: 'bus',          label: 'Bus',          labelTr: 'Otobüs',        emoji: '🚌' },
+  { value: 'pharmacy',     label: 'Pharmacy',     labelTr: 'Eczane',        emoji: '💊' },
+  { value: 'gas_station',  label: 'Gas Station',  labelTr: 'Benzin İstasyonu', emoji: '⛽' },
+  { value: 'traffic',      label: 'Traffic & Cars', labelTr: 'Trafik ve Arabalar', emoji: '🚗' },
+];
 
 interface Props {
   aiState: AiState;
   onAiChange: (label: string, color: string) => void;
   language: 'en' | 'tr';
-  prefetch: PrefetchResult;
 }
 
-export default function StoryMode({ aiState, onAiChange, language, prefetch }: Props): React.ReactElement {
+export default function StoryMode({ aiState, onAiChange, language }: Props): React.ReactElement {
+  const [context, setContext] = useState<StoryContext>('school');
   const [history, setHistory] = useState<StoryPage[]>([]);
   const [index, setIndex] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -25,7 +40,7 @@ export default function StoryMode({ aiState, onAiChange, language, prefetch }: P
   const [trText, setTrText] = useState('');
   const initialized = useRef(false);
   const pendingSpeakRef = useRef<string | null>(null);
-  const { popQueue, triggerRefill, imageCache } = prefetch;
+  const { popQueue, triggerRefill, imageCache } = useStoryPrefetch(aiState, onAiChange, context);
 
   useEffect(() => {
     if (initialized.current) return;
@@ -33,6 +48,21 @@ export default function StoryMode({ aiState, onAiChange, language, prefetch }: P
     void loadFirst();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // When context changes (after first mount), clear history and load fresh
+  const isFirstMount = useRef(true);
+  useEffect(() => {
+    if (isFirstMount.current) {
+      isFirstMount.current = false;
+      return;
+    }
+    setHistory([]);
+    setIndex(0);
+    setTrText('');
+    cancelSpeech();
+    void loadFirst();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [context]);
   useEffect(() => () => { cancelSpeech(); }, []);
 
   // Speak pending text on the first user interaction after mount.
@@ -79,12 +109,13 @@ export default function StoryMode({ aiState, onAiChange, language, prefetch }: P
         page = popQueue();
       }
       if (!page) {
-        page = await getNewStoryPage(aiState, onAiChange);
+        page = await getNewStoryPage(aiState, onAiChange, context);
       }
       setLoading(false);
     }
-    setHistory([page]);
+    setHistory((prev) => prev.length === 0 ? [page!] : [page!]);
     setIndex(0);
+    setPageKey((k) => k + 1);
     // Chrome blocks speak() after an async gap (gesture context has expired).
     // Queue the text; the interaction listener above will fire it on the next tap.
     pendingSpeakRef.current = page.pt;
@@ -109,7 +140,7 @@ export default function StoryMode({ aiState, onAiChange, language, prefetch }: P
         speakText(prefetched.pt);
       } else {
         setLoading(true);
-        const page = await getNewStoryPage(aiState, onAiChange);
+        const page = await getNewStoryPage(aiState, onAiChange, context);
         setHistory((h) => [...h, page]);
         setIndex(nextIndex);
         setPageKey((k) => k + 1);
@@ -149,6 +180,20 @@ export default function StoryMode({ aiState, onAiChange, language, prefetch }: P
   return (
     <div className="game-container" style={{ display: 'block', borderColor: '#0284c7' }}>
       <div className="story-card">
+        <div className="story-context-row">
+          <select
+            className="story-context-select"
+            value={context}
+            onChange={(e) => setContext(e.target.value as StoryContext)}
+            aria-label={language === 'tr' ? 'Senaryo seç' : 'Choose scenario'}
+          >
+            {CONTEXTS.map(({ value, label, labelTr, emoji }) => (
+              <option key={value} value={value}>
+                {emoji} {language === 'tr' ? labelTr : label}
+              </option>
+            ))}
+          </select>
+        </div>
         {page && theme
           ? <StoryIllustration
               key={pageKey}

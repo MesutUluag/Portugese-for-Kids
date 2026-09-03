@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { StoryPage } from '../data/words';
-import { AiState, getNewStoryPage } from '../utils/ai';
+import { AiState, StoryContext, getNewStoryPage } from '../utils/ai';
 import { fetchImageBlobUrl } from './useBackendImage';
 
 /** Derives the image-generation prompt for a story page (shared with StoryIllustration). */
@@ -28,6 +28,7 @@ export interface PrefetchResult {
 export function useStoryPrefetch(
   aiState: AiState,
   onAiChange: (label: string, color: string) => void,
+  context: StoryContext = 'school',
 ): PrefetchResult {
   const [imageCache, setImageCache] = useState<Map<string, string>>(new Map());
 
@@ -52,17 +53,20 @@ export function useStoryPrefetch(
 
   /** Fetch one story + its image and append both to queue / cache. */
   async function refillOne(): Promise<void> {
-    const page = await getNewStoryPage(aiState, onAiChange);
+    const page = await getNewStoryPage(aiState, onAiChange, context);
     queueRef.current = [...queueRef.current, page];
     await prefetchImage(page);
   }
 
-  // Fetch the first story + image as soon as aiState is ready.
-  // Runs once when aiState transitions from null to a real value.
+  // Fetch the first story + image as soon as aiState is ready, or when context changes.
   useEffect(() => {
     if (!aiState) return;
 
-    void getNewStoryPage(aiState, onAiChange).then((page) => {
+    // Reset queue and cache on context change
+    queueRef.current = [];
+    setImageCache(new Map());
+
+    void getNewStoryPage(aiState, onAiChange, context).then((page) => {
       queueRef.current = [page];
       void prefetchImage(page);
     });
@@ -72,7 +76,7 @@ export function useStoryPrefetch(
       blobUrls.current.forEach((url) => URL.revokeObjectURL(url));
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [aiState]);
+  }, [aiState, context]);
 
   function popQueue(): StoryPage | undefined {
     const [first, ...rest] = queueRef.current;
