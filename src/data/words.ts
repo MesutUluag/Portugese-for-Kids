@@ -490,6 +490,10 @@ export const kidsWords: Word[] = [
   { pt: "dezoito e quarenta e cinco", en: "18:45 - evening walk", tr: "18:45 - akşam yürüyüşü", emoji: "18:45", category: "Time" },
   { pt: "vinte horas", en: "20:00 - bedtime", tr: "20:00 - uyku vakti", emoji: "20:00", category: "Time" },
   { pt: "vinte e duas e meia", en: "22:30 - lights out", tr: "22:30 - ışıklar sönüyor", emoji: "22:30", category: "Time" },
+  { pt: "doze e cinquenta e três", en: "12:53 - nearly one", tr: "12:53 - neredeyse bir", emoji: "12:53", category: "Time" },
+  { pt: "oito e quarenta e sete", en: "08:47 - almost nine", tr: "08:47 - neredeyse dokuz", emoji: "08:47", category: "Time" },
+  { pt: "dezasseis e trinta e dois", en: "16:32 - afternoon", tr: "16:32 - öğleden sonra", emoji: "16:32", category: "Time" },
+  { pt: "vinte e um e onze", en: "21:11 - evening", tr: "21:11 - akşam", emoji: "21:11", category: "Time" },
   { pt: "meia-noite", en: "00:00 - midnight", tr: "00:00 - gece yarısı", emoji: "00:00", category: "Time" },
   // ── Weather ──────────────────────────────────────────────────────────────────
   { pt: "tempo", en: "weather", tr: "hava durumu", emoji: "🌤️", category: "Weather" },
