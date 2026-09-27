@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { LayoutGrid, BookOpen, Image, Headphones, Layers, PencilLine, Puzzle, Globe, Timer, Volume2, VolumeX, ShoppingCart } from 'lucide-react';
 import { Mode, StoryPage } from './data/words';
 import { AiState, initAI, getNewStoryPage } from './utils/ai';
+import { buildStoryImagePrompt } from './story/useStoryPrefetch';
+import { fetchImageBlobUrl } from './story/useBackendImage';
 import CardsMode from './components/CardsMode';
 import StoryMode from './story/StoryMode';
 import Game1 from './components/Game1';
@@ -30,8 +32,29 @@ export default function App(): React.ReactElement {
   // React only uses it on the first render, so wrapping in a ref-guarded pattern ensures
   // the fetch fires exactly once regardless of how often App re-renders.
   const storyPrefetchRef = useRef<Promise<StoryPage> | null>(null);
+  // Image for page 1 — started as soon as page 1 text resolves.
+  const imagePrefetchRef = useRef<Promise<string> | null>(null);
+  // Page 2 text — started as soon as page 1 text resolves (reply prefetch).
+  const replyPrefetchRef = useRef<Promise<StoryPage> | null>(null);
+  // Image for page 2 — started as soon as page 2 text resolves.
+  const replyImagePrefetchRef = useRef<Promise<string> | null>(null);
+
   if (storyPrefetchRef.current === null) {
     storyPrefetchRef.current = getNewStoryPage('backend', () => {}, 'school');
+
+    // As soon as page 1 arrives: kick off its image AND prefetch page 2.
+    imagePrefetchRef.current = storyPrefetchRef.current
+      .then((page) => fetchImageBlobUrl(buildStoryImagePrompt(page)))
+      .catch(() => '');
+
+    replyPrefetchRef.current = storyPrefetchRef.current
+      .then((page) => getNewStoryPage('backend', () => {}, 'school', page.pt, [page.pt]))
+      .catch(() => undefined as unknown as StoryPage);
+
+    // As soon as page 2 arrives: kick off its image.
+    replyImagePrefetchRef.current = replyPrefetchRef.current
+      .then((reply) => reply ? fetchImageBlobUrl(buildStoryImagePrompt(reply)) : '')
+      .catch(() => '');
   }
   const [language, setLanguage] = useState<'en' | 'tr'>('en');
   const [musicEnabled, setMusicEnabled] = useState<boolean>(() => {
@@ -222,6 +245,9 @@ export default function App(): React.ReactElement {
           onAiChange={(_label, _color) => {}}
           language={language}
           prefetchPromise={storyPrefetchRef.current ?? undefined}
+          imagePrefetchPromise={imagePrefetchRef.current ?? undefined}
+          replyPrefetchPromise={replyPrefetchRef.current ?? undefined}
+          replyImagePrefetchPromise={replyImagePrefetchRef.current ?? undefined}
         />
       )}
       {mode === 'game1' && <Game1 onScore={addScore} language={language} />}
