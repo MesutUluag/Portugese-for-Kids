@@ -106,7 +106,7 @@ export default function CardsMode({ language }: Props): React.ReactElement {
             onClick={() => speakText(w.pt)}
           >
             <span className="sound-icon">🔊</span>
-            <span className={`kids-emoji${w.category === 'Numbers' || /^\d{2}:\d{2}$/.test(w.emoji) ? ' kids-emoji--number' : ''}`}>{w.emoji}</span>
+            <span className={`kids-emoji${w.category === 'Numbers' || w.category === 'Time' ? ' kids-emoji--number' : ''}`}>{w.emoji}</span>
             <div className="kids-pt">{w.pt}</div>
             <div className="kids-en">{language === 'tr' ? w.tr : w.en}</div>
           </div>
