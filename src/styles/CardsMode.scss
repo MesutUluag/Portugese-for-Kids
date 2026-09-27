@@ -4,20 +4,51 @@
 
 @use './_variables.scss' as *;
 
-// ─── Search Box ───────────────────────────────────────────────────────────────
-.search-box {
+// ─── Search + Category row ────────────────────────────────────────────────────
+.search-row {
+  display: flex;
+  gap: 8px;
   width: 100%;
-  max-width: 480px;
-  padding: 14px;
-  border-radius: $radius-md;
-  border: 3px solid $color-amber-light;
+  max-width: 500px;
   margin-bottom: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  min-height: 44px;
 
   @media (min-width: 480px) {
     margin-bottom: 15px;
+  }
+}
+
+.search-box {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 12px 14px;
+  border-radius: $radius-md;
+  border: 3px solid $color-amber-light;
+  font-size: 15px;
+  font-weight: bold;
+  min-height: 44px;
+
+  &:focus {
+    outline: none;
+    border-color: $color-amber;
+  }
+}
+
+.category-select {
+  flex: 0 0 auto;
+  padding: 10px 10px;
+  border-radius: $radius-md;
+  border: 3px solid $color-amber-light;
+  background: $color-white;
+  color: $color-text-dark;
+  font-size: 14px;
+  font-weight: bold;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: auto;
+
+  &:focus {
+    outline: none;
+    border-color: $color-amber;
   }
 }
 
@@ -78,6 +109,25 @@
   @media (min-width: 480px) {
     font-size: 50px;
     margin-bottom: 5px;
+  }
+
+  // Number cards: render the numeric string in a compact bold badge
+  &--number {
+    font-size: 22px;
+    font-weight: 900;
+    font-family: $font-family;
+    color: $color-navy;
+    background: $color-amber-pale;
+    border: 2px solid $color-amber-light;
+    border-radius: $radius-sm;
+    padding: 4px 8px;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+
+    @media (min-width: 480px) {
+      font-size: 26px;
+      padding: 5px 10px;
+    }
   }
 }
 
