@@ -58,9 +58,15 @@ interface Props {
   onAiChange: (label: string, color: string) => void;
   language: 'en' | 'tr';
   prefetchPromise?: Promise<StoryPage>;
+  /** Pre-started blob URL promise for the first page's image, begun at app load. */
+  imagePrefetchPromise?: Promise<string>;
+  /** Pre-started reply (page 2) text promise, begun at app load. */
+  replyPrefetchPromise?: Promise<StoryPage>;
+  /** Pre-started blob URL promise for page 2's image, begun at app load. */
+  replyImagePrefetchPromise?: Promise<string>;
 }
 
-export default function StoryMode({ aiState, onAiChange, language, prefetchPromise }: Props): React.ReactElement {
+export default function StoryMode({ aiState, onAiChange, language, prefetchPromise, imagePrefetchPromise, replyPrefetchPromise, replyImagePrefetchPromise }: Props): React.ReactElement {
   const [context, setContext] = useState<StoryContext>('school');
   const [history, setHistory] = useState<StoryPage[]>([]);
   const [index, setIndex] = useState(0);
@@ -74,7 +80,7 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
   const pendingSpeakRef = useRef<string | null>(null);
   const prefetchedReplyRef = useRef<StoryPage | null>(null);
   const prefetchingReply = useRef(false);
-  const { prefetchImage, imageCache } = useStoryPrefetch(aiState, onAiChange, context);
+  const { prefetchImage, seedImage, imageCache } = useStoryPrefetch(aiState, onAiChange, context);
 
   // Single effect watching context. On the very first run this IS the initial load.
   // On subsequent runs it is a genuine context change triggered by the user.
@@ -166,7 +172,20 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
     setHistory([page!]);
     setIndex(0);
     setPageKey((k) => k + 1);
-    prefetchImage(page!);
+
+    // If an image was pre-fetched at app load, seed the cache directly with the blob URL.
+    // Otherwise fall through to prefetchImage which will start the fetch now.
+    if (!speakImmediately && imagePrefetchPromise) {
+      imagePrefetchPromise.then((blobUrl) => {
+        if (blobUrl) {
+          seedImage(page!, blobUrl);
+        } else {
+          prefetchImage(page!);
+        }
+      }).catch(() => prefetchImage(page!));
+    } else {
+      prefetchImage(page!);
+    }
     if (speakImmediately) {
       // Gesture already occurred (e.g. user clicked the context dropdown),
       // so speak() is allowed immediately.
@@ -176,11 +195,31 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
       // is lost). Queue it; the interaction listener fires it on the next tap.
       pendingSpeakRef.current = page.pt;
     }
-    // Start prefetching the reply to this first page in the background
-    void prefetchReply(page.pt, [page!.pt]);
+    // Use the app-load reply prefetch if available (already running since app start),
+    // otherwise fall back to prefetchReply which will fetch now.
+    if (!speakImmediately && replyPrefetchPromise) {
+      replyPrefetchPromise.then((reply) => {
+        if (!reply || id !== loadIdRef.current) return;
+        prefetchedReplyRef.current = reply;
+        // Seed its image from the app-load promise, or trigger a fresh fetch.
+        if (replyImagePrefetchPromise) {
+          replyImagePrefetchPromise.then((blobUrl) => {
+            if (blobUrl) seedImage(reply, blobUrl);
+            else prefetchImage(reply);
+          }).catch(() => prefetchImage(reply));
+        } else {
+          prefetchImage(reply);
+        }
+      }).catch(() => {
+        void prefetchReply(page!.pt, [page!.pt]);
+      });
+    } else {
+      void prefetchReply(page!.pt, [page!.pt]);
+    }
   }
 
-  /** Fetch the reply to `sentence` in the background and cache it in prefetchedReplyRef. */
+  /** Fetch the reply to `sentence` in the background and cache it in prefetchedReplyRef.
+   *  Also kicks off image prefetch for the reply page so its image is ready before the user taps Next. */
   async function prefetchReply(sentence: string, currentHistory: string[]): Promise<void> {
     if (prefetchingReply.current) return;
     prefetchingReply.current = true;
@@ -188,6 +227,8 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
     try {
       const reply = await getNewStoryPage(aiState, onAiChange, context, sentence, currentHistory);
       prefetchedReplyRef.current = reply;
+      // Start fetching the reply's image while the user reads the current page
+      prefetchImage(reply);
     } catch {
       // non-fatal — handleNext will fall back to a live fetch
     } finally {
@@ -282,7 +323,7 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
               page={page}
               pageKey={pageKey}
               sceneVars={sceneVars}
-              prefetchedImageUrl={imageCache.get(buildStoryImagePrompt(page))}
+              prefetchedImageUrl={imageCache.get(buildStoryImagePrompt(page, context))}
             />
           : <div className="story-illustration" style={sceneVars} />
         }
