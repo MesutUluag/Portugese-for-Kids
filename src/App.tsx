@@ -34,12 +34,20 @@ export default function App(): React.ReactElement {
     storyPrefetchRef.current = getNewStoryPage('backend', () => {}, 'school');
   }
   const [language, setLanguage] = useState<'en' | 'tr'>('en');
-  const [musicEnabled, setMusicEnabled] = useState(!import.meta.env.DEV);
+  const [musicEnabled, setMusicEnabled] = useState<boolean>(() => {
+    try {
+      const saved = localStorage.getItem('kids_music_enabled');
+      if (saved !== null) return saved === 'true';
+    } catch (e) {
+      console.error('Failed to load music preference:', e);
+    }
+    return !import.meta.env.DEV;
+  });
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const lastTrackRef = useRef<string | null>(
     MUSIC_TRACKS[Math.floor(Math.random() * MUSIC_TRACKS.length)]
   );
-  const musicEnabledRef = useRef(!import.meta.env.DEV);
+  const musicEnabledRef = useRef(musicEnabled);
 
   function buildTrackUrl(track: string): string {
     const basePath = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
@@ -133,6 +141,11 @@ export default function App(): React.ReactElement {
 
   useEffect(() => {
     musicEnabledRef.current = musicEnabled;
+    try {
+      localStorage.setItem('kids_music_enabled', String(musicEnabled));
+    } catch (e) {
+      console.error('Failed to save music preference:', e);
+    }
     const audio = audioRef.current;
     if (!audio) return;
     if (!musicEnabled) {
