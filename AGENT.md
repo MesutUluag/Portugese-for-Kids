@@ -20,7 +20,8 @@ src/
 ├── commons/
 │   └── WordImage.tsx           # Wikipedia image → emoji fallback shared across games
 ├── components/
-│   ├── CardsMode.tsx           # Flashcard grid — search + category filter
+│   ├── CardsMode.tsx           # Flashcard grid — search + category filter + verb conjugation trigger
+│   ├── ConjugationModal.tsx    # Verb conjugation modal (A1/A2 levels, audio, EN/TR translations & examples)
 │   ├── Game1.tsx               # Picture Game (word → image, 4-choice MCQ)
 │   ├── Game2.tsx               # Listen & Find (TTS → image, 4-choice MCQ)
 │   ├── Game3.tsx               # Memory Match (flip-card pairs)
@@ -30,6 +31,7 @@ src/
 │   ├── Game7.tsx               # Market Game (drag items → animated cart, bunny mascot)
 │   └── InAppBrowserGuard.tsx   # WebView detection + redirect prompt (Turkish UI)
 ├── data/
+│   ├── verbConjugations.ts     # A1 & A2 conjugation tables and example sentences for 60 verbs
 │   └── words.ts                # kidsWords, marketItems, templatePagesByContext, Mode type
 ├── story/
 │   ├── SceneProp.tsx           # Emoji → Wikimedia Commons image
@@ -96,6 +98,16 @@ Audio feedback uses the Web Audio API (`playSynth`). `getNumberWord` handles Por
 
 ### Scene themes (`sceneTheme.ts`)
 `getSceneTheme` inspects `mainEmoji`, `bgLeft`, `bgRight` of a `StoryPage` and returns a `SceneTheme` record of CSS colour values. The returned values are applied as CSS custom properties (`--sky-top`, `--hill-color`, etc.) on the illustration container. There are 5 named themes plus the default day theme.
+
+### Verb Conjugation Modal (`ConjugationModal.tsx` & `verbConjugations.ts`)
+- **Trigger**: Displayed from `CardsMode.tsx` via a book icon button (`BookOpen`) on verb cards when `verbConjugations[word.pt]` exists.
+- **A1 Level**:
+  - 4-column layout: Pronoun (`Eu`, `Tu`, `Ele/Ela/Você`, `Nós`, `Eles/Elas/Vocês`), Presente, Futuro Próximo (`vou/vais/vai/vamos/vão + [verb]`), and Ação Contínua (`estou a / estás a / … + [verb]`).
+  - Example sentences for Presente, Futuro Próximo, and Ação Contínua with EN/TR explanations.
+- **A2 Level**:
+  - 3-column tense table: Pretérito Perfeito and Pretérito Imperfeito.
+  - Particípio Passado single-form box with helper formula.
+- **Audio & Accessibility**: Every conjugated form, example, and infinitive has tap-to-speak audio via `speakText()`. Font sizes (e.g., category selects) adhere to 16px to prevent iOS auto-zoom on mobile.
 
 ---
 
