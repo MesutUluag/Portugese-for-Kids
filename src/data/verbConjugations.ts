@@ -22,6 +22,9 @@ export interface ConjugationRow {
 export interface VerbConjugation {
   a1: {
     presente: ConjugationRow[];
+    exPresente: string;       // e.g. "Eu nado no mar."
+    exFuturo: string;         // e.g. "Eu vou nadar amanhã."
+    exContinua: string;       // e.g. "Eu estou a nadar agora."
   };
   a2: {
     preteritoPerfeito: ConjugationRow[];
@@ -48,7 +51,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── ser ──────────────────────────────────────────────────────────────────
   ser: {
-    a1: { presente: rows('sou', 'és', 'é', 'somos', 'são') },
+    a1: {
+      presente: rows('sou', 'és', 'é', 'somos', 'são'),
+      exPresente: 'Eu sou estudante.',
+      exFuturo:   'Eu vou ser médico.',
+      exContinua: 'Eu estou a ser honesto.',
+    },
     a2: {
       preteritoPerfeito:   rows('fui',   'foste',  'foi',   'fomos',  'foram'),
       preteritoImperfeito: rows('era',   'eras',   'era',   'éramos', 'eram'),
@@ -58,7 +66,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── estar ─────────────────────────────────────────────────────────────────
   estar: {
-    a1: { presente: rows('estou', 'estás', 'está', 'estamos', 'estão') },
+    a1: {
+      presente: rows('estou', 'estás', 'está', 'estamos', 'estão'),
+      exPresente: 'Eu estou em casa.',
+      exFuturo:   'Eu vou estar aqui.',
+      exContinua: 'Eu estou a estar com amigos.',
+    },
     a2: {
       preteritoPerfeito:   rows('estive',  'estiveste', 'esteve',  'estivemos', 'estiveram'),
       preteritoImperfeito: rows('estava',  'estavas',   'estava',  'estávamos', 'estavam'),
@@ -68,7 +81,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── ter ───────────────────────────────────────────────────────────────────
   ter: {
-    a1: { presente: rows('tenho', 'tens', 'tem', 'temos', 'têm') },
+    a1: {
+      presente: rows('tenho', 'tens', 'tem', 'temos', 'têm'),
+      exPresente: 'Eu tenho um livro.',
+      exFuturo:   'Eu vou ter aulas amanhã.',
+      exContinua: 'Eu estou a ter problemas.',
+    },
     a2: {
       preteritoPerfeito:   rows('tive',   'tiveste',  'teve',   'tivemos',  'tiveram'),
       preteritoImperfeito: rows('tinha',  'tinhas',   'tinha',  'tínhamos', 'tinham'),
@@ -78,7 +96,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── ir ────────────────────────────────────────────────────────────────────
   ir: {
-    a1: { presente: rows('vou', 'vais', 'vai', 'vamos', 'vão') },
+    a1: {
+      presente: rows('vou', 'vais', 'vai', 'vamos', 'vão'),
+      exPresente: 'Eu vou à escola.',
+      exFuturo:   'Eu vou ir ao parque.',
+      exContinua: 'Eu estou a ir para casa.',
+    },
     a2: {
       preteritoPerfeito:   rows('fui',   'foste',  'foi',   'fomos',  'foram'),
       preteritoImperfeito: rows('ia',    'ias',    'ia',    'íamos',  'iam'),
@@ -88,7 +111,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── vir ───────────────────────────────────────────────────────────────────
   vir: {
-    a1: { presente: rows('venho', 'vens', 'vem', 'vimos', 'vêm') },
+    a1: {
+      presente: rows('venho', 'vens', 'vem', 'vimos', 'vêm'),
+      exPresente: 'Eu venho de Portugal.',
+      exFuturo:   'Eu vou vir amanhã.',
+      exContinua: 'Eu estou a vir para a aula.',
+    },
     a2: {
       preteritoPerfeito:   rows('vim',    'vieste',  'veio',   'viemos',  'vieram'),
       preteritoImperfeito: rows('vinha',  'vinhas',  'vinha',  'vínhamos','vinham'),
@@ -98,7 +126,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── fazer ─────────────────────────────────────────────────────────────────
   fazer: {
-    a1: { presente: rows('faço', 'fazes', 'faz', 'fazemos', 'fazem') },
+    a1: {
+      presente: rows('faço', 'fazes', 'faz', 'fazemos', 'fazem'),
+      exPresente: 'Eu faço os trabalhos de casa.',
+      exFuturo:   'Eu vou fazer o jantar.',
+      exContinua: 'Eu estou a fazer um bolo.',
+    },
     a2: {
       preteritoPerfeito:   rows('fiz',    'fizeste',  'fez',    'fizemos',  'fizeram'),
       preteritoImperfeito: rows('fazia',  'fazias',   'fazia',  'fazíamos', 'faziam'),
@@ -108,7 +141,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── falar ─────────────────────────────────────────────────────────────────
   falar: {
-    a1: { presente: rows('falo', 'falas', 'fala', 'falamos', 'falam') },
+    a1: {
+      presente: rows('falo', 'falas', 'fala', 'falamos', 'falam'),
+      exPresente: 'Eu falo português.',
+      exFuturo:   'Eu vou falar com o professor.',
+      exContinua: 'Eu estou a falar ao telefone.',
+    },
     a2: {
       preteritoPerfeito:   rows('falei',   'falaste',  'falou',   'falámos',  'falaram'),
       preteritoImperfeito: rows('falava',  'falavas',  'falava',  'falávamos','falavam'),
@@ -118,7 +156,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── dizer ─────────────────────────────────────────────────────────────────
   dizer: {
-    a1: { presente: rows('digo', 'dizes', 'diz', 'dizemos', 'dizem') },
+    a1: {
+      presente: rows('digo', 'dizes', 'diz', 'dizemos', 'dizem'),
+      exPresente: 'Eu digo a verdade.',
+      exFuturo:   'Eu vou dizer uma coisa.',
+      exContinua: 'Eu estou a dizer adeus.',
+    },
     a2: {
       preteritoPerfeito:   rows('disse',  'disseste', 'disse',  'dissemos', 'disseram'),
       preteritoImperfeito: rows('dizia',  'dizias',   'dizia',  'dizíamos', 'diziam'),
@@ -128,7 +171,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── comer ─────────────────────────────────────────────────────────────────
   comer: {
-    a1: { presente: rows('como', 'comes', 'come', 'comemos', 'comem') },
+    a1: {
+      presente: rows('como', 'comes', 'come', 'comemos', 'comem'),
+      exPresente: 'Eu como fruta todos os dias.',
+      exFuturo:   'Eu vou comer pizza.',
+      exContinua: 'Eu estou a comer agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('comi',   'comeste',  'comeu',   'comemos',  'comeram'),
       preteritoImperfeito: rows('comia',  'comias',   'comia',   'comíamos', 'comiam'),
@@ -138,7 +186,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── beber ─────────────────────────────────────────────────────────────────
   beber: {
-    a1: { presente: rows('bebo', 'bebes', 'bebe', 'bebemos', 'bebem') },
+    a1: {
+      presente: rows('bebo', 'bebes', 'bebe', 'bebemos', 'bebem'),
+      exPresente: 'Eu bebo água.',
+      exFuturo:   'Eu vou beber sumo.',
+      exContinua: 'Eu estou a beber leite.',
+    },
     a2: {
       preteritoPerfeito:   rows('bebi',   'bebeste',  'bebeu',   'bebemos',  'beberam'),
       preteritoImperfeito: rows('bebia',  'bebias',   'bebia',   'bebíamos', 'bebiam'),
@@ -148,7 +201,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── dormir ────────────────────────────────────────────────────────────────
   dormir: {
-    a1: { presente: rows('durmo', 'dormes', 'dorme', 'dormimos', 'dormem') },
+    a1: {
+      presente: rows('durmo', 'dormes', 'dorme', 'dormimos', 'dormem'),
+      exPresente: 'Eu durmo cedo.',
+      exFuturo:   'Eu vou dormir tarde hoje.',
+      exContinua: 'Eu estou a dormir mal.',
+    },
     a2: {
       preteritoPerfeito:   rows('dormi',   'dormiste',  'dormiu',   'dormimos',  'dormiram'),
       preteritoImperfeito: rows('dormia',  'dormias',   'dormia',   'dormíamos', 'dormiam'),
@@ -158,7 +216,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── acordar ───────────────────────────────────────────────────────────────
   acordar: {
-    a1: { presente: rows('acordo', 'acordas', 'acorda', 'acordamos', 'acordam') },
+    a1: {
+      presente: rows('acordo', 'acordas', 'acorda', 'acordamos', 'acordam'),
+      exPresente: 'Eu acordo às sete.',
+      exFuturo:   'Eu vou acordar cedo.',
+      exContinua: 'Eu estou a acordar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('acordei',   'acordaste',  'acordou',   'acordámos',  'acordaram'),
       preteritoImperfeito: rows('acordava',  'acordavas',  'acordava',  'acordávamos','acordavam'),
@@ -168,7 +231,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── ver ───────────────────────────────────────────────────────────────────
   ver: {
-    a1: { presente: rows('vejo', 'vês', 'vê', 'vemos', 'veem') },
+    a1: {
+      presente: rows('vejo', 'vês', 'vê', 'vemos', 'veem'),
+      exPresente: 'Eu vejo um filme.',
+      exFuturo:   'Eu vou ver televisão.',
+      exContinua: 'Eu estou a ver o mar.',
+    },
     a2: {
       preteritoPerfeito:   rows('vi',    'viste',  'viu',   'vimos',  'viram'),
       preteritoImperfeito: rows('via',   'vias',   'via',   'víamos', 'viam'),
@@ -178,7 +246,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── ouvir ─────────────────────────────────────────────────────────────────
   ouvir: {
-    a1: { presente: rows('ouço', 'ouves', 'ouve', 'ouvimos', 'ouvem') },
+    a1: {
+      presente: rows('ouço', 'ouves', 'ouve', 'ouvimos', 'ouvem'),
+      exPresente: 'Eu ouço música.',
+      exFuturo:   'Eu vou ouvir a rádio.',
+      exContinua: 'Eu estou a ouvir uma canção.',
+    },
     a2: {
       preteritoPerfeito:   rows('ouvi',   'ouviste',  'ouviu',   'ouvimos',  'ouviram'),
       preteritoImperfeito: rows('ouvia',  'ouvias',   'ouvia',   'ouvíamos', 'ouviam'),
@@ -188,7 +261,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── ler ───────────────────────────────────────────────────────────────────
   ler: {
-    a1: { presente: rows('leio', 'lês', 'lê', 'lemos', 'leem') },
+    a1: {
+      presente: rows('leio', 'lês', 'lê', 'lemos', 'leem'),
+      exPresente: 'Eu leio um livro.',
+      exFuturo:   'Eu vou ler a história.',
+      exContinua: 'Eu estou a ler agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('li',    'leste',  'leu',   'lemos',  'leram'),
       preteritoImperfeito: rows('lia',   'lias',   'lia',   'líamos', 'liam'),
@@ -198,7 +276,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── escrever ──────────────────────────────────────────────────────────────
   escrever: {
-    a1: { presente: rows('escrevo', 'escreves', 'escreve', 'escrevemos', 'escrevem') },
+    a1: {
+      presente: rows('escrevo', 'escreves', 'escreve', 'escrevemos', 'escrevem'),
+      exPresente: 'Eu escrevo uma carta.',
+      exFuturo:   'Eu vou escrever um e-mail.',
+      exContinua: 'Eu estou a escrever no caderno.',
+    },
     a2: {
       preteritoPerfeito:   rows('escrevi',   'escreveste',  'escreveu',   'escrevemos',  'escreveram'),
       preteritoImperfeito: rows('escrevia',  'escrevias',   'escrevia',   'escrevíamos', 'escreviam'),
@@ -208,7 +291,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── estudar ───────────────────────────────────────────────────────────────
   estudar: {
-    a1: { presente: rows('estudo', 'estudas', 'estuda', 'estudamos', 'estudam') },
+    a1: {
+      presente: rows('estudo', 'estudas', 'estuda', 'estudamos', 'estudam'),
+      exPresente: 'Eu estudo todos os dias.',
+      exFuturo:   'Eu vou estudar para o teste.',
+      exContinua: 'Eu estou a estudar português.',
+    },
     a2: {
       preteritoPerfeito:   rows('estudei',   'estudaste',  'estudou',   'estudámos',  'estudaram'),
       preteritoImperfeito: rows('estudava',  'estudavas',  'estudava',  'estudávamos','estudavam'),
@@ -218,7 +306,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── trabalhar ─────────────────────────────────────────────────────────────
   trabalhar: {
-    a1: { presente: rows('trabalho', 'trabalhas', 'trabalha', 'trabalhamos', 'trabalham') },
+    a1: {
+      presente: rows('trabalho', 'trabalhas', 'trabalha', 'trabalhamos', 'trabalham'),
+      exPresente: 'Eu trabalho numa escola.',
+      exFuturo:   'Eu vou trabalhar amanhã.',
+      exContinua: 'Eu estou a trabalhar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('trabalhei',   'trabalhaste',  'trabalhou',   'trabalhámos',  'trabalharam'),
       preteritoImperfeito: rows('trabalhava',  'trabalhavas',  'trabalhava',  'trabalhávamos','trabalhavam'),
@@ -228,7 +321,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── brincar ───────────────────────────────────────────────────────────────
   brincar: {
-    a1: { presente: rows('brinco', 'brincas', 'brinca', 'brincamos', 'brincam') },
+    a1: {
+      presente: rows('brinco', 'brincas', 'brinca', 'brincamos', 'brincam'),
+      exPresente: 'Eu brinco no jardim.',
+      exFuturo:   'Eu vou brincar com os amigos.',
+      exContinua: 'Eu estou a brincar com a bola.',
+    },
     a2: {
       preteritoPerfeito:   rows('brinquei',  'brincaste',  'brincou',   'brincámos',  'brincaram'),
       preteritoImperfeito: rows('brincava',  'brincavas',  'brincava',  'brincávamos','brincavam'),
@@ -238,7 +336,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── correr ────────────────────────────────────────────────────────────────
   correr: {
-    a1: { presente: rows('corro', 'corres', 'corre', 'corremos', 'correm') },
+    a1: {
+      presente: rows('corro', 'corres', 'corre', 'corremos', 'correm'),
+      exPresente: 'Eu corro todos os dias.',
+      exFuturo:   'Eu vou correr no parque.',
+      exContinua: 'Eu estou a correr muito.',
+    },
     a2: {
       preteritoPerfeito:   rows('corri',   'correste',  'correu',   'corremos',  'correram'),
       preteritoImperfeito: rows('corria',  'corrias',   'corria',   'corríamos', 'corriam'),
@@ -248,7 +351,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── andar ─────────────────────────────────────────────────────────────────
   andar: {
-    a1: { presente: rows('ando', 'andas', 'anda', 'andamos', 'andam') },
+    a1: {
+      presente: rows('ando', 'andas', 'anda', 'andamos', 'andam'),
+      exPresente: 'Eu ando de bicicleta.',
+      exFuturo:   'Eu vou andar a pé.',
+      exContinua: 'Eu estou a andar depressa.',
+    },
     a2: {
       preteritoPerfeito:   rows('andei',   'andaste',  'andou',   'andámos',  'andaram'),
       preteritoImperfeito: rows('andava',  'andavas',  'andava',  'andávamos','andavam'),
@@ -258,7 +366,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── nadar ─────────────────────────────────────────────────────────────────
   nadar: {
-    a1: { presente: rows('nado', 'nadas', 'nada', 'nadamos', 'nadam') },
+    a1: {
+      presente: rows('nado', 'nadas', 'nada', 'nadamos', 'nadam'),
+      exPresente: 'Eu nado no mar.',
+      exFuturo:   'Eu vou nadar amanhã.',
+      exContinua: 'Eu estou a nadar na piscina.',
+    },
     a2: {
       preteritoPerfeito:   rows('nadei',   'nadaste',  'nadou',   'nadámos',  'nadaram'),
       preteritoImperfeito: rows('nadava',  'nadavas',  'nadava',  'nadávamos','nadavam'),
@@ -268,7 +381,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── cantar ────────────────────────────────────────────────────────────────
   cantar: {
-    a1: { presente: rows('canto', 'cantas', 'canta', 'cantamos', 'cantam') },
+    a1: {
+      presente: rows('canto', 'cantas', 'canta', 'cantamos', 'cantam'),
+      exPresente: 'Eu canto uma música.',
+      exFuturo:   'Eu vou cantar no concerto.',
+      exContinua: 'Eu estou a cantar em voz alta.',
+    },
     a2: {
       preteritoPerfeito:   rows('cantei',   'cantaste',  'cantou',   'cantámos',  'cantaram'),
       preteritoImperfeito: rows('cantava',  'cantavas',  'cantava',  'cantávamos','cantavam'),
@@ -278,7 +396,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── dançar ────────────────────────────────────────────────────────────────
   dançar: {
-    a1: { presente: rows('danço', 'danças', 'dança', 'dançamos', 'dançam') },
+    a1: {
+      presente: rows('danço', 'danças', 'dança', 'dançamos', 'dançam'),
+      exPresente: 'Eu danço muito bem.',
+      exFuturo:   'Eu vou dançar na festa.',
+      exContinua: 'Eu estou a dançar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('dancei',   'dançaste',  'dançou',   'dançámos',  'dançaram'),
       preteritoImperfeito: rows('dançava',  'dançavas',  'dançava',  'dançávamos','dançavam'),
@@ -288,7 +411,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── desenhar ──────────────────────────────────────────────────────────────
   desenhar: {
-    a1: { presente: rows('desenho', 'desenhas', 'desenha', 'desenhamos', 'desenham') },
+    a1: {
+      presente: rows('desenho', 'desenhas', 'desenha', 'desenhamos', 'desenham'),
+      exPresente: 'Eu desenho um gato.',
+      exFuturo:   'Eu vou desenhar uma casa.',
+      exContinua: 'Eu estou a desenhar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('desenhei',   'desenhaste',  'desenhou',   'desenhámos',  'desenharam'),
       preteritoImperfeito: rows('desenhava',  'desenhavas',  'desenhava',  'desenhávamos','desenhavam'),
@@ -298,7 +426,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── comprar ───────────────────────────────────────────────────────────────
   comprar: {
-    a1: { presente: rows('compro', 'compras', 'compra', 'compramos', 'compram') },
+    a1: {
+      presente: rows('compro', 'compras', 'compra', 'compramos', 'compram'),
+      exPresente: 'Eu compro pão na padaria.',
+      exFuturo:   'Eu vou comprar um presente.',
+      exContinua: 'Eu estou a comprar legumes.',
+    },
     a2: {
       preteritoPerfeito:   rows('comprei',   'compraste',  'comprou',   'comprámos',  'compraram'),
       preteritoImperfeito: rows('comprava',  'compravas',  'comprava',  'comprávamos','compravam'),
@@ -308,7 +441,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── dar ───────────────────────────────────────────────────────────────────
   dar: {
-    a1: { presente: rows('dou', 'dás', 'dá', 'damos', 'dão') },
+    a1: {
+      presente: rows('dou', 'dás', 'dá', 'damos', 'dão'),
+      exPresente: 'Eu dou um presente.',
+      exFuturo:   'Eu vou dar uma festa.',
+      exContinua: 'Eu estou a dar aulas.',
+    },
     a2: {
       preteritoPerfeito:   rows('dei',   'deste',  'deu',   'demos',  'deram'),
       preteritoImperfeito: rows('dava',  'davas',  'dava',  'dávamos','davam'),
@@ -318,7 +456,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── ajudar ────────────────────────────────────────────────────────────────
   ajudar: {
-    a1: { presente: rows('ajudo', 'ajudas', 'ajuda', 'ajudamos', 'ajudam') },
+    a1: {
+      presente: rows('ajudo', 'ajudas', 'ajuda', 'ajudamos', 'ajudam'),
+      exPresente: 'Eu ajudo a minha mãe.',
+      exFuturo:   'Eu vou ajudar o professor.',
+      exContinua: 'Eu estou a ajudar um amigo.',
+    },
     a2: {
       preteritoPerfeito:   rows('ajudei',   'ajudaste',  'ajudou',   'ajudámos',  'ajudaram'),
       preteritoImperfeito: rows('ajudava',  'ajudavas',  'ajudava',  'ajudávamos','ajudavam'),
@@ -328,7 +471,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── gostar ────────────────────────────────────────────────────────────────
   gostar: {
-    a1: { presente: rows('gosto', 'gostas', 'gosta', 'gostamos', 'gostam') },
+    a1: {
+      presente: rows('gosto', 'gostas', 'gosta', 'gostamos', 'gostam'),
+      exPresente: 'Eu gosto de música.',
+      exFuturo:   'Eu vou gostar desta aula.',
+      exContinua: 'Eu estou a gostar muito.',
+    },
     a2: {
       preteritoPerfeito:   rows('gostei',   'gostaste',  'gostou',   'gostámos',  'gostaram'),
       preteritoImperfeito: rows('gostava',  'gostavas',  'gostava',  'gostávamos','gostavam'),
@@ -338,7 +486,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── querer ────────────────────────────────────────────────────────────────
   querer: {
-    a1: { presente: rows('quero', 'queres', 'quer', 'queremos', 'querem') },
+    a1: {
+      presente: rows('quero', 'queres', 'quer', 'queremos', 'querem'),
+      exPresente: 'Eu quero um gelado.',
+      exFuturo:   'Eu vou querer mais.',
+      exContinua: 'Eu estou a querer sair.',
+    },
     a2: {
       preteritoPerfeito:   rows('quis',    'quiseste',  'quis',    'quisemos',  'quiseram'),
       preteritoImperfeito: rows('queria',  'querias',   'queria',  'queríamos', 'queriam'),
@@ -348,7 +501,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── poder ─────────────────────────────────────────────────────────────────
   poder: {
-    a1: { presente: rows('posso', 'podes', 'pode', 'podemos', 'podem') },
+    a1: {
+      presente: rows('posso', 'podes', 'pode', 'podemos', 'podem'),
+      exPresente: 'Eu posso ajudar.',
+      exFuturo:   'Eu vou poder ir amanhã.',
+      exContinua: 'Eu estou a poder estudar.',
+    },
     a2: {
       preteritoPerfeito:   rows('pude',    'pudeste',  'pôde',    'pudemos',  'puderam'),
       preteritoImperfeito: rows('podia',   'podias',   'podia',   'podíamos', 'podiam'),
@@ -358,7 +516,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── saber ─────────────────────────────────────────────────────────────────
   saber: {
-    a1: { presente: rows('sei', 'sabes', 'sabe', 'sabemos', 'sabem') },
+    a1: {
+      presente: rows('sei', 'sabes', 'sabe', 'sabemos', 'sabem'),
+      exPresente: 'Eu sei a resposta.',
+      exFuturo:   'Eu vou saber o resultado.',
+      exContinua: 'Eu estou a saber mais.',
+    },
     a2: {
       preteritoPerfeito:   rows('soube',   'soubeste',  'soube',   'soubemos',  'souberam'),
       preteritoImperfeito: rows('sabia',   'sabias',    'sabia',   'sabíamos',  'sabiam'),
@@ -368,7 +531,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── abrir ─────────────────────────────────────────────────────────────────
   abrir: {
-    a1: { presente: rows('abro', 'abres', 'abre', 'abrimos', 'abrem') },
+    a1: {
+      presente: rows('abro', 'abres', 'abre', 'abrimos', 'abrem'),
+      exPresente: 'Eu abro a janela.',
+      exFuturo:   'Eu vou abrir a porta.',
+      exContinua: 'Eu estou a abrir o livro.',
+    },
     a2: {
       preteritoPerfeito:   rows('abri',   'abriste',  'abriu',   'abrimos',  'abriram'),
       preteritoImperfeito: rows('abria',  'abrias',   'abria',   'abríamos', 'abriam'),
@@ -378,7 +546,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── fechar ────────────────────────────────────────────────────────────────
   fechar: {
-    a1: { presente: rows('fecho', 'fechas', 'fecha', 'fechamos', 'fecham') },
+    a1: {
+      presente: rows('fecho', 'fechas', 'fecha', 'fechamos', 'fecham'),
+      exPresente: 'Eu fecho a porta.',
+      exFuturo:   'Eu vou fechar a janela.',
+      exContinua: 'Eu estou a fechar o caderno.',
+    },
     a2: {
       preteritoPerfeito:   rows('fechei',   'fechaste',  'fechou',   'fechámos',  'fecharam'),
       preteritoImperfeito: rows('fechava',  'fechavas',  'fechava',  'fechávamos','fechavam'),
@@ -388,7 +561,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── começar ───────────────────────────────────────────────────────────────
   começar: {
-    a1: { presente: rows('começo', 'começas', 'começa', 'começamos', 'começam') },
+    a1: {
+      presente: rows('começo', 'começas', 'começa', 'começamos', 'começam'),
+      exPresente: 'Eu começo às nove.',
+      exFuturo:   'Eu vou começar agora.',
+      exContinua: 'Eu estou a começar a ler.',
+    },
     a2: {
       preteritoPerfeito:   rows('comecei',   'começaste',  'começou',   'começámos',  'começaram'),
       preteritoImperfeito: rows('começava',  'começavas',  'começava',  'começávamos','começavam'),
@@ -398,7 +576,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── acabar ────────────────────────────────────────────────────────────────
   acabar: {
-    a1: { presente: rows('acabo', 'acabas', 'acaba', 'acabamos', 'acabam') },
+    a1: {
+      presente: rows('acabo', 'acabas', 'acaba', 'acabamos', 'acabam'),
+      exPresente: 'Eu acabo o trabalho.',
+      exFuturo:   'Eu vou acabar cedo.',
+      exContinua: 'Eu estou a acabar o livro.',
+    },
     a2: {
       preteritoPerfeito:   rows('acabei',   'acabaste',  'acabou',   'acabámos',  'acabaram'),
       preteritoImperfeito: rows('acabava',  'acabavas',  'acabava',  'acabávamos','acabavam'),
@@ -408,7 +591,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── chegar ────────────────────────────────────────────────────────────────
   chegar: {
-    a1: { presente: rows('chego', 'chegas', 'chega', 'chegamos', 'chegam') },
+    a1: {
+      presente: rows('chego', 'chegas', 'chega', 'chegamos', 'chegam'),
+      exPresente: 'Eu chego às oito.',
+      exFuturo:   'Eu vou chegar tarde.',
+      exContinua: 'Eu estou a chegar à escola.',
+    },
     a2: {
       preteritoPerfeito:   rows('cheguei',  'chegaste',  'chegou',   'chegámos',  'chegaram'),
       preteritoImperfeito: rows('chegava',  'chegavas',  'chegava',  'chegávamos','chegavam'),
@@ -418,7 +606,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── sair ──────────────────────────────────────────────────────────────────
   sair: {
-    a1: { presente: rows('saio', 'sais', 'sai', 'saímos', 'saem') },
+    a1: {
+      presente: rows('saio', 'sais', 'sai', 'saímos', 'saem'),
+      exPresente: 'Eu saio de casa.',
+      exFuturo:   'Eu vou sair mais tarde.',
+      exContinua: 'Eu estou a sair agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('saí',    'saíste',  'saiu',   'saímos',  'saíram'),
       preteritoImperfeito: rows('saía',   'saías',   'saía',   'saíamos', 'saíam'),
@@ -428,7 +621,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── entrar ────────────────────────────────────────────────────────────────
   entrar: {
-    a1: { presente: rows('entro', 'entras', 'entra', 'entramos', 'entram') },
+    a1: {
+      presente: rows('entro', 'entras', 'entra', 'entramos', 'entram'),
+      exPresente: 'Eu entro na sala.',
+      exFuturo:   'Eu vou entrar na escola.',
+      exContinua: 'Eu estou a entrar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('entrei',   'entraste',  'entrou',   'entrámos',  'entraram'),
       preteritoImperfeito: rows('entrava',  'entravas',  'entrava',  'entrávamos','entravam'),
@@ -438,7 +636,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── sentar ────────────────────────────────────────────────────────────────
   sentar: {
-    a1: { presente: rows('sento', 'sentas', 'senta', 'sentamos', 'sentam') },
+    a1: {
+      presente: rows('sento', 'sentas', 'senta', 'sentamos', 'sentam'),
+      exPresente: 'Eu sento na cadeira.',
+      exFuturo:   'Eu vou sentar aqui.',
+      exContinua: 'Eu estou a sentar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('sentei',   'sentaste',  'sentou',   'sentámos',  'sentaram'),
       preteritoImperfeito: rows('sentava',  'sentavas',  'sentava',  'sentávamos','sentavam'),
@@ -448,7 +651,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── perguntar ─────────────────────────────────────────────────────────────
   perguntar: {
-    a1: { presente: rows('pergunto', 'perguntas', 'pergunta', 'perguntamos', 'perguntam') },
+    a1: {
+      presente: rows('pergunto', 'perguntas', 'pergunta', 'perguntamos', 'perguntam'),
+      exPresente: 'Eu pergunto ao professor.',
+      exFuturo:   'Eu vou perguntar amanhã.',
+      exContinua: 'Eu estou a perguntar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('perguntei',   'perguntaste',  'perguntou',   'perguntámos',  'perguntaram'),
       preteritoImperfeito: rows('perguntava',  'perguntavas',  'perguntava',  'perguntávamos','perguntavam'),
@@ -458,7 +666,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── responder ─────────────────────────────────────────────────────────────
   responder: {
-    a1: { presente: rows('respondo', 'respondes', 'responde', 'respondemos', 'respondem') },
+    a1: {
+      presente: rows('respondo', 'respondes', 'responde', 'respondemos', 'respondem'),
+      exPresente: 'Eu respondo à pergunta.',
+      exFuturo:   'Eu vou responder ao e-mail.',
+      exContinua: 'Eu estou a responder agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('respondi',   'respondeste',  'respondeu',   'respondemos',  'responderam'),
       preteritoImperfeito: rows('respondia',  'respondias',   'respondia',   'respondíamos', 'respondiam'),
@@ -468,7 +681,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── pensar ────────────────────────────────────────────────────────────────
   pensar: {
-    a1: { presente: rows('penso', 'pensas', 'pensa', 'pensamos', 'pensam') },
+    a1: {
+      presente: rows('penso', 'pensas', 'pensa', 'pensamos', 'pensam'),
+      exPresente: 'Eu penso muito.',
+      exFuturo:   'Eu vou pensar nisso.',
+      exContinua: 'Eu estou a pensar em ti.',
+    },
     a2: {
       preteritoPerfeito:   rows('pensei',   'pensaste',  'pensou',   'pensámos',  'pensaram'),
       preteritoImperfeito: rows('pensava',  'pensavas',  'pensava',  'pensávamos','pensavam'),
@@ -478,7 +696,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── trazer ────────────────────────────────────────────────────────────────
   trazer: {
-    a1: { presente: rows('trago', 'trazes', 'traz', 'trazemos', 'trazem') },
+    a1: {
+      presente: rows('trago', 'trazes', 'traz', 'trazemos', 'trazem'),
+      exPresente: 'Eu trago o livro.',
+      exFuturo:   'Eu vou trazer comida.',
+      exContinua: 'Eu estou a trazer a mochila.',
+    },
     a2: {
       preteritoPerfeito:   rows('trouxe',  'trouxeste', 'trouxe',  'trouxemos', 'trouxeram'),
       preteritoImperfeito: rows('trazia',  'trazias',   'trazia',  'trazíamos', 'traziam'),
@@ -488,7 +711,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── ficar ─────────────────────────────────────────────────────────────────
   ficar: {
-    a1: { presente: rows('fico', 'ficas', 'fica', 'ficamos', 'ficam') },
+    a1: {
+      presente: rows('fico', 'ficas', 'fica', 'ficamos', 'ficam'),
+      exPresente: 'Eu fico em casa.',
+      exFuturo:   'Eu vou ficar aqui.',
+      exContinua: 'Eu estou a ficar cansado.',
+    },
     a2: {
       preteritoPerfeito:   rows('fiquei',  'ficaste',  'ficou',   'ficámos',  'ficaram'),
       preteritoImperfeito: rows('ficava',  'ficavas',  'ficava',  'ficávamos','ficavam'),
@@ -498,7 +726,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── voltar ────────────────────────────────────────────────────────────────
   voltar: {
-    a1: { presente: rows('volto', 'voltas', 'volta', 'voltamos', 'voltam') },
+    a1: {
+      presente: rows('volto', 'voltas', 'volta', 'voltamos', 'voltam'),
+      exPresente: 'Eu volto à tarde.',
+      exFuturo:   'Eu vou voltar amanhã.',
+      exContinua: 'Eu estou a voltar para casa.',
+    },
     a2: {
       preteritoPerfeito:   rows('voltei',   'voltaste',  'voltou',   'voltámos',  'voltaram'),
       preteritoImperfeito: rows('voltava',  'voltavas',  'voltava',  'voltávamos','voltavam'),
@@ -508,7 +741,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── jantar ────────────────────────────────────────────────────────────────
   jantar: {
-    a1: { presente: rows('janto', 'jantas', 'janta', 'jantamos', 'jantam') },
+    a1: {
+      presente: rows('janto', 'jantas', 'janta', 'jantamos', 'jantam'),
+      exPresente: 'Eu janto às oito.',
+      exFuturo:   'Eu vou jantar fora.',
+      exContinua: 'Eu estou a jantar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('jantei',   'jantaste',  'jantou',   'jantámos',  'jantaram'),
       preteritoImperfeito: rows('jantava',  'jantavas',  'jantava',  'jantávamos','jantavam'),
@@ -518,7 +756,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── incomodar ─────────────────────────────────────────────────────────────
   incomodar: {
-    a1: { presente: rows('incomodo', 'incomodas', 'incomoda', 'incomodamos', 'incomodam') },
+    a1: {
+      presente: rows('incomodo', 'incomodas', 'incomoda', 'incomodamos', 'incomodam'),
+      exPresente: 'Eu incomodo o irmão.',
+      exFuturo:   'Eu vou incomodar menos.',
+      exContinua: 'Eu estou a incomodar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('incomodei',   'incomodaste',  'incomodou',   'incomodámos',  'incomodaram'),
       preteritoImperfeito: rows('incomodava',  'incomodavas',  'incomodava',  'incomodávamos','incomodavam'),
@@ -528,7 +771,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── medir ─────────────────────────────────────────────────────────────────
   medir: {
-    a1: { presente: rows('meço', 'medes', 'mede', 'medimos', 'medem') },
+    a1: {
+      presente: rows('meço', 'medes', 'mede', 'medimos', 'medem'),
+      exPresente: 'Eu meço a sala.',
+      exFuturo:   'Eu vou medir o livro.',
+      exContinua: 'Eu estou a medir tudo.',
+    },
     a2: {
       preteritoPerfeito:   rows('medi',   'mediste',  'mediu',   'medimos',  'mediram'),
       preteritoImperfeito: rows('media',  'medias',   'media',   'medíamos', 'mediam'),
@@ -538,7 +786,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── odiar ─────────────────────────────────────────────────────────────────
   odiar: {
-    a1: { presente: rows('odeio', 'odeias', 'odeia', 'odiamos', 'odeiam') },
+    a1: {
+      presente: rows('odeio', 'odeias', 'odeia', 'odiamos', 'odeiam'),
+      exPresente: 'Eu odeio o trânsito.',
+      exFuturo:   'Eu vou odiar isso.',
+      exContinua: 'Eu estou a odiar esperar.',
+    },
     a2: {
       preteritoPerfeito:   rows('odiei',   'odiaste',  'odiou',   'odiámos',  'odiaram'),
       preteritoImperfeito: rows('odiava',  'odiavas',  'odiava',  'odiávamos','odiavam'),
@@ -548,7 +801,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── pintar ────────────────────────────────────────────────────────────────
   pintar: {
-    a1: { presente: rows('pinto', 'pintas', 'pinta', 'pintamos', 'pintam') },
+    a1: {
+      presente: rows('pinto', 'pintas', 'pinta', 'pintamos', 'pintam'),
+      exPresente: 'Eu pinto a parede.',
+      exFuturo:   'Eu vou pintar um quadro.',
+      exContinua: 'Eu estou a pintar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('pintei',   'pintaste',  'pintou',   'pintámos',  'pintaram'),
       preteritoImperfeito: rows('pintava',  'pintavas',  'pintava',  'pintávamos','pintavam'),
@@ -558,7 +816,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── jogar ─────────────────────────────────────────────────────────────────
   jogar: {
-    a1: { presente: rows('jogo', 'jogas', 'joga', 'jogamos', 'jogam') },
+    a1: {
+      presente: rows('jogo', 'jogas', 'joga', 'jogamos', 'jogam'),
+      exPresente: 'Eu jogo futebol.',
+      exFuturo:   'Eu vou jogar amanhã.',
+      exContinua: 'Eu estou a jogar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('joguei',  'jogaste',  'jogou',   'jogámos',  'jogaram'),
       preteritoImperfeito: rows('jogava',  'jogavas',  'jogava',  'jogávamos','jogavam'),
@@ -568,7 +831,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── subir ─────────────────────────────────────────────────────────────────
   subir: {
-    a1: { presente: rows('subo', 'sobes', 'sobe', 'subimos', 'sobem') },
+    a1: {
+      presente: rows('subo', 'sobes', 'sobe', 'subimos', 'sobem'),
+      exPresente: 'Eu subo as escadas.',
+      exFuturo:   'Eu vou subir ao topo.',
+      exContinua: 'Eu estou a subir agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('subi',   'subiste',  'subiu',   'subimos',  'subiram'),
       preteritoImperfeito: rows('subia',  'subias',   'subia',   'subíamos', 'subiam'),
@@ -578,7 +846,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── caber ─────────────────────────────────────────────────────────────────
   caber: {
-    a1: { presente: rows('caibo', 'cabes', 'cabe', 'cabemos', 'cabem') },
+    a1: {
+      presente: rows('caibo', 'cabes', 'cabe', 'cabemos', 'cabem'),
+      exPresente: 'Eu caibo na cadeira.',
+      exFuturo:   'Eu vou caber aqui.',
+      exContinua: 'Eu estou a caber bem.',
+    },
     a2: {
       preteritoPerfeito:   rows('coube',   'coubeste',  'coube',   'coubemos',  'couberam'),
       preteritoImperfeito: rows('cabia',   'cabias',    'cabia',   'cabíamos',  'cabiam'),
@@ -588,7 +861,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── aterrar ───────────────────────────────────────────────────────────────
   aterrar: {
-    a1: { presente: rows('aterro', 'aterras', 'aterra', 'aterramos', 'aterram') },
+    a1: {
+      presente: rows('aterro', 'aterras', 'aterra', 'aterramos', 'aterram'),
+      exPresente: 'O avião aterra agora.',
+      exFuturo:   'O avião vai aterrar em breve.',
+      exContinua: 'O avião está a aterrar.',
+    },
     a2: {
       preteritoPerfeito:   rows('aterrei',   'aterraste',  'aterrou',   'aterrámos',  'aterraram'),
       preteritoImperfeito: rows('aterrava',  'aterravas',  'aterrava',  'aterrávamos','aterravam'),
@@ -598,7 +876,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── parar ─────────────────────────────────────────────────────────────────
   parar: {
-    a1: { presente: rows('paro', 'paras', 'para', 'paramos', 'param') },
+    a1: {
+      presente: rows('paro', 'paras', 'para', 'paramos', 'param'),
+      exPresente: 'Eu paro no sinal.',
+      exFuturo:   'Eu vou parar aqui.',
+      exContinua: 'Eu estou a parar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('parei',   'paraste',  'parou',   'parámos',  'pararam'),
       preteritoImperfeito: rows('parava',  'paravas',  'parava',  'parávamos','paravam'),
@@ -608,7 +891,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── chorar ────────────────────────────────────────────────────────────────
   chorar: {
-    a1: { presente: rows('choro', 'choras', 'chora', 'choramos', 'choram') },
+    a1: {
+      presente: rows('choro', 'choras', 'chora', 'choramos', 'choram'),
+      exPresente: 'Eu choro de alegria.',
+      exFuturo:   'Eu vou chorar no filme.',
+      exContinua: 'Eu estou a chorar agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('chorei',   'choraste',  'chorou',   'chorámos',  'choraram'),
       preteritoImperfeito: rows('chorava',  'choravas',  'chorava',  'chorávamos','choravam'),
@@ -618,7 +906,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── esquecer ──────────────────────────────────────────────────────────────
   esquecer: {
-    a1: { presente: rows('esqueço', 'esqueces', 'esquece', 'esquecemos', 'esquecem') },
+    a1: {
+      presente: rows('esqueço', 'esqueces', 'esquece', 'esquecemos', 'esquecem'),
+      exPresente: 'Eu esqueço as chaves.',
+      exFuturo:   'Eu vou esquecer isso.',
+      exContinua: 'Eu estou a esquecer tudo.',
+    },
     a2: {
       preteritoPerfeito:   rows('esqueci',   'esqueceste',  'esqueceu',   'esquecemos',  'esqueceram'),
       preteritoImperfeito: rows('esquecia',  'esquecias',   'esquecia',   'esquecíamos', 'esqueciam'),
@@ -629,7 +922,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
   // ── levantar-me ───────────────────────────────────────────────────────────
   // Stored under the hyphenated key as it appears in words.ts
   'levantar-me': {
-    a1: { presente: rows('levanto-me', 'levantas-te', 'levanta-se', 'levantamo-nos', 'levantam-se') },
+    a1: {
+      presente: rows('levanto-me', 'levantas-te', 'levanta-se', 'levantamo-nos', 'levantam-se'),
+      exPresente: 'Eu levanto-me cedo.',
+      exFuturo:   'Eu vou levantar-me às sete.',
+      exContinua: 'Eu estou a levantar-me agora.',
+    },
     a2: {
       preteritoPerfeito:   rows('levantei-me',   'levantaste-te',  'levantou-se',   'levantámo-nos',  'levantaram-se'),
       preteritoImperfeito: rows('levantava-me',  'levantavas-te',  'levantava-se',  'levantávamo-nos','levantavam-se'),
@@ -639,7 +937,12 @@ export const verbConjugations: Record<string, VerbConjugation> = {
 
   // ── parecer ───────────────────────────────────────────────────────────────
   parecer: {
-    a1: { presente: rows('pareço', 'pareces', 'parece', 'parecemos', 'parecem') },
+    a1: {
+      presente: rows('pareço', 'pareces', 'parece', 'parecemos', 'parecem'),
+      exPresente: 'Eu pareço cansado.',
+      exFuturo:   'Eu vou parecer melhor.',
+      exContinua: 'Eu estou a parecer bem.',
+    },
     a2: {
       preteritoPerfeito:   rows('pareceu',  'pareceste',  'pareceu',   'parecemos',  'pareceram'),
       preteritoImperfeito: rows('parecia',  'parecias',   'parecia',   'parecíamos', 'pareciam'),
