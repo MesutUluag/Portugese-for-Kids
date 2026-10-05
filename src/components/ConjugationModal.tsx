@@ -34,11 +34,14 @@ function AudioBtn({ form }: { form: string }) {
 interface A1TableProps {
   rows: ConjugationRow[];
   infinitive: string;
-  language: 'en' | 'tr';
+  exPresente: string;
+  exFuturo: string;
+  exContinua: string;
 }
 
-function A1Table({ rows, infinitive, language: _language }: A1TableProps) {
+function A1Table({ rows, infinitive, exPresente, exFuturo, exContinua }: A1TableProps) {
   return (
+    <>
     <div className="conj-table-wrapper">
       <table className="conj-table">
         <thead>
@@ -71,6 +74,12 @@ function A1Table({ rows, infinitive, language: _language }: A1TableProps) {
         </tbody>
       </table>
     </div>
+    <div className="conj-examples-row">
+      <span className="conj-example">{`💬 ${exPresente}`}</span>
+      <span className="conj-example">{`💬 ${exFuturo}`}</span>
+      <span className="conj-example">{`💬 ${exContinua}`}</span>
+    </div>
+    </>
   );
 }
 
@@ -178,7 +187,13 @@ export default function ConjugationModal({ verb, initialLevel, language, onClose
         {/* ── A1 content ─────────────────────────────────────────────── */}
         {activeLevel === 'a1' && (
           <div className="conj-content">
-            <A1Table rows={data.a1.presente} infinitive={verb} language={language} />
+            <A1Table
+              rows={data.a1.presente}
+              infinitive={verb}
+              exPresente={data.a1.exPresente}
+              exFuturo={data.a1.exFuturo}
+              exContinua={data.a1.exContinua}
+            />
           </div>
         )}
 
