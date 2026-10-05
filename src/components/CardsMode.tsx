@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import { kidsWords, Word } from '../data/words';
 import { speakText } from '../utils/speech';
+import { verbConjugations } from '../data/verbConjugations';
+import ConjugationModal from './ConjugationModal';
+import { BookOpen } from 'lucide-react';
 import '../styles/CardsMode.scss';
 
 interface Props {
@@ -27,6 +30,9 @@ const CATEGORY_EMOJI: Record<string, string> = {
   Time:         '⏰',
   Weather:      '☁️',
   Phrases:      '💬',
+  Nouns:        '🔤',
+  Pronouns:     '👉',
+  Adverbs:      '⚡',
 };
 
 const CATEGORY_TR: Record<string, string> = {
@@ -46,11 +52,15 @@ const CATEGORY_TR: Record<string, string> = {
   Time:           'Zaman',
   Weather:        'Hava Durumu',
   Phrases:        'İfadeler',
+  Nouns:          'İsimler',
+  Pronouns:       'Zamirler',
+  Adverbs:        'Zarflar',
 };
 
 export default function CardsMode({ language }: Props): React.ReactElement {
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [selectedVerb, setSelectedVerb] = useState<string | null>(null);
 
   // Shuffle the words list once on mount so the learning cards appear in a fresh, randomized order each visit
   const [shuffledWords] = useState<Word[]>(() => shuffleArray(kidsWords));
@@ -101,17 +111,48 @@ export default function CardsMode({ language }: Props): React.ReactElement {
       <div className="kids-grid">
         {filtered.map((w) => (
           <div
-            key={`${w.pt}-${w.en}`}
-            className="kids-card"
-            onClick={() => speakText(w.pt)}
-          >
-            <span className="sound-icon">🔊</span>
-            <span className={`kids-emoji${w.category === 'Numbers' || /^\d{2}:\d{2}$/.test(w.emoji) ? ' kids-emoji--number' : ''}`}>{w.emoji}</span>
-            <div className="kids-pt">{w.pt}</div>
-            <div className="kids-en">{language === 'tr' ? w.tr : w.en}</div>
-          </div>
+              key={`${w.pt}-${w.en}`}
+              className="kids-card"
+              onClick={() => speakText(w.pt)}
+            >
+              <span className="sound-icon">🔊</span>
+              <span className={`kids-emoji${w.category === 'Numbers' || /^\d{2}:\d{2}$/.test(w.emoji) ? ' kids-emoji--number' : ''}`}>{w.emoji}</span>
+              <div className="kids-pt">{w.pt}</div>
+              <div className={`kids-en${w.category === 'Verbs' && verbConjugations[w.pt] ? ' kids-en--verb' : ''}`}>
+                {w.category === 'Verbs' && verbConjugations[w.pt]
+                  ? (() => {
+                      const text = language === 'tr' ? w.tr : w.en;
+                      const parenIdx = text.indexOf(' (');
+                      if (parenIdx === -1) return text;
+                      return <>{text.slice(0, parenIdx)}<br /><span className="kids-en-paren">{text.slice(parenIdx + 1)}</span></>;
+                    })()
+                  : (language === 'tr' ? w.tr : w.en)
+                }
+              </div>
+              {w.category === 'Verbs' && verbConjugations[w.pt] && (
+                <button
+                  className="verb-conj-btn"
+                  aria-label={`Show conjugations for ${w.pt}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedVerb(w.pt);
+                  }}
+                >
+                  <BookOpen size={16} color="white" strokeWidth={2} />
+                </button>
+              )}
+            </div>
         ))}
       </div>
+
+      {selectedVerb && (
+        <ConjugationModal
+          verb={selectedVerb}
+          initialLevel="a1"
+          language={language}
+          onClose={() => setSelectedVerb(null)}
+        />
+      )}
     </>
   );
 }
