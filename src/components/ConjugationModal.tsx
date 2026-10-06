@@ -37,10 +37,16 @@ interface A1TableProps {
   exPresente: string;
   exFuturo: string;
   exContinua: string;
+  exPresenteEn: string;
+  exFuturoEn: string;
+  exContinuaEn: string;
+  exPresenteTr: string;
+  exFuturoTr: string;
+  exContinuaTr: string;
   language: 'en' | 'tr';
 }
 
-function A1Table({ rows, infinitive, exPresente, exFuturo, exContinua, language }: A1TableProps) {
+function A1Table({ rows, infinitive, exPresente, exFuturo, exContinua, exPresenteEn, exFuturoEn, exContinuaEn, exPresenteTr, exFuturoTr, exContinuaTr, language }: A1TableProps) {
   const isTr = language === 'tr';
 
   const presenteHint  = isTr ? '🟢 Şu an / Her zaman'  : '🟢 Right now / Always';
@@ -91,9 +97,18 @@ function A1Table({ rows, infinitive, exPresente, exFuturo, exContinua, language 
       </table>
     </div>
     <div className="conj-examples-row">
-      <span className="conj-example">{`💬 ${exPresente}`}</span>
-      <span className="conj-example">{`💬 ${exFuturo}`}</span>
-      <span className="conj-example">{`💬 ${exContinua}`}</span>
+      <span className="conj-example">
+        {`💬 ${exPresente}`}
+        <span className="conj-example-translation">{isTr ? exPresenteTr : exPresenteEn}</span>
+      </span>
+      <span className="conj-example">
+        {`💬 ${exFuturo}`}
+        <span className="conj-example-translation">{isTr ? exFuturoTr : exFuturoEn}</span>
+      </span>
+      <span className="conj-example">
+        {`💬 ${exContinua}`}
+        <span className="conj-example-translation">{isTr ? exContinuaTr : exContinuaEn}</span>
+      </span>
     </div>
     </>
   );
@@ -209,6 +224,12 @@ export default function ConjugationModal({ verb, initialLevel, language, onClose
               exPresente={data.a1.exPresente}
               exFuturo={data.a1.exFuturo}
               exContinua={data.a1.exContinua}
+              exPresenteEn={data.a1.exPresenteEn}
+              exFuturoEn={data.a1.exFuturoEn}
+              exContinuaEn={data.a1.exContinuaEn}
+              exPresenteTr={data.a1.exPresenteTr}
+              exFuturoTr={data.a1.exFuturoTr}
+              exContinuaTr={data.a1.exContinuaTr}
               language={language}
             />
           </div>
