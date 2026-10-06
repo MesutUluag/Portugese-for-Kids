@@ -37,9 +37,16 @@ interface A1TableProps {
   exPresente: string;
   exFuturo: string;
   exContinua: string;
+  language: 'en' | 'tr';
 }
 
-function A1Table({ rows, infinitive, exPresente, exFuturo, exContinua }: A1TableProps) {
+function A1Table({ rows, infinitive, exPresente, exFuturo, exContinua, language }: A1TableProps) {
+  const isTr = language === 'tr';
+
+  const presenteHint  = isTr ? '🟢 Şu an / Her zaman'  : '🟢 Right now / Always';
+  const futuroHint    = isTr ? '🔜 Yakın gelecek'       : '🔜 Near future';
+  const continuaHint  = isTr ? '🔁 Devam eden eylem'    : '🔁 Ongoing action';
+
   return (
     <>
     <div className="conj-table-wrapper">
@@ -47,9 +54,18 @@ function A1Table({ rows, infinitive, exPresente, exFuturo, exContinua }: A1Table
         <thead>
           <tr>
             <th>PRONOME</th>
-            <th>PRESENTE</th>
-            <th>FUTURO PRÓXIMO</th>
-            <th>AÇÃO CONTÍNUA</th>
+            <th>
+              PRESENTE
+              <span className="conj-th-hint">{presenteHint}</span>
+            </th>
+            <th>
+              FUTURO PRÓXIMO
+              <span className="conj-th-hint">{futuroHint}</span>
+            </th>
+            <th>
+              AÇÃO CONTÍNUA
+              <span className="conj-th-hint">{continuaHint}</span>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -193,6 +209,7 @@ export default function ConjugationModal({ verb, initialLevel, language, onClose
               exPresente={data.a1.exPresente}
               exFuturo={data.a1.exFuturo}
               exContinua={data.a1.exContinua}
+              language={language}
             />
           </div>
         )}
