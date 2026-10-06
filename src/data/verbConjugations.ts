@@ -19,6 +19,17 @@ export interface ConjugationRow {
   form: string;
 }
 
+export interface SpecialUse {
+  formula: string;          // e.g. "saber + Infinitivo"
+  descEn: string;           // e.g. "to know how to do something"
+  descTr: string;           // e.g. "bir şeyi nasıl yapacağını bilmek"
+  examples: {
+    pt: string;
+    en: string;
+    tr: string;
+  }[];
+}
+
 export interface VerbConjugation {
   a1: {
     presente: ConjugationRow[];
@@ -31,6 +42,7 @@ export interface VerbConjugation {
     exPresenteTr: string;
     exFuturoTr: string;
     exContinuaTr: string;
+    specialUse?: SpecialUse;
   };
   a2: {
     preteritoPerfeito: ConjugationRow[];
@@ -110,6 +122,17 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       exPresenteTr: 'Bir kitabım var.',
       exFuturoTr:   'Yarın derslerim olacak.',
       exContinuaTr: 'Sorun yaşıyorum.',
+      specialUse: {
+        formula: 'ter + de/que + Infinitivo',
+        descEn: 'to have to do something (obligation)',
+        descTr: 'bir şeyi yapmak zorunda olmak (zorunluluk)',
+        examples: [
+          { pt: 'Eu tenho de estudar.',              en: 'I have to study.',                   tr: 'Çalışmam gerekiyor.' },
+          { pt: 'Ela tem de ir à escola.',           en: 'She has to go to school.',           tr: 'Okula gitmesi gerekiyor.' },
+          { pt: 'Temos de comer agora.',             en: 'We have to eat now.',                tr: 'Şimdi yememiz gerekiyor.' },
+          { pt: 'Tu tens de fazer os trabalhos de casa.', en: 'You have to do your homework.', tr: 'Ev ödevini yapman gerekiyor.' },
+        ],
+      },
     },
     a2: {
       preteritoPerfeito:   rows('tive',   'tiveste',  'teve',   'tivemos',  'tiveram'),
@@ -656,6 +679,17 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       exPresenteTr: 'Müzikten hoşlanıyorum.',
       exFuturoTr:   'Bu filmden hoşlanacağım.',
       exContinuaTr: 'Çok beğeniyorum.',
+      specialUse: {
+        formula: 'gostar + de + substantivo/infinitivo',
+        descEn: 'always needs "de" — to like something / doing something',
+        descTr: 'her zaman "de" ister — bir şeyden/yapmaktan hoşlanmak',
+        examples: [
+          { pt: 'Eu gosto de chocolate.',        en: 'I like chocolate.',             tr: 'Çikolatayı severim.' },
+          { pt: 'Ela gosta de nadar.',           en: 'She likes swimming.',           tr: 'Yüzmeyi seviyor.' },
+          { pt: 'Gostamos de música.',           en: 'We like music.',                tr: 'Müzikten hoşlanıyoruz.' },
+          { pt: 'Gostas de correr?',             en: 'Do you like running?',          tr: 'Koşmayı sever misin?' },
+        ],
+      },
     },
     a2: {
       preteritoPerfeito:   rows('gostei',   'gostaste',  'gostou',   'gostámos',  'gostaram'),
@@ -677,6 +711,17 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       exPresenteTr: 'Dondurma istiyorum.',
       exFuturoTr:   'Daha fazlasını isteyeceğim.',
       exContinuaTr: 'Dışarı çıkmak istiyorum.',
+      specialUse: {
+        formula: 'querer + Infinitivo',
+        descEn: 'to want to do something',
+        descTr: 'bir şey yapmak istemek',
+        examples: [
+          { pt: 'Eu quero comer pizza.',         en: 'I want to eat pizza.',          tr: 'Pizza yemek istiyorum.' },
+          { pt: 'Ela quer dormir.',              en: 'She wants to sleep.',           tr: 'Uyumak istiyor.' },
+          { pt: 'Eles querem brincar.',          en: 'They want to play.',            tr: 'Oynamak istiyorlar.' },
+          { pt: 'Queres beber água?',            en: 'Do you want to drink water?',   tr: 'Su içmek ister misin?' },
+        ],
+      },
     },
     a2: {
       preteritoPerfeito:   rows('quis',    'quiseste',  'quis',    'quisemos',  'quiseram'),
@@ -698,6 +743,17 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       exPresenteTr: 'Yardım edebilirim.',
       exFuturoTr:   'Yarın gidebileceğim.',
       exContinuaTr: 'Çalışmayı başarıyorum.',
+      specialUse: {
+        formula: 'poder + Infinitivo',
+        descEn: 'can / to be able to do something',
+        descTr: 'bir şeyi yapabilmek (yetenek / izin)',
+        examples: [
+          { pt: 'Posso entrar?',                en: 'Can I come in?',                tr: 'Girebilir miyim?' },
+          { pt: 'Ela pode falar inglês.',        en: 'She can speak English.',        tr: 'İngilizce konuşabiliyor.' },
+          { pt: 'Não posso sair hoje.',          en: 'I can\'t go out today.',        tr: 'Bugün çıkamıyorum.' },
+          { pt: 'Podemos ajudar?',              en: 'Can we help?',                  tr: 'Yardım edebilir miyiz?' },
+        ],
+      },
     },
     a2: {
       preteritoPerfeito:   rows('pude',    'pudeste',  'pôde',    'pudemos',  'puderam'),
@@ -719,6 +775,18 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       exPresenteTr: 'Cevabı biliyorum.',
       exFuturoTr:   'Sonucu öğreneceğim.',
       exContinuaTr: 'Daha çok öğreniyorum.',
+      specialUse: {
+        formula: 'saber + Infinitivo',
+        descEn: 'to know how to do something',
+        descTr: 'bir şeyi nasıl yapacağını bilmek',
+        examples: [
+          { pt: 'Ele sabe nadar.',              en: 'He knows how to swim.',          tr: 'Yüzmeyi biliyor.' },
+          { pt: 'Eles sabem correr rápido.',    en: 'They know how to run fast.',     tr: 'Hızlı koşmayı biliyorlar.' },
+          { pt: 'Eu não sei cozinhar.',         en: 'I don\'t know how to cook.',     tr: 'Yemek yapmayı bilmiyorum.' },
+          { pt: 'O menino sabe escrever.',      en: 'The boy knows how to write.',    tr: 'Çocuk yazmayı biliyor.' },
+          { pt: 'Sabes ler em português?',      en: 'Do you know how to read in Portuguese?', tr: 'Portekizce okuyabiliyor musun?' },
+        ],
+      },
     },
     a2: {
       preteritoPerfeito:   rows('soube',   'soubeste',  'soube',   'soubemos',  'souberam'),
@@ -1313,6 +1381,153 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('pareceu',  'pareceste',  'pareceu',   'parecemos',  'pareceram'),
       preteritoImperfeito: rows('parecia',  'parecias',   'parecia',   'parecíamos', 'pareciam'),
       participioPassado: 'parecido',
+    },
+  },
+  // ── tocar ─────────────────────────────────────────────────────────────────
+  tocar: {
+    a1: {
+      presente: rows('toco', 'tocas', 'toca', 'tocamos', 'tocam'),
+      exPresente: 'Eu toco piano.',
+      exFuturo:   'Eu vou tocar guitarra.',
+      exContinua: 'Eu estou a tocar agora.',
+      exPresenteEn: 'I play the piano.',
+      exFuturoEn:   'I am going to play the guitar.',
+      exContinuaEn: 'I am playing now.',
+      exPresenteTr: 'Piyano çalıyorum.',
+      exFuturoTr:   'Gitar çalacağım.',
+      exContinuaTr: 'Şu an çalıyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('toquei',  'tocaste',  'tocou',   'tocámos',  'tocaram'),
+      preteritoImperfeito: rows('tocava',  'tocavas',  'tocava',  'tocávamos','tocavam'),
+      participioPassado: 'tocado',
+    },
+  },
+
+  // ── encher ────────────────────────────────────────────────────────────────
+  encher: {
+    a1: {
+      presente: rows('encho', 'enches', 'enche', 'enchemos', 'enchem'),
+      exPresente: 'Eu encho o copo de água.',
+      exFuturo:   'Eu vou encher o balão.',
+      exContinua: 'Eu estou a encher a mochila.',
+      exPresenteEn: 'I fill the glass with water.',
+      exFuturoEn:   'I am going to blow up the balloon.',
+      exContinuaEn: 'I am filling the backpack.',
+      exPresenteTr: 'Bardağı suyla dolduruyorum.',
+      exFuturoTr:   'Balonu şişireceğim.',
+      exContinuaTr: 'Sırt çantasını dolduruyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('enchi',   'encheste',  'encheu',   'enchemos',  'encheram'),
+      preteritoImperfeito: rows('enchia',  'enchias',   'enchia',   'enchíamos', 'enchiam'),
+      participioPassado: 'enchido',
+    },
+  },
+
+  // ── mentir ────────────────────────────────────────────────────────────────
+  mentir: {
+    a1: {
+      presente: rows('minto', 'mentes', 'mente', 'mentimos', 'mentem'),
+      exPresente: 'O menino mente para a mãe.',
+      exFuturo:   'Eu vou mentir para não me chatear.',
+      exContinua: 'Eu estou a mentir um bocado.',
+      exPresenteEn: 'The boy lies to his mum.',
+      exFuturoEn:   'I am going to lie to avoid trouble.',
+      exContinuaEn: 'I am lying a little.',
+      exPresenteTr: 'Çocuk annesine yalan söylüyor.',
+      exFuturoTr:   'Sorun çıkarmamak için yalan söyleyeceğim.',
+      exContinuaTr: 'Biraz yalan söylüyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('menti',   'mentiste',  'mentiu',   'mentimos',  'mentiram'),
+      preteritoImperfeito: rows('mentia',  'mentias',   'mentia',   'mentíamos', 'mentiam'),
+      participioPassado: 'mentido',
+    },
+  },
+
+  // ── desistir ──────────────────────────────────────────────────────────────
+  desistir: {
+    a1: {
+      presente: rows('desisto', 'desistes', 'desiste', 'desistimos', 'desistem'),
+      exPresente: 'Eu desisto quando estou cansado.',
+      exFuturo:   'Eu vou desistir da corrida.',
+      exContinua: 'Eu estou a desistir do jogo.',
+      exPresenteEn: 'I give up when I am tired.',
+      exFuturoEn:   'I am going to give up the race.',
+      exContinuaEn: 'I am giving up the game.',
+      exPresenteTr: 'Yorulunca vazgeçiyorum.',
+      exFuturoTr:   'Yarıştan vazgeçeceğim.',
+      exContinuaTr: 'Oyundan vazgeçiyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('desisti',   'desististe',  'desistiu',   'desistimos',  'desistiram'),
+      preteritoImperfeito: rows('desistia',  'desistias',   'desistia',   'desistíamos', 'desistiam'),
+      participioPassado: 'desistido',
+    },
+  },
+
+  // ── pedir ─────────────────────────────────────────────────────────────────
+  pedir: {
+    a1: {
+      presente: rows('peço', 'pedes', 'pede', 'pedimos', 'pedem'),
+      exPresente: 'Eu peço ajuda.',
+      exFuturo:   'Eu vou pedir uma pizza.',
+      exContinua: 'Eu estou a pedir desculpa.',
+      exPresenteEn: 'I ask for help.',
+      exFuturoEn:   'I am going to order a pizza.',
+      exContinuaEn: 'I am asking for forgiveness.',
+      exPresenteTr: 'Yardım istiyorum.',
+      exFuturoTr:   'Pizza sipariş edeceğim.',
+      exContinuaTr: 'Özür diliyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('pedi',   'pediste',  'pediu',   'pedimos',  'pediram'),
+      preteritoImperfeito: rows('pedia',  'pedias',   'pedia',   'pedíamos', 'pediam'),
+      participioPassado: 'pedido',
+    },
+  },
+
+  // ── lembrar ───────────────────────────────────────────────────────────────
+  lembrar: {
+    a1: {
+      presente: rows('lembro', 'lembras', 'lembra', 'lembramos', 'lembram'),
+      exPresente: 'Eu lembro a palavra em português.',
+      exFuturo:   'Eu vou lembrar o teu aniversário.',
+      exContinua: 'Eu estou a lembrar-me do nome.',
+      exPresenteEn: 'I remember the word in Portuguese.',
+      exFuturoEn:   'I am going to remember your birthday.',
+      exContinuaEn: 'I am trying to remember the name.',
+      exPresenteTr: 'Portekizce kelimeyi hatırlıyorum.',
+      exFuturoTr:   'Doğum gününü hatırlayacağım.',
+      exContinuaTr: 'İsmi hatırlamaya çalışıyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('lembrei',   'lembraste',  'lembrou',   'lembrámos',  'lembraram'),
+      preteritoImperfeito: rows('lembrava',  'lembravas',  'lembrava',  'lembrávamos','lembravam'),
+      participioPassado: 'lembrado',
+    },
+  },
+
+  // ── cumpre (cumprir) ──────────────────────────────────────────────────────
+  // Keyed as 'cumpre' to match the pt field in words.ts
+  cumpre: {
+    a1: {
+      presente: rows('cumpro', 'cumpres', 'cumpre', 'cumprimos', 'cumprem'),
+      exPresente: 'Eu cumpro as regras da escola.',
+      exFuturo:   'Eu vou cumprir a minha promessa.',
+      exContinua: 'Eu estou a cumprir o trabalho de casa.',
+      exPresenteEn: 'I follow the rules at school.',
+      exFuturoEn:   'I am going to keep my promise.',
+      exContinuaEn: 'I am getting my homework done.',
+      exPresenteTr: 'Okul kurallarına uyuyorum.',
+      exFuturoTr:   'Sözümü tutacağım.',
+      exContinuaTr: 'Ev ödevimi tamamlıyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('cumpri',   'cumpriste',  'cumpriu',   'cumprimos',  'cumpriram'),
+      preteritoImperfeito: rows('cumpria',  'cumprias',   'cumpria',   'cumpríamos', 'cumpriam'),
+      participioPassado: 'cumprido',
     },
   },
 };

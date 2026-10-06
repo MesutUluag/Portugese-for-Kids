@@ -288,3 +288,50 @@
   margin-top: 2px;
 }
 
+// ── Special use block (e.g. saber + Infinitivo) ───────────────────────────────
+.conj-special-use {
+  margin-top: 10px;
+  border: 1.5px solid #d1fae5;
+  border-radius: $radius-sm;
+  background: #f0fdf4;
+  padding: 8px 10px;
+}
+
+.conj-special-use-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.conj-special-use-formula {
+  font-size: 11px;
+  font-weight: bold;
+  color: #166534;
+  background: #dcfce7;
+  border-radius: $radius-pill;
+  padding: 2px 8px;
+  white-space: nowrap;
+
+  @media (min-width: 480px) {
+    font-size: 12px;
+  }
+}
+
+.conj-special-use-desc {
+  font-size: 11px;
+  color: #166534;
+  font-style: italic;
+
+  @media (min-width: 480px) {
+    font-size: 12px;
+  }
+}
+
+.conj-special-use-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
