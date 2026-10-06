@@ -162,6 +162,10 @@ export const kidsWords: Word[] = [
   { pt: "encher", en: "to fill", tr: "doldurmak", emoji: "🪣", category: "Verbs" },
   { pt: "mentir", en: "to lie", tr: "yalan söylemek", emoji: "🤥", category: "Verbs" },
   { pt: "sabe", en: "knows / you know", tr: "biliyor / bilirsiniz", emoji: "💡", category: "Verbs" },
+  { pt: "desistir", en: "to give up", tr: "vazgeçmek", emoji: "🏳️", category: "Verbs" },
+  { pt: "pedir", en: "to ask / request", tr: "istemek / rica etmek", emoji: "🙏", category: "Verbs" },
+  { pt: "lembrar", en: "to remember", tr: "hatırlamak", emoji: "🧠", category: "Verbs" },
+  { pt: "cumpre", en: "fulfils / it is due", tr: "yerine getirir / gerekmektedir", emoji: "✅", category: "Verbs" },
   { pt: "subir", en: "to go up / climb", tr: "çıkmak / tırmanmak", emoji: "⛰️", category: "Verbs" },
   { pt: "caber", en: "to fit", tr: "sığmak", emoji: "📦", category: "Verbs" },
   { pt: "aterrar", en: "to land (plane)", tr: "inmek (uçak)", emoji: "✈️", category: "Verbs" },
@@ -345,6 +349,7 @@ export const kidsWords: Word[] = [
   { pt: "dente", en: "tooth", tr: "diş", emoji: "🦷", category: "Body" },
   { pt: "barriga", en: "belly / tummy", tr: "karın / göbek", emoji: "🤰", category: "Body" },
   { pt: "dedo", en: "finger", tr: "parmak", emoji: "👉", category: "Body" },
+  { pt: "dores de cabeça", en: "headache", tr: "baş ağrısı", emoji: "🤕", category: "Body" },
   // ── Clothes ──────────────────────────────────────────────────────────────────
   { pt: "camisola", en: "sweater / jumper", tr: "kazak", emoji: "👚", category: "Clothes" },
   { pt: "t-shirt", en: "t-shirt", tr: "tişört", emoji: "👕", category: "Clothes" },
@@ -586,6 +591,8 @@ export const kidsWords: Word[] = [
   { pt: "relógio", en: "clock / watch", tr: "saat", emoji: "⏰", category: "Nouns" },
   { pt: "outubro", en: "October", tr: "Ekim", emoji: "🍂", category: "Nouns" },
   { pt: "dobro", en: "double", tr: "iki katı / çift", emoji: "2️⃣", category: "Nouns" },
+  { pt: "coisas", en: "things", tr: "şeyler", emoji: "📦", category: "Nouns" },
+  { pt: "óculos", en: "glasses / spectacles", tr: "gözlük", emoji: "👓", category: "Nouns" },
   // ── Pronouns & Function Words ─────────────────────────────────────────────────
   { pt: "meu", en: "my", tr: "benim", emoji: "👤", category: "Pronouns" },
   { pt: "nosso", en: "our", tr: "bizim", emoji: "👥", category: "Pronouns" },
