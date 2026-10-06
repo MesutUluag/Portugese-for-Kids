@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { verbConjugations } from '../data/verbConjugations';
-import type { ConjugationRow } from '../data/verbConjugations';
+import type { ConjugationRow, SpecialUse } from '../data/verbConjugations';
 import { speakText } from '../utils/speech';
 import '../styles/ConjugationModal.scss';
 
@@ -43,10 +43,11 @@ interface A1TableProps {
   exPresenteTr: string;
   exFuturoTr: string;
   exContinuaTr: string;
+  specialUse?: SpecialUse;
   language: 'en' | 'tr';
 }
 
-function A1Table({ rows, infinitive, exPresente, exFuturo, exContinua, exPresenteEn, exFuturoEn, exContinuaEn, exPresenteTr, exFuturoTr, exContinuaTr, language }: A1TableProps) {
+function A1Table({ rows, infinitive, exPresente, exFuturo, exContinua, exPresenteEn, exFuturoEn, exContinuaEn, exPresenteTr, exFuturoTr, exContinuaTr, specialUse, language }: A1TableProps) {
   const isTr = language === 'tr';
 
   const presenteHint  = isTr ? '🟢 Şu an / Her zaman'  : '🟢 Right now / Always';
@@ -110,6 +111,27 @@ function A1Table({ rows, infinitive, exPresente, exFuturo, exContinua, exPresent
         <span className="conj-example-translation">{isTr ? exContinuaTr : exContinuaEn}</span>
       </span>
     </div>
+
+    {specialUse && (
+      <div className="conj-special-use">
+        <div className="conj-special-use-header">
+          <span className="conj-special-use-formula">{specialUse.formula}</span>
+          <span className="conj-special-use-desc">
+            {language === 'tr' ? specialUse.descTr : specialUse.descEn}
+          </span>
+        </div>
+        <div className="conj-special-use-examples">
+          {specialUse.examples.map((ex) => (
+            <span key={ex.pt} className="conj-example">
+              {`💬 ${ex.pt}`}
+              <span className="conj-example-translation">
+                {language === 'tr' ? ex.tr : ex.en}
+              </span>
+            </span>
+          ))}
+        </div>
+      </div>
+    )}
     </>
   );
 }
@@ -230,6 +252,7 @@ export default function ConjugationModal({ verb, initialLevel, language, onClose
               exPresenteTr={data.a1.exPresenteTr}
               exFuturoTr={data.a1.exFuturoTr}
               exContinuaTr={data.a1.exContinuaTr}
+              specialUse={data.a1.specialUse}
               language={language}
             />
           </div>
