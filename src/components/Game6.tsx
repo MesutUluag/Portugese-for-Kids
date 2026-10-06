@@ -63,17 +63,26 @@ const TRAY_POSITIONS = [
 ];
 
 // ─── Word filter ──────────────────────────────────────────────────────────────
+const NOUN_CATEGORIES = new Set([
+  'Family',
+  'Animals',
+  'Food & Drink',
+  'Body',
+  'Clothes',
+  'Home',
+  'School',
+  'Places',
+  'Transport',
+  'Nouns',
+]);
+
 const EXCLUDE_PATTERNS = [
-  /^to /,
-  /^(red|blue|green|yellow|white|black|pink|orange|purple|brown)$/i,
-  /^(one|two|three|four|five|six|seven|eight|nine|ten)$/i,
-  /^(big|small|beautiful|ugly|good|bad|new|old|fast|slow|hot|cold|happy|sad|tired|hungry|thirsty|sick|healthy|tall|short|easy|difficult)$/i,
-  /^(today|tomorrow|yesterday|morning|afternoon|night|evening|day|week|month|year|hour|time|sun|rain|snow|wind|cloud|weather)$/i,
-  /^(hello|goodbye|thank|please|sorry|excuse|yes|no|okay|alright)/i,
-  /\(m\)|\(f\)/, /\s/,
+  /\(m\)|\(f\)/,
+  /\s/,
 ];
+
 const puzzleWords: Word[] = kidsWords.filter(
-  ({ en }) => !EXCLUDE_PATTERNS.some(r => r.test(en)),
+  (w) => NOUN_CATEGORIES.has(w.category) && !EXCLUDE_PATTERNS.some((r) => r.test(w.en)),
 );
 
 // ─── Types ────────────────────────────────────────────────────────────────────
