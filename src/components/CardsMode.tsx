@@ -1,9 +1,11 @@
 import React, { useMemo, useState } from 'react';
-import { kidsWords, Word } from '../data/words';
+import { kidsWords, Word, prepGroupByWord } from '../data/words';
+import type { PrepGroup } from '../data/words';
 import { speakText } from '../utils/speech';
 import { verbConjugations } from '../data/verbConjugations';
 import ConjugationModal from './ConjugationModal';
-import { BookOpen } from 'lucide-react';
+import PrepositionModal from './PrepositionModal';
+import { BookOpen, Link2 } from 'lucide-react';
 import '../styles/CardsMode.scss';
 
 interface Props {
@@ -33,6 +35,7 @@ const CATEGORY_EMOJI: Record<string, string> = {
   Nouns:        '🔤',
   Pronouns:     '👉',
   Adverbs:      '⚡',
+  Prepositions: '🔗',
 };
 
 const CATEGORY_TR: Record<string, string> = {
@@ -55,12 +58,14 @@ const CATEGORY_TR: Record<string, string> = {
   Nouns:          'İsimler',
   Pronouns:       'Zamirler',
   Adverbs:        'Zarflar',
+  Prepositions:   'Edatlar',
 };
 
 export default function CardsMode({ language }: Props): React.ReactElement {
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [selectedVerb, setSelectedVerb] = useState<string | null>(null);
+  const [selectedPrepGroup, setSelectedPrepGroup] = useState<PrepGroup | null>(null);
 
   // Shuffle the words list once on mount so the learning cards appear in a fresh, randomized order each visit
   const [shuffledWords] = useState<Word[]>(() => shuffleArray(kidsWords));
@@ -141,6 +146,18 @@ export default function CardsMode({ language }: Props): React.ReactElement {
                   <BookOpen size={16} color="white" strokeWidth={2} />
                 </button>
               )}
+              {w.category === 'Prepositions' && prepGroupByWord[w.pt]?.definite.length > 0 && (
+                <button
+                  className="prep-group-btn"
+                  aria-label={`Show contractions for ${w.pt}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedPrepGroup(prepGroupByWord[w.pt]);
+                  }}
+                >
+                  <Link2 size={14} color="white" strokeWidth={2.5} />
+                </button>
+              )}
             </div>
         ))}
       </div>
@@ -151,6 +168,13 @@ export default function CardsMode({ language }: Props): React.ReactElement {
           initialLevel="a1"
           language={language}
           onClose={() => setSelectedVerb(null)}
+        />
+      )}
+      {selectedPrepGroup && (
+        <PrepositionModal
+          group={selectedPrepGroup}
+          language={language}
+          onClose={() => setSelectedPrepGroup(null)}
         />
       )}
     </>
