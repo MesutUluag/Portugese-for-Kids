@@ -161,7 +161,6 @@ export const kidsWords: Word[] = [
   { pt: "tocar", en: "to play (instrument)", tr: "çalmak (enstrüman)", emoji: "🎹", category: "Verbs" },
   { pt: "encher", en: "to fill", tr: "doldurmak", emoji: "🪣", category: "Verbs" },
   { pt: "mentir", en: "to lie", tr: "yalan söylemek", emoji: "🤥", category: "Verbs" },
-  { pt: "sabe", en: "knows / you know", tr: "biliyor / bilirsiniz", emoji: "💡", category: "Verbs" },
   { pt: "desistir", en: "to give up", tr: "vazgeçmek", emoji: "🏳️", category: "Verbs" },
   { pt: "pedir", en: "to ask / request", tr: "istemek / rica etmek", emoji: "🙏", category: "Verbs" },
   { pt: "lembrar", en: "to remember", tr: "hatırlamak", emoji: "🧠", category: "Verbs" },
