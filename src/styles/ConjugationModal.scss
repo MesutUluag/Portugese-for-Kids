@@ -111,13 +111,17 @@
   border: none;
   font-size: 22px;
   font-weight: bold;
+  line-height: 1;
+  padding: 0;
   color: $color-navy;
   cursor: pointer;
   flex-shrink: 0;
   border-radius: $radius-circle;
 
+  span { display: block; transform: translateY(-1px); }
+
   &:hover {
-    background: $color-amber-pale;
+    background: $color-blue-light;
   }
 }
 

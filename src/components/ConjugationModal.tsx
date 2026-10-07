@@ -233,7 +233,7 @@ export default function ConjugationModal({ verb, initialLevel, language, onClose
           </div>
 
           <button className="conjugation-close" onClick={onClose} aria-label="Close">
-            ×
+            <span>×</span>
           </button>
         </div>
 
