@@ -1,0 +1,307 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// PrepositionModal Styles — matches the tutorial cross-table layout
+// ─────────────────────────────────────────────────────────────────────────────
+
+@use './_variables.scss' as *;
+
+// Palette for the grid (green tones matching the tutorial screenshot)
+$grid-green:        #c8e6c9;   // header / active-row background
+$grid-green-dark:   #388e3c;   // text on green cells
+$grid-green-border: #a5d6a7;   // border between cells
+$grid-white:        #ffffff;
+$grid-pill-bg:      #f4f4f4;   // non-active contraction pill
+$grid-pill-border:  #e0e0e0;
+
+// ── Backdrop ──────────────────────────────────────────────────────────────────
+.prep-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 8px;
+
+  @media (min-width: 480px) {
+    padding: 16px;
+  }
+}
+
+// ── Modal card ────────────────────────────────────────────────────────────────
+.prep-modal {
+  background: $color-white;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-lg;
+  width: 100%;
+  max-width: 560px;
+  max-height: 92vh;
+  overflow-y: auto;
+  padding: 12px 10px 16px;
+  position: relative;
+
+  @media (min-width: 480px) {
+    padding: 16px 16px 20px;
+    max-height: 88vh;
+  }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.prep-header-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.prep-title-pill {
+  background: $grid-green-dark;
+  color: $color-white;
+  border-radius: $radius-pill;
+  font-weight: bold;
+  font-size: 11px;
+  padding: 6px 10px;
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @media (min-width: 480px) {
+    font-size: 13px;
+    padding: 7px 14px;
+  }
+}
+
+.prep-close {
+  margin-left: auto;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1;
+  padding: 0;
+  color: $color-navy;
+  cursor: pointer;
+  flex-shrink: 0;
+  border-radius: $radius-circle;
+
+  span { display: block; transform: translateY(-1px); }
+
+  &:hover {
+    background: $grid-green;
+  }
+}
+
+// ── Section label ─────────────────────────────────────────────────────────────
+.prep-section-label {
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $color-text-muted;
+  margin: 12px 0 6px;
+}
+
+// ── Grid wrapper (scroll on small screens) ────────────────────────────────────
+.prep-grid-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: $radius-sm;
+  border: 1.5px solid $grid-green-border;
+  margin-bottom: 4px;
+}
+
+// ── The cross table ───────────────────────────────────────────────────────────
+.prep-grid-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 320px;
+
+  // ── Column widths ──
+  td, th { white-space: nowrap; }
+
+  // ── Article header row ────────────────────────────────────────────────────
+  .prep-grid-corner {
+    background: $grid-green;
+    border-bottom: 1.5px solid $grid-green-border;
+    width: 110px;
+    min-width: 90px;
+
+    @media (min-width: 480px) {
+      width: 140px;
+    }
+  }
+
+  .prep-grid-art-header {
+    background: $grid-green;
+    border-left: 1.5px solid $grid-green-border;
+    border-bottom: 1.5px solid $grid-green-border;
+    padding: 6px 8px;
+    text-align: center;
+
+    @media (min-width: 480px) {
+      padding: 8px 12px;
+    }
+  }
+
+  .prep-grid-art-word {
+    display: block;
+    font-size: 14px;
+    font-weight: 900;
+    color: $grid-green-dark;
+
+    @media (min-width: 480px) {
+      font-size: 16px;
+    }
+  }
+
+  .prep-grid-art-hint {
+    display: block;
+    font-size: 9px;
+    font-weight: normal;
+    color: $grid-green-dark;
+    margin-top: 1px;
+    text-transform: none;
+    letter-spacing: 0;
+
+    @media (min-width: 480px) {
+      font-size: 10px;
+    }
+  }
+
+  // ── Body rows ─────────────────────────────────────────────────────────────
+  tbody tr {
+    border-top: 1.5px solid $grid-green-border;
+  }
+
+  // ── Left (base preposition) cell ──────────────────────────────────────────
+  .prep-grid-base-cell {
+    background: $color-white;
+    padding: 6px 8px;
+    vertical-align: middle;
+  }
+
+  .prep-grid-base-pill {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .prep-grid-base-word {
+    font-size: 14px;
+    font-weight: 900;
+    color: $color-navy;
+
+    @media (min-width: 480px) {
+      font-size: 16px;
+    }
+  }
+
+  .prep-grid-base-hint {
+    display: block;
+    width: 100%;
+    font-size: 9px;
+    color: $color-text-muted;
+    margin-top: 1px;
+    font-style: italic;
+
+    @media (min-width: 480px) {
+      font-size: 10px;
+    }
+  }
+
+  // ── Contraction cells ─────────────────────────────────────────────────────
+  .prep-grid-contr-cell {
+    padding: 5px 6px;
+    border-left: 1.5px solid $grid-green-border;
+    vertical-align: middle;
+    text-align: center;
+    background: $color-white;
+
+  }
+
+  .prep-grid-contr-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    background: $grid-white;
+    border: 1.5px solid $grid-pill-border;
+    border-radius: 10px;
+    padding: 4px 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+
+  .prep-grid-contr-word {
+    font-size: 13px;
+    font-weight: 700;
+    color: $color-navy;
+
+    @media (min-width: 480px) {
+      font-size: 15px;
+    }
+  }
+}
+
+// ── Audio button ──────────────────────────────────────────────────────────────
+.prep-audio-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0 1px;
+  vertical-align: middle;
+  line-height: 1;
+  opacity: 0.65;
+  flex-shrink: 0;
+
+  &:hover { opacity: 1; }
+}
+
+// ── Example sentences row ─────────────────────────────────────────────────────
+.prep-examples-list {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.prep-example-box {
+  flex: 1 1 150px;
+  background: #f1f8e9;
+  border: 1.5px solid $grid-green-border;
+  border-radius: $radius-sm;
+  padding: 8px 10px;
+}
+
+.prep-example-pt {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  font-weight: bold;
+  color: $grid-green-dark;
+  font-style: italic;
+
+  @media (min-width: 480px) {
+    font-size: 14px;
+  }
+}
+
+.prep-example-tr {
+  display: block;
+  font-size: 11px;
+  color: $color-text-muted;
+  margin-top: 3px;
+
+  @media (min-width: 480px) {
+    font-size: 12px;
+  }
+}
