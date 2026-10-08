@@ -1712,4 +1712,220 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       exParticipioTr: 'İki yıldır Lizbon\'da yaşıyorum.',
     },
   },
+
+  // ── ligar ─────────────────────────────────────────────────────────────────
+  ligar: {
+    a1: {
+      presente: rows('ligo', 'ligas', 'liga', 'ligamos', 'ligam'),
+      exPresente: 'Eu ligo à minha mãe todos os dias.',
+      exFuturo:   'Eu vou ligar mais tarde para ti.',
+      exContinua: 'Eu estou a ligar para o meu pai.',
+      exPresenteEn: 'I call my mother every day.',
+      exFuturoEn:   'I am going to call you later.',
+      exContinuaEn: 'I am calling my father.',
+      exPresenteTr: 'Her gün annemi arıyorum.',
+      exFuturoTr:   'Seni daha sonra arayacağım.',
+      exContinuaTr: 'Babamı arıyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('liguei',   'ligaste',  'ligou',   'ligámos',  'ligaram'),
+      preteritoImperfeito: rows('ligava',   'ligavas',  'ligava',  'ligávamos','ligavam'),
+      participioPassado: 'ligado',
+      exParticipioEn: 'I have called my grandparents on weekends.',
+      exParticipioTr: 'Hafta sonları büyükanne ve büyükbabamı aradım.',
+    },
+  },
+
+  // ── tratar ────────────────────────────────────────────────────────────────
+  tratar: {
+    a1: {
+      presente: rows('trato', 'tratas', 'trata', 'tratamos', 'tratam'),
+      exPresente: 'Eu trato do meu cão com carinho.',
+      exFuturo:   'Eu vou tratar deste assunto amanhã.',
+      exContinua: 'Eu estou a tratar dos bilhetes para o cinema.',
+      exPresenteEn: 'I take care of my dog with care.',
+      exFuturoEn:   'I am going to handle this matter tomorrow.',
+      exContinuaEn: 'I am sorting out the tickets for the cinema.',
+      exPresenteTr: 'Köpeğime sevgiyle bakıyorum.',
+      exFuturoTr:   'Bu konuyla yarın ilgileneceğim.',
+      exContinuaTr: 'Sinema biletleriyle ilgileniyorum.',
+      specialUse: {
+        formula: 'tratar de + Infinitivo / Nome',
+        descEn: 'to take care of / handle something',
+        descTr: 'bir şeyle ilgilenmek / halletmek',
+        examples: [
+          { pt: 'Eu trato de pôr a mesa para o jantar.', en: 'I take care of setting the table for dinner.', tr: 'Akşam yemeği için masayı kurmayı ben hallederim.' },
+          { pt: 'Ela trata de comprar os bilhetes.', en: 'She takes care of buying the tickets.', tr: 'Biletleri alma işini o halleder.' },
+        ],
+      },
+    },
+    a2: {
+      preteritoPerfeito:   rows('tratei',   'trataste',  'tratou',   'tratámos',  'trataram'),
+      preteritoImperfeito: rows('tratava',  'tratavas',  'tratava',  'tratávamos','tratavam'),
+      participioPassado: 'tratado',
+      exParticipioEn: 'I have handled everything very calmly.',
+      exParticipioTr: 'Her şeyi çok sakince hallettim.',
+    },
+  },
+
+  // ── apanhar ───────────────────────────────────────────────────────────────
+  apanhar: {
+    a1: {
+      presente: rows('apanho', 'apanhas', 'apanha', 'apanhamos', 'apanham'),
+      exPresente: 'Eu apanho o autocarro para a escola.',
+      exFuturo:   'Eu vou apanhar a bola no ar.',
+      exContinua: 'Eu estou a apanhar conchas na praia.',
+      exPresenteEn: 'I catch the bus to school.',
+      exFuturoEn:   'I am going to catch the ball in the air.',
+      exContinuaEn: 'I am picking up shells on the beach.',
+      exPresenteTr: 'Okula gitmek için otobüse biniyorum.',
+      exFuturoTr:   'Topu havada yakalayacağım.',
+      exContinuaTr: 'Sahilde deniz kabukları topluyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('apanhei',   'apanhaste',  'apanhou',   'apanhámos',  'apanharam'),
+      preteritoImperfeito: rows('apanhava',  'apanhavas',  'apanhava',  'apanhávamos','apanhavam'),
+      participioPassado: 'apanhado',
+      exParticipioEn: 'I have caught the train on time.',
+      exParticipioTr: 'Trene vaktinde bindim.',
+    },
+  },
+
+  // ── emprestar ─────────────────────────────────────────────────────────────
+  emprestar: {
+    a1: {
+      presente: rows('empresto', 'emprestas', 'empresta', 'emprestamos', 'emprestam'),
+      exPresente: 'Eu empresto o meu lápis ao colega.',
+      exFuturo:   'Eu vou emprestar este livro à Maria.',
+      exContinua: 'Eu estou a emprestar a minha borracha.',
+      exPresenteEn: 'I lend my pencil to my classmate.',
+      exFuturoEn:   'I am going to lend this book to Maria.',
+      exContinuaEn: 'I am lending my rubber.',
+      exPresenteTr: 'Kalemimi sınıf arkadaşıma ödünç veriyorum.',
+      exFuturoTr:   'Bu kitabı Maria\'ya ödünç vereceğim.',
+      exContinuaTr: 'Silgimi ödünç veriyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('emprestei',   'emprestaste',  'emprestou',   'emprestámos',  'emprestaram'),
+      preteritoImperfeito: rows('emprestava',  'emprestavas',  'emprestava',  'emprestávamos','emprestavam'),
+      participioPassado: 'emprestado',
+      exParticipioEn: 'I have lent my games to my cousins.',
+      exParticipioTr: 'Oyunlarımı kuzenlerime ödünç verdim.',
+    },
+  },
+
+  // ── sugerir ───────────────────────────────────────────────────────────────
+  sugerir: {
+    a1: {
+      presente: rows('sugiro', 'sugeres', 'sugere', 'sugerimos', 'sugerem'),
+      exPresente: 'Eu sugiro um passeio no parque.',
+      exFuturo:   'Eu vou sugerir um jogo novo à turma.',
+      exContinua: 'Eu estou a sugerir uma boa sobremesa.',
+      exPresenteEn: 'I suggest a walk in the park.',
+      exFuturoEn:   'I am going to suggest a new game to the class.',
+      exContinuaEn: 'I am suggesting a good dessert.',
+      exPresenteTr: 'Parkta yürüyüş yapmayı öneriyorum.',
+      exFuturoTr:   'Sınıfa yeni bir oyun önereceğim.',
+      exContinuaTr: 'İyi bir tatlı öneriyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('sugeri',   'sugeriste',  'sugeriu',   'sugerimos',  'sugeriram'),
+      preteritoImperfeito: rows('sugeria',  'sugerias',   'sugeria',   'sugeríamos', 'sugeriam'),
+      participioPassado: 'sugerido',
+      exParticipioEn: 'I have suggested interesting books.',
+      exParticipioTr: 'İlginç kitaplar önerdim.',
+    },
+  },
+
+  // ── partilhar ─────────────────────────────────────────────────────────────
+  partilhar: {
+    a1: {
+      presente: rows('partilho', 'partilhas', 'partilha', 'partilhamos', 'partilham'),
+      exPresente: 'Eu partilho o meu lanche no recreio.',
+      exFuturo:   'Eu vou partilhar o bolo com a família.',
+      exContinua: 'Eu estou a partilhar os meus lápis de cor.',
+      exPresenteEn: 'I share my snack at break time.',
+      exFuturoEn:   'I am going to share the cake with the family.',
+      exContinuaEn: 'I am sharing my coloured pencils.',
+      exPresenteTr: 'Teneffüste atıştırmalığımı paylaşıyorum.',
+      exFuturoTr:   'Pastayı ailemle paylaşacağım.',
+      exContinuaTr: 'Boya kalemlerimi paylaşıyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('partilhei',   'partilhaste',  'partilhou',   'partilhámos',  'partilharam'),
+      preteritoImperfeito: rows('partilhava',  'partilhavas',  'partilhava',  'partilhávamos','partilhavam'),
+      participioPassado: 'partilhado',
+      exParticipioEn: 'I have shared the toys with my brother.',
+      exParticipioTr: 'Oyuncakları erkek kardeşimle paylaştım.',
+    },
+  },
+
+  // ── entender ──────────────────────────────────────────────────────────────
+  entender: {
+    a1: {
+      presente: rows('entendo', 'entendes', 'entende', 'entendemos', 'entendem'),
+      exPresente: 'Eu entendo a explicação da professora.',
+      exFuturo:   'Eu vou entender tudo com mais prática.',
+      exContinua: 'Eu estou a entender a história em português.',
+      exPresenteEn: 'I understand the teacher\'s explanation.',
+      exFuturoEn:   'I will understand everything with more practice.',
+      exContinuaEn: 'I am understanding the story in Portuguese.',
+      exPresenteTr: 'Öğretmenin açıklamasını anlıyorum.',
+      exFuturoTr:   'Daha fazla pratikle her şeyi anlayacağım.',
+      exContinuaTr: 'Portekizce hikayeyi anlıyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('entendi',   'entendeste',  'entendeu',   'entendemos',  'entenderam'),
+      preteritoImperfeito: rows('entendia',  'entendias',   'entendia',   'entendíamos', 'entendiam'),
+      participioPassado: 'entendido',
+      exParticipioEn: 'I have understood all the rules.',
+      exParticipioTr: 'Tüm kuralları anladım.',
+    },
+  },
+
+  // ── ganhar ────────────────────────────────────────────────────────────────
+  ganhar: {
+    a1: {
+      presente: rows('ganho', 'ganhas', 'ganha', 'ganhamos', 'ganham'),
+      exPresente: 'Eu ganho muitas partidas de xadrez.',
+      exFuturo:   'Eu vou ganhar o jogo de futebol amanhã.',
+      exContinua: 'Eu estou a ganhar este jogo com o meu irmão.',
+      exPresenteEn: 'I win many chess matches.',
+      exFuturoEn:   'I am going to win the football match tomorrow.',
+      exContinuaEn: 'I am winning this game with my brother.',
+      exPresenteTr: 'Birçok satranç maçı kazanıyorum.',
+      exFuturoTr:   'Yarınki futbol maçını kazanacağım.',
+      exContinuaTr: 'Kardeşimle oynadığımız bu oyunu kazanıyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('ganhei',   'ganhaste',  'ganhou',   'ganhámos',  'ganharam'),
+      preteritoImperfeito: rows('ganhava',  'ganhavas',  'ganhava',  'ganhávamos','ganhavam'),
+      participioPassado: 'ganho',
+      exParticipioEn: 'I have won medals at school.',
+      exParticipioTr: 'Okulda madalyalar kazandım.',
+    },
+  },
+
+  // ── adivinhar ─────────────────────────────────────────────────────────────
+  adivinhar: {
+    a1: {
+      presente: rows('adivinho', 'adivinhas', 'adivinha', 'adivinhamos', 'adivinham'),
+      exPresente: 'Eu adivinho sempre as charadas do avô.',
+      exFuturo:   'Eu vou adivinhar o que está dentro da caixa.',
+      exContinua: 'Eu estou a adivinhar quem bateu à porta.',
+      exPresenteEn: 'I always guess grandfather\'s riddles.',
+      exFuturoEn:   'I am going to guess what is inside the box.',
+      exContinuaEn: 'I am guessing who knocked on the door.',
+      exPresenteTr: 'Büyükbabamın bilmecelerini her zaman bilirim.',
+      exFuturoTr:   'Kutunun içinde ne olduğunu tahmin edeceğim.',
+      exContinuaTr: 'Kapıyı kimin çaldığını tahmin ediyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('adivinhei',   'adivinhaste',  'adivinhou',   'adivinhámos',  'adivinharam'),
+      preteritoImperfeito: rows('adivinhava',  'adivinhavas',  'adivinhava',  'adivinhávamos','adivinhavam'),
+      participioPassado: 'adivinhado',
+      exParticipioEn: 'I have guessed all the riddles.',
+      exParticipioTr: 'Bütün bilmeceleri bildim.',
+    },
+  },
 };
