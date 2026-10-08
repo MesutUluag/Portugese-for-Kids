@@ -1,45 +1,9 @@
-import type { PrepGroup, PrepContraction, PrepExample } from './types';
+import type { PrepGroup } from './types';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Preposition Groups — used by PrepositionModal to show the full contraction
 // table when the user taps any card in the Prepositions category.
 // ─────────────────────────────────────────────────────────────────────────────
-
-export interface PrepContraction {
-  pt: string        // the contracted word
-  enHint: string    // short English label
-  trHint: string    // short Turkish label
-}
-
-export interface PrepExample {
-  pt: string
-  en: string
-  tr: string
-  /** Short use-case label, e.g. "Destination", "Recipient" */
-  label?: string
-  labelTr?: string
-}
-
-export interface PrepGroup {
-  /** Key preposition (e.g. "de") */
-  base: string
-  /** English meaning of the base preposition */
-  baseEn: string
-  /** Turkish meaning of the base preposition */
-  baseTr: string
-  /** 2–3 example sentences */
-  examples: PrepExample[]
-  /** All members of this group (including the base word itself if it's a card) */
-  members: string[]
-  /** Contraction table rows: base + definite articles */
-  definite: PrepContraction[]
-  /** Contraction table rows: base + indefinite articles (optional) */
-  indefinite?: PrepContraction[]
-  /** Informal / spoken contraction table (e.g. pra/pro for para) */
-  spoken?: PrepContraction[]
-  /** Quick-tip comparing this preposition to a similar one */
-  tip?: { en: string; tr: string }
-}
 
 export const prepGroups: PrepGroup[] = [
   // ── DE ─────────────────────────────────────────────────────────────────────
