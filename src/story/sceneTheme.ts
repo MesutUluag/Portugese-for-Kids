@@ -1,4 +1,4 @@
-import { StoryPage } from '../data/words';
+import { StoryPage } from '../data/index';
 
 // Maps emoji characters to English Wikipedia search terms
 export const emojiToSearchTerm: Record<string, string> = {

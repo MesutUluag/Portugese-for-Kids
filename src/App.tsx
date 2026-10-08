@@ -1,18 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { LayoutGrid, BookOpen, Image, Headphones, Layers, PencilLine, Puzzle, Globe, Timer, Volume2, VolumeX, ShoppingCart } from 'lucide-react';
-import { Mode, StoryPage } from './data/words';
+import { Mode, StoryPage } from './data/index';
 import { AiState, initAI, getNewStoryPage } from './utils/ai';
 import { buildStoryImagePrompt } from './story/useStoryPrefetch';
 import { fetchImageBlobUrl } from './story/useBackendImage';
-import CardsMode from './components/CardsMode';
-import StoryMode from './story/StoryMode';
-import Game1 from './components/Game1';
-import Game2 from './components/Game2';
-import Game3 from './components/Game3';
-import Game4 from './components/Game4';
-import Game5 from './components/Game5';
-import Game6 from './components/Game6';
-import Game7 from './components/Game7';
+const CardsMode = React.lazy(() => import('./components/CardsMode'));
+const StoryMode = React.lazy(() => import('./story/StoryMode'));
+const Game1 = React.lazy(() => import('./components/Game1'));
+const Game2 = React.lazy(() => import('./components/Game2'));
+const Game3 = React.lazy(() => import('./components/Game3'));
+const Game4 = React.lazy(() => import('./components/Game4'));
+const Game5 = React.lazy(() => import('./components/Game5'));
+const Game6 = React.lazy(() => import('./components/Game6'));
+const Game7 = React.lazy(() => import('./components/Game7'));
 
 const MUSIC_TRACKS = [
   'alex-morgan-kids-background-music-579469.mp3',
@@ -238,25 +238,27 @@ export default function App(): React.ReactElement {
         ))}
       </div>
 
-      {mode === 'cards' && <CardsMode language={language} />}
-      {mode === 'story' && (
-        <StoryMode
-          aiState={aiState}
-          onAiChange={(_label, _color) => {}}
-          language={language}
-          prefetchPromise={storyPrefetchRef.current ?? undefined}
-          imagePrefetchPromise={imagePrefetchRef.current ?? undefined}
-          replyPrefetchPromise={replyPrefetchRef.current ?? undefined}
-          replyImagePrefetchPromise={replyImagePrefetchRef.current ?? undefined}
-        />
-      )}
-      {mode === 'game1' && <Game1 onScore={addScore} language={language} />}
-      {mode === 'game2' && <Game2 onScore={addScore} language={language} />}
-      {mode === 'game3' && <Game3 onScore={addScore} language={language} />}
-      {mode === 'game4' && <Game4 onScore={addScore} language={language} />}
-      {mode === 'game5' && <Game5 onScore={addScore} language={language} />}
-      {mode === 'game6' && <Game6 onScore={addScore} language={language} />}
-      {mode === 'game7' && <Game7 onScore={addScore} language={language} />}
+      <Suspense fallback={<div className="loading">Loading…</div>}>
+        {mode === 'cards' && <CardsMode language={language} />}
+        {mode === 'story' && (
+          <StoryMode
+            aiState={aiState}
+            onAiChange={(_label, _color) => {}}
+            language={language}
+            prefetchPromise={storyPrefetchRef.current ?? undefined}
+            imagePrefetchPromise={imagePrefetchRef.current ?? undefined}
+            replyPrefetchPromise={replyPrefetchRef.current ?? undefined}
+            replyImagePrefetchPromise={replyImagePrefetchRef.current ?? undefined}
+          />
+        )}
+        {mode === 'game1' && <Game1 onScore={addScore} language={language} />}
+        {mode === 'game2' && <Game2 onScore={addScore} language={language} />}
+        {mode === 'game3' && <Game3 onScore={addScore} language={language} />}
+        {mode === 'game4' && <Game4 onScore={addScore} language={language} />}
+        {mode === 'game5' && <Game5 onScore={addScore} language={language} />}
+        {mode === 'game6' && <Game6 onScore={addScore} language={language} />}
+        {mode === 'game7' && <Game7 onScore={addScore} language={language} />}
+      </Suspense>
     </main>
   );
 }

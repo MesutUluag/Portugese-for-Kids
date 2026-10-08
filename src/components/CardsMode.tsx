@@ -1,6 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { kidsWords, Word, prepGroupByWord } from '../data/words';
-import type { PrepGroup } from '../data/words';
+import React, { useEffect, useMemo, useState } from 'react';
+import type { Word, PrepGroup } from '../data/index';
 import { speakText } from '../utils/speech';
 import { verbConjugations } from '../data/verbConjugations';
 import ConjugationModal from './ConjugationModal';
@@ -35,12 +34,6 @@ const CATEGORY_ORDER: string[] = [
   'Prepositions',
   'Adverbs',
   'Nouns',
-];
-
-const foundCategories = new Set(kidsWords.map((w) => w.category));
-const ALL_CATEGORIES = [
-  ...CATEGORY_ORDER.filter((cat) => foundCategories.has(cat)),
-  ...Array.from(foundCategories).filter((cat) => !CATEGORY_ORDER.includes(cat)),
 ];
 
 const CATEGORY_EMOJI: Record<string, string> = {
@@ -90,13 +83,29 @@ const CATEGORY_TR: Record<string, string> = {
 };
 
 export default function CardsMode({ language }: Props): React.ReactElement {
+  const [allWords, setAllWords]   = useState<Word[]>([]);
+  const [prepByWord, setPrepByWord] = useState<Record<string, PrepGroup>>({});
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [selectedVerb, setSelectedVerb] = useState<string | null>(null);
   const [selectedPrepGroup, setSelectedPrepGroup] = useState<PrepGroup | null>(null);
 
-  // Shuffle the words list once on mount so the learning cards appear in a fresh, randomized order each visit
-  const [shuffledWords] = useState<Word[]>(() => shuffleArray(kidsWords));
+  useEffect(() => {
+    import('../data/words').then((m) => setAllWords(shuffleArray(m.kidsWords)));
+    import('../data/prepGroups').then((m) => setPrepByWord(m.prepGroupByWord));
+  }, []);
+
+  // Derive category list once words are loaded
+  const ALL_CATEGORIES = useMemo(() => {
+    const found = new Set(allWords.map((w) => w.category));
+    return [
+      ...CATEGORY_ORDER.filter((cat) => found.has(cat)),
+      ...Array.from(found).filter((cat) => !CATEGORY_ORDER.includes(cat)),
+    ];
+  }, [allWords]);
+
+  // shuffledWords IS allWords — already shuffled on load
+  const shuffledWords = allWords;
 
   const filtered = useMemo(() => {
     let words = shuffledWords;
@@ -174,13 +183,13 @@ export default function CardsMode({ language }: Props): React.ReactElement {
                   <BookOpen size={16} color="white" strokeWidth={2} />
                 </button>
               )}
-              {w.category === 'Prepositions' && prepGroupByWord[w.pt] != null && (prepGroupByWord[w.pt].definite.length > 0 || prepGroupByWord[w.pt].examples.length > 0) && (
+              {w.category === 'Prepositions' && prepByWord[w.pt] != null && (prepByWord[w.pt].definite.length > 0 || prepByWord[w.pt].examples.length > 0) && (
                 <button
                   className="prep-group-btn"
                   aria-label={`Show contractions for ${w.pt}`}
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedPrepGroup(prepGroupByWord[w.pt]);
+                    setSelectedPrepGroup(prepByWord[w.pt]);
                   }}
                 >
                   <Link2 size={14} color="white" strokeWidth={2.5} />

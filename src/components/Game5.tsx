@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { kidsWords, Word } from '../data/words';
+import type { Word } from '../data/index';
 import { cancelSpeech, speakText } from '../utils/speech';
 import WordImage from '../commons/WordImage.tsx';
 import '../styles/Game5.scss';
@@ -10,6 +10,7 @@ interface Props {
 }
 
 export default function Game5({ onScore, language }: Props): React.ReactElement {
+  const [words, setWords] = useState<Word[]>([]);
   const [target, setTarget] = useState<Word | null>(null);
   const [scrambled, setScrambled] = useState<string[]>([]);
   const [input, setInput] = useState<string[]>([]);
@@ -28,8 +29,13 @@ export default function Game5({ onScore, language }: Props): React.ReactElement 
     setAnimClass('');
   }, []);
 
+  useEffect(() => {
+    import('../data/words').then((m) => setWords(m.kidsWords));
+  }, []);
+
   const loadNew = useCallback(() => {
-    const valid = kidsWords.filter((w) => w.pt.length >= 3 && w.pt.length <= 8 && !w.pt.includes(' '));
+    if (!words.length) return;
+    const valid = words.filter((w) => w.pt.length >= 3 && w.pt.length <= 8 && !w.pt.includes(' '));
     const t = valid[Math.floor(Math.random() * valid.length)];
     setHistory((prev) => {
       const next = [...prev, t];
@@ -37,7 +43,7 @@ export default function Game5({ onScore, language }: Props): React.ReactElement 
       return next;
     });
     loadWord(t);
-  }, [loadWord]);
+  }, [words, loadWord]);
 
   useEffect(() => { loadNew(); }, [loadNew]);
   useEffect(() => () => { cancelSpeech(); }, []);

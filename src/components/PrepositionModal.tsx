@@ -1,5 +1,5 @@
 import React from 'react';
-import type { PrepGroup } from '../data/words';
+import type { PrepGroup } from '../data/index';
 import { speakText } from '../utils/speech';
 import '../styles/PrepositionModal.scss';
 

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { kidsWords, Word } from '../data/words';
+import type { Word } from '../data/index';
 import { cancelSpeech, speakText } from '../utils/speech';
 import WordImage from '../commons/WordImage.tsx';
 import '../styles/Game2.scss';
@@ -10,6 +10,7 @@ interface Props {
 }
 
 export default function Game2({ onScore, language }: Props): React.ReactElement {
+  const [words, setWords] = useState<Word[]>([]);
   const [target, setTarget] = useState<Word | null>(null);
   const [options, setOptions] = useState<Word[]>([]);
   const [animClass, setAnimClass] = useState('');
@@ -20,18 +21,23 @@ export default function Game2({ onScore, language }: Props): React.ReactElement 
     setTimeout(() => setAnimClass(''), 600);
   };
 
+  useEffect(() => {
+    import('../data/words').then((m) => setWords(m.kidsWords));
+  }, []);
+
   const load = useCallback(() => {
-    const t = kidsWords[Math.floor(Math.random() * kidsWords.length)];
+    if (!words.length) return;
+    const t = words[Math.floor(Math.random() * words.length)];
     setTarget(t);
     setCorrectPt(null);
     speakText(t.pt);
     const opts: Word[] = [t];
     while (opts.length < 4) {
-      const rand = kidsWords[Math.floor(Math.random() * kidsWords.length)];
+      const rand = words[Math.floor(Math.random() * words.length)];
       if (!opts.some((o) => o.pt === rand.pt)) opts.push(rand);
     }
     setOptions(opts.sort(() => Math.random() - 0.5));
-  }, []);
+  }, [words]);
 
   useEffect(() => { load(); }, [load]);
   useEffect(() => () => { cancelSpeech(); }, []);
