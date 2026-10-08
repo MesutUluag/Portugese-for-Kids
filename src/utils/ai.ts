@@ -1,4 +1,4 @@
-import { StoryPage, templatePagesByContext } from '../data/words';
+import { StoryPage, templatePagesByContext } from '../data/index';
 
 export type AiState = 'backend' | 'template' | null;
 export type StoryContext =

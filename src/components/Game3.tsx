@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { kidsWords, Word } from '../data/words';
+import type { Word } from '../data/index';
 import { cancelSpeech, speakText } from '../utils/speech';
 import WordImage from '../commons/WordImage.tsx';
 import '../styles/Game3.scss';
@@ -15,22 +15,28 @@ interface Props {
 }
 
 export default function Game3({ onScore, language }: Props): React.ReactElement {
+  const [words, setWords] = useState<Word[]>([]);
   const [deck, setDeck] = useState<Word[]>([]);
   const [flipped, setFlipped] = useState<number[]>([]);
   const [matched, setMatched] = useState<number[]>([]);
   const [blocked, setBlocked] = useState(false);
 
+  useEffect(() => {
+    import('../data/words').then((m) => setWords(m.kidsWords));
+  }, []);
+
   const load = useCallback(() => {
+    if (!words.length) return;
     const selected: Word[] = [];
     while (selected.length < 3) {
-      const rand = kidsWords[Math.floor(Math.random() * kidsWords.length)];
+      const rand = words[Math.floor(Math.random() * words.length)];
       if (!selected.some((s) => s.pt === rand.pt)) selected.push(rand);
     }
     setDeck([...selected, ...selected].sort(() => Math.random() - 0.5));
     setFlipped([]);
     setMatched([]);
     setBlocked(false);
-  }, []);
+  }, [words]);
 
   useEffect(() => { load(); }, [load]);
   useEffect(() => () => { cancelSpeech(); }, []);

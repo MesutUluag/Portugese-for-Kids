@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { marketItems, MarketItem } from '../data/words';
+import type { MarketItem } from '../data/index';
 import { cancelSpeech, speakText } from '../utils/speech';
 import '../styles/Game7.scss';
 
@@ -685,6 +685,7 @@ const ConfettiBurst = React.memo(function ConfettiBurst() {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function Game7({ onScore, language }: Props): React.ReactElement {
+  const [allMarketItems, setAllMarketItems] = useState<MarketItem[]>([]);
   const [_level, setLevel]              = useState(1);
   const [_coins, setCoins]              = useState(10);
   const [_stars, setStars]              = useState(0);
@@ -718,14 +719,19 @@ export default function Game7({ onScore, language }: Props): React.ReactElement 
   // Tracks how many correct items have been tapped this round (for spoken count).
   const pendingCountRef  = useRef(0);
 
+  useEffect(() => {
+    import('../data/marketItems').then((m) => setAllMarketItems(m.marketItems));
+  }, []);
+
   // ── New round ───────────────────────────────────────────────────────────────
   const CART_CAPACITY = 15;
 
   // keepCartState: pass true when a cart-swap animation is already in progress
   // so startNewRound doesn't clobber the 'enter' / 'exit' cart state.
   const startNewRound = useCallback((clearCart = false, keepCartState = false) => {
+    if (!allMarketItems.length) return;
     // Fisher-Yates shuffle — unbiased unlike .sort(() => Math.random() - 0.5)
-    const arr = [...marketItems];
+    const arr = [...allMarketItems];
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -758,7 +764,7 @@ export default function Game7({ onScore, language }: Props): React.ReactElement 
     const text = buildOrderText(count, target);
     speechTextRef.current = text;
     setSpeechText(text);
-  }, []);
+  }, [allMarketItems]);
 
   // Announce the current order phrase — reads ref so never stale or double-fired
   const announceOrder = useCallback((delayMs = 0) => {
@@ -772,11 +778,12 @@ export default function Game7({ onScore, language }: Props): React.ReactElement 
   }, []);
 
   useEffect(() => {
+    if (!allMarketItems.length) return;
     startNewRound();
     // Announce first order after voices load
     setTimeout(() => announceOrder(), 600);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [allMarketItems]);
   useEffect(() => () => { cancelSpeech(); }, []);
 
   // Keep ref in sync so the swap logic can read cartItems synchronously

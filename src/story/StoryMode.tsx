@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Volume2, Gauge } from 'lucide-react';
-import { StoryPage } from '../data/words';
+import { StoryPage } from '../data/index';
 import { AiState, StoryContext, getNewStoryPage } from '../utils/ai';
 import { cancelSpeech, speakText } from '../utils/speech';
 import { translateToTurkish } from '../utils/translate';

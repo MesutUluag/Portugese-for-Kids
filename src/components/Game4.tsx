@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { kidsWords, Word } from '../data/words';
+import type { Word } from '../data/index';
 import { cancelSpeech, speakText } from '../utils/speech';
 import WordImage from '../commons/WordImage.tsx';
 import '../styles/Game4.scss';
@@ -12,6 +12,7 @@ interface Props {
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyzáéíóúãõç';
 
 export default function Game4({ onScore, language }: Props): React.ReactElement {
+  const [words, setWords] = useState<Word[]>([]);
   const [target, setTarget] = useState<Word | null>(null);
   const [blank, setBlank] = useState('');
   const [correctChar, setCorrectChar] = useState('');
@@ -19,8 +20,13 @@ export default function Game4({ onScore, language }: Props): React.ReactElement 
   const [animClass, setAnimClass] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
 
+  useEffect(() => {
+    import('../data/words').then((m) => setWords(m.kidsWords));
+  }, []);
+
   const load = useCallback(() => {
-    const valid = kidsWords.filter((w) => w.pt.length >= 3 && !w.pt.includes(' '));
+    if (!words.length) return;
+    const valid = words.filter((w) => w.pt.length >= 3 && !w.pt.includes(' '));
     const t = valid[Math.floor(Math.random() * valid.length)];
     setTarget(t);
     speakText(t.pt);
@@ -38,7 +44,7 @@ export default function Game4({ onScore, language }: Props): React.ReactElement 
       if (!opts.includes(rand)) opts.push(rand);
     }
     setOptions(opts.sort(() => Math.random() - 0.5));
-  }, []);
+  }, [words]);
 
   useEffect(() => { load(); }, [load]);
   useEffect(() => () => { cancelSpeech(); }, []);

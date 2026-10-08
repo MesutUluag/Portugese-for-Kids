@@ -249,15 +249,21 @@ export function useWikiImage(term: string): string | null {
   const [url, setUrl] = useState<string | null>(initialUrl);
 
   useEffect(() => {
-    if (!term) return;
-
-    // Already cached — update state only if value actually differs (avoids re-render loop)
-    if (term in cache) {
-      const resolved = cache[term] === FETCHED_NO_IMAGE ? null : (cache[term] as string);
-      // Use functional form so this is a no-op when value hasn't changed
-      setUrl(prev => (prev === resolved ? prev : resolved));
+    if (!term) {
+      setUrl(null);
       return;
     }
+
+    // Immediately resolve from cache (or reset to null) so callers never see a stale URL
+    // from a previous term while the new fetch is in-flight.
+    if (term in cache) {
+      const resolved = cache[term] === FETCHED_NO_IMAGE ? null : (cache[term] as string);
+      setUrl(resolved);
+      return;
+    }
+
+    // Term not yet cached — reset to null immediately so the consumer shows a loading state
+    setUrl(null);
 
     const keyword = wikiArticleForTerm(term);
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StoryPage } from '../data/words';
+import { StoryPage } from '../data/index';
 
 interface Props {
   page: StoryPage;

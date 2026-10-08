@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { kidsWords, Word } from '../data/words';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import type { Word } from '../data/index';
 import { cancelSpeech, speakText } from '../utils/speech';
 import { useWikiImage } from '../utils/useWikiImage';
 import '../styles/Game6.scss';
@@ -80,10 +80,6 @@ const EXCLUDE_PATTERNS = [
   /\(m\)|\(f\)/,
   /\s/,
 ];
-
-const puzzleWords: Word[] = kidsWords.filter(
-  (w) => NOUN_CATEGORIES.has(w.category) && !EXCLUDE_PATTERNS.some((r) => r.test(w.en)),
-);
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 interface Props { onScore: (pts: number) => void; language: 'en' | 'tr'; }
@@ -169,6 +165,7 @@ function drawJigsawPath(
 
 // ─── Game6 ────────────────────────────────────────────────────────────────────
 export default function Game6({ onScore, language }: Props): React.ReactElement {
+  const [words,        setWords]        = useState<Word[]>([]);
   const [target,       setTarget]       = useState<Word | null>(null);
   const [animClass,    setAnimClass]    = useState('');
   const [showFallback, setShowFallback] = useState(false);
@@ -190,6 +187,15 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
   // spinner angle (driven by render loop — no re-render needed)
   const spinnerAngleRef = useRef(0);
   const imgLoadingRef   = useRef(false);
+
+  useEffect(() => {
+    import('../data/words').then((m) => setWords(m.kidsWords));
+  }, []);
+
+  const puzzleWords = useMemo(
+    () => words.filter((w) => NOUN_CATEGORIES.has(w.category) && !EXCLUDE_PATTERNS.some((r) => r.test(w.en))),
+    [words],
+  );
 
   const wikiUrl = useWikiImage(target?.en ?? '');
 
@@ -258,10 +264,11 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
 
   // ── Load a new word ────────────────────────────────────────────────────────
   const load = useCallback(() => {
-    let next: Word;
-    do {
-      next = puzzleWords[Math.floor(Math.random() * puzzleWords.length)];
-    } while (next === targetRef.current && puzzleWords.length > 1);
+      if (!puzzleWords.length) return;
+      let next: Word;
+      do {
+        next = puzzleWords[Math.floor(Math.random() * puzzleWords.length)];
+      } while (next === targetRef.current && puzzleWords.length > 1);
     targetRef.current = next;
     solvedRef.current = false;
     imgRef.current = null;
@@ -295,7 +302,7 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
     setAnimClass('');
     setShowFallback(false);
     speakText(next.pt);
-  }, []);
+  }, [puzzleWords]);
 
   useEffect(() => { load(); }, [load]);
   useEffect(() => () => { cancelSpeech(); }, []);

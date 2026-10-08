@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { StoryPage } from '../data/words';
+import { StoryPage } from '../data/index';
 import { AiState, StoryContext } from '../utils/ai';
 import { fetchImageBlobUrl } from './useBackendImage';
 
