@@ -174,7 +174,7 @@ export default function CardsMode({ language }: Props): React.ReactElement {
                   <BookOpen size={16} color="white" strokeWidth={2} />
                 </button>
               )}
-              {w.category === 'Prepositions' && prepGroupByWord[w.pt]?.definite.length > 0 && (
+              {w.category === 'Prepositions' && prepGroupByWord[w.pt] != null && (prepGroupByWord[w.pt].definite.length > 0 || prepGroupByWord[w.pt].examples.length > 0) && (
                 <button
                   className="prep-group-btn"
                   aria-label={`Show contractions for ${w.pt}`}

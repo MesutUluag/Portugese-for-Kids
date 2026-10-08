@@ -377,7 +377,7 @@ export const kidsWords: Word[] = [
   { pt: "janela", en: "window", tr: "pencere", emoji: "🪟", category: "Home" },
   { pt: "parede", en: "wall", tr: "duvar", emoji: "🧱", category: "Home" },
   { pt: "tecto", en: "ceiling / roof", tr: "tavan / çatı", emoji: "🔝", category: "Home" },
-  { pt: "chão", en: "floor", tr: "zemin / yer", emoji: "🪵", category: "Home" },
+  { pt: "chão", en: "floor", tr: "zemin / yer", emoji: "🟫", category: "Home" },
   { pt: "escadas", en: "stairs", tr: "merdiven", emoji: "🪜", category: "Home" },
   { pt: "sala de estar", en: "living room", tr: "oturma odası", emoji: "🛋️", category: "Home" },
   { pt: "sofá", en: "sofa / couch", tr: "kanepe", emoji: "🛋️", category: "Home" },
@@ -632,7 +632,7 @@ export const kidsWords: Word[] = [
   { pt: "tão", en: "so / such", tr: "o kadar / çok", emoji: "😲", category: "Adverbs" },
   { pt: "cedo", en: "early", tr: "erken", emoji: "🌅", category: "Adverbs" },
   { pt: "atrasado", en: "late / delayed", tr: "geç / gecikmiş", emoji: "⏱️", category: "Adverbs" },
-  { pt: "para", en: "to / for / until", tr: "için / -a / -e", emoji: "➡️", category: "Adverbs" },
+  { pt: "para", en: "to / for / until", tr: "için / -a / -e", emoji: "➡️", category: "Prepositions" },
   { pt: "por", en: "for / by", tr: "tarafından / için", emoji: "🔄", category: "Adverbs" },
   { pt: "há", en: "there is / for (time)", tr: "var / -dır", emoji: "⌛", category: "Adverbs" },
   // ── Prepositions ─────────────────────────────────────────────────────────────
@@ -1315,6 +1315,9 @@ export interface PrepExample {
   pt: string
   en: string
   tr: string
+  /** Short use-case label, e.g. "Destination", "Recipient" */
+  label?: string
+  labelTr?: string
 }
 
 export interface PrepGroup {
@@ -1332,6 +1335,10 @@ export interface PrepGroup {
   definite: PrepContraction[]
   /** Contraction table rows: base + indefinite articles (optional) */
   indefinite?: PrepContraction[]
+  /** Informal / spoken contraction table (e.g. pra/pro for para) */
+  spoken?: PrepContraction[]
+  /** Quick-tip comparing this preposition to a similar one */
+  tip?: { en: string; tr: string }
 }
 
 export const prepGroups: PrepGroup[] = [
@@ -1435,15 +1442,27 @@ export const prepGroups: PrepGroup[] = [
   // ── PARA ───────────────────────────────────────────────────────────────────
   {
     base: 'para',
-    baseEn: 'to / for / towards',
-    baseTr: 'için / -a / -e doğru',
+    baseEn: 'to / for / until / towards',
+    baseTr: 'için / -a / -e / -e doğru / -e kadar',
     examples: [
-      { pt: 'Eu vou para Portugal.',         en: 'I go to Portugal.',               tr: 'Portekiz\'e gidiyorum.' },
-      { pt: 'Isto é para ti.',               en: 'This is for you.',                tr: 'Bu senin için.' },
-      { pt: 'Eu vou para casa.',             en: 'I go home.',                      tr: 'Eve gidiyorum.' },
+      { pt: 'Eu vou para Portugal.',         en: 'I go to Portugal.',               tr: 'Portekiz\'e gidiyorum.',         label: 'Destination',   labelTr: 'Varış Yeri' },
+      { pt: 'Isto é para ti.',               en: 'This is for you.',                tr: 'Bu senin için.',                 label: 'Recipient',     labelTr: 'Alıcı' },
+      { pt: 'Falta uma hora para o jantar.', en: 'There is one hour until dinner.', tr: 'Akşam yemeğine bir saat var.',   label: 'Time / Deadline', labelTr: 'Zaman / Son Tarih' },
+      { pt: 'Ela estuda para aprender.',     en: 'She studies in order to learn.',  tr: 'O öğrenmek için çalışıyor.',     label: 'Purpose',       labelTr: 'Amaç' },
+      { pt: 'Comprei flores para a mãe.',    en: 'I bought flowers for mum.',       tr: 'Annem için çiçek aldım.',        label: 'Beneficiary',   labelTr: 'Yararlanan' },
     ],
     members: ['para'],
     definite: [],
+    spoken: [
+      { pt: 'pro',  enHint: 'para + o  →  pro  (spoken, m)',     trHint: 'para + o  →  pro  (konuşma dili, eril)' },
+      { pt: 'pra',  enHint: 'para + a  →  pra  (spoken, f)',     trHint: 'para + a  →  pra  (konuşma dili, dişil)' },
+      { pt: 'pros', enHint: 'para + os →  pros (spoken, m, pl)', trHint: 'para + os →  pros (konuşma dili, eril çoğul)' },
+      { pt: 'pras', enHint: 'para + as →  pras (spoken, f, pl)', trHint: 'para + as →  pras (konuşma dili, dişil çoğul)' },
+    ],
+    tip: {
+      en: '💡 "Para" vs. "a": Use "a" for a short trip or quick visit (Vou a Lisboa → going and coming back). Use "para" for a longer stay or permanent move (Eu vou para Portugal → moving there).',
+      tr: '💡 "Para" ve "a" farkı: Kısa bir gezi için "a" kullanın (Vou a Lisboa → gidip dönmek). Uzun süreli ya da kalıcı taşınma için "para" kullanın (Eu vou para Portugal → oraya taşınıyorum).',
+    },
   },
 ];
 
