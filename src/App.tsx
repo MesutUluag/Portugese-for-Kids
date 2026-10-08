@@ -1,4 +1,5 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
+import LoadingSpinner from './commons/LoadingSpinner';
 import { LayoutGrid, BookOpen, Image, Headphones, Layers, PencilLine, Puzzle, Globe, Timer, Volume2, VolumeX, ShoppingCart } from 'lucide-react';
 import { Mode, StoryPage } from './data/index';
 import { AiState, initAI, getNewStoryPage } from './utils/ai';
@@ -238,7 +239,7 @@ export default function App(): React.ReactElement {
         ))}
       </div>
 
-      <Suspense fallback={<div className="loading">Loading…</div>}>
+      <Suspense fallback={<LoadingSpinner />}>
         {mode === 'cards' && <CardsMode language={language} />}
         {mode === 'story' && (
           <StoryMode
