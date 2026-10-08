@@ -23,7 +23,7 @@ function AudioBtn({ form }: { form: string }) {
       aria-label={`Speak ${form}`}
       onClick={(e) => {
         e.stopPropagation();
-        speakText(form);
+        speakText(form, { rate: 0.65 });
       }}
     >
       🔊

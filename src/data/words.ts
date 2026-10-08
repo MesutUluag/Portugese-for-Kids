@@ -173,6 +173,8 @@ export const kidsWords: Word[] = [
   { pt: "esquecer", en: "to forget", tr: "unutmak", emoji: "💭", category: "Verbs" },
   { pt: "levantar-me", en: "to get up", tr: "kalkmak", emoji: "🛌", category: "Verbs" },
   { pt: "parecer", en: "to seem / look like", tr: "görünmek / sanmak", emoji: "🤔", category: "Verbs" },
+  { pt: "esperar", en: "to wait / hope", tr: "beklemek / ummak", emoji: "⏳", category: "Verbs" },
+  { pt: "viver", en: "to live", tr: "yaşamak", emoji: "🏡", category: "Verbs" },
   // ── Family ───────────────────────────────────────────────────────────────────
   { pt: "pai", en: "father", tr: "baba", emoji: "👨", category: "Family" },
   { pt: "mãe", en: "mother", tr: "anne", emoji: "👩", category: "Family" },
@@ -594,6 +596,7 @@ export const kidsWords: Word[] = [
   { pt: "dobro", en: "double", tr: "iki katı / çift", emoji: "2️⃣", category: "Nouns" },
   { pt: "coisas", en: "things", tr: "şeyler", emoji: "📦", category: "Nouns" },
   { pt: "óculos", en: "glasses / spectacles", tr: "gözlük", emoji: "👓", category: "Nouns" },
+  { pt: "país", en: "country", tr: "ülke", emoji: "🌍", category: "Nouns" },
   // ── Pronouns & Function Words ─────────────────────────────────────────────────
   { pt: "meu", en: "my", tr: "benim", emoji: "👤", category: "Pronouns" },
   { pt: "nosso", en: "our", tr: "bizim", emoji: "👥", category: "Pronouns" },
@@ -647,7 +650,7 @@ export const kidsWords: Word[] = [
   { pt: "à", en: "to the (f)", tr: "-e / -a (dişil)", emoji: "🎯", category: "Prepositions" },
   { pt: "aos", en: "to the (m, pl)", tr: "-e / -a (eril çoğul)", emoji: "🎯", category: "Prepositions" },
   { pt: "às", en: "to the (f, pl)", tr: "-e / -a (dişil çoğul)", emoji: "🎯", category: "Prepositions" },
-  { pt: "do", en: "of the (m)", tr: "erkek ismin -den eki", emoji: "🏷️", category: "Prepositions" },
+  { pt: "do", en: "of / by / from — of the (m)", tr: "ait / tarafından / -den — erkek ismin -den eki", emoji: "🏷️", category: "Prepositions" },
   { pt: "da", en: "of the (f)", tr: "kadın ismin -den eki", emoji: "🏷️", category: "Prepositions" },
   { pt: "dos", en: "of the (m, pl)", tr: "eril çoğulun -den eki", emoji: "🏷️", category: "Prepositions" },
   { pt: "das", en: "of the (f, pl)", tr: "dişil çoğulun -den eki", emoji: "🏷️", category: "Prepositions" },

@@ -28,7 +28,7 @@ function AudioBtn({ form }: { form: string }) {
     <button
       className="prep-audio-btn"
       aria-label={`Speak ${form}`}
-      onClick={(e) => { e.stopPropagation(); speakText(form); }}
+      onClick={(e) => { e.stopPropagation(); speakText(form, { rate: 0.65 }); }}
     >
       🔊
     </button>
