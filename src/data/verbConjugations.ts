@@ -1530,4 +1530,46 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       participioPassado: 'cumprido',
     },
   },
+
+  // ── esperar ───────────────────────────────────────────────────────────────
+  esperar: {
+    a1: {
+      presente: rows('espero', 'esperas', 'espera', 'esperamos', 'esperam'),
+      exPresente: 'Eu espero o autocarro.',
+      exFuturo:   'Eu vou esperar por ti.',
+      exContinua: 'Eu estou a esperar na fila.',
+      exPresenteEn: 'I wait for the bus.',
+      exFuturoEn:   'I am going to wait for you.',
+      exContinuaEn: 'I am waiting in the queue.',
+      exPresenteTr: 'Otobüsü bekliyorum.',
+      exFuturoTr:   'Seni bekleyeceğim.',
+      exContinuaTr: 'Kuyrukta bekliyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('esperei',   'esperaste',  'esperou',   'esperámos',  'esperaram'),
+      preteritoImperfeito: rows('esperava',  'esperavas',  'esperava',  'esperávamos','esperavam'),
+      participioPassado: 'esperado',
+    },
+  },
+
+  // ── viver ─────────────────────────────────────────────────────────────────
+  viver: {
+    a1: {
+      presente: rows('vivo', 'vives', 'vive', 'vivemos', 'vivem'),
+      exPresente: 'Eu vivo em Lisboa.',
+      exFuturo:   'Eu vou viver no campo.',
+      exContinua: 'Eu estou a viver uma aventura.',
+      exPresenteEn: 'I live in Lisbon.',
+      exFuturoEn:   'I am going to live in the countryside.',
+      exContinuaEn: 'I am living an adventure.',
+      exPresenteTr: 'Lizbon\'da yaşıyorum.',
+      exFuturoTr:   'Kırsal kesimde yaşayacağım.',
+      exContinuaTr: 'Bir macera yaşıyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('vivi',   'viveste',  'viveu',   'vivemos',  'viveram'),
+      preteritoImperfeito: rows('vivia',  'vivias',   'vivia',   'vivíamos', 'viviam'),
+      participioPassado: 'vivido',
+    },
+  },
 };

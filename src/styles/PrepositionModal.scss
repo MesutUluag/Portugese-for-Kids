@@ -305,3 +305,135 @@ $grid-pill-border:  #e0e0e0;
     font-size: 12px;
   }
 }
+
+// ── Example label badge ───────────────────────────────────────────────────────
+.prep-example-label {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: $grid-green-dark;
+  background: $grid-green;
+  border-radius: 4px;
+  padding: 1px 5px;
+  margin-bottom: 4px;
+
+  @media (min-width: 480px) {
+    font-size: 10px;
+  }
+}
+
+// ── Formal note (above spoken table) ─────────────────────────────────────────
+.prep-formal-note {
+  font-size: 11px;
+  color: $color-text-muted;
+  font-style: italic;
+  margin: 0 0 8px;
+  line-height: 1.4;
+}
+
+// ── Spoken / informal contractions table ─────────────────────────────────────
+.prep-spoken-table {
+  border: 1.5px solid $grid-green-border;
+  border-radius: $radius-sm;
+  overflow: hidden;
+  margin-bottom: 4px;
+}
+
+.prep-spoken-header-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  background: $grid-green;
+  padding: 5px 10px;
+  gap: 8px;
+}
+
+.prep-spoken-col-head {
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: $grid-green-dark;
+
+  @media (min-width: 480px) {
+    font-size: 10px;
+  }
+}
+
+.prep-spoken-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  background: $color-white;
+  border-top: 1px solid $grid-green-border;
+}
+
+.prep-spoken-formal {
+  font-size: 11px;
+  color: $color-text-muted;
+  font-style: italic;
+
+  @media (min-width: 480px) {
+    font-size: 12px;
+  }
+}
+
+.prep-spoken-form {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+
+  strong {
+    font-size: 15px;
+    color: $color-navy;
+
+    @media (min-width: 480px) {
+      font-size: 16px;
+    }
+  }
+}
+
+.prep-spoken-example {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px;
+  font-size: 11px;
+
+  em {
+    font-style: italic;
+    font-weight: 600;
+    color: $grid-green-dark;
+  }
+
+  @media (min-width: 480px) {
+    font-size: 12px;
+  }
+}
+
+.prep-spoken-trans {
+  display: block;
+  width: 100%;
+  font-size: 10px;
+  color: $color-text-muted;
+  margin-top: 1px;
+}
+
+// ── Quick tip box ─────────────────────────────────────────────────────────────
+.prep-tip-box {
+  background: #fff8e1;
+  border: 1.5px solid #ffe082;
+  border-radius: $radius-sm;
+  padding: 10px 12px;
+  font-size: 11px;
+  color: #5d4037;
+  line-height: 1.5;
+  margin-top: 2px;
+
+  @media (min-width: 480px) {
+    font-size: 12px;
+  }
+}

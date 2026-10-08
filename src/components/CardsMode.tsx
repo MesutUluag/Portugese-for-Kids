@@ -12,8 +12,36 @@ interface Props {
   language: 'en' | 'tr';
 }
 
-// Derive the ordered list of unique categories from the words array (preserves declaration order)
-const ALL_CATEGORIES = Array.from(new Set(kidsWords.map((w) => w.category)));
+// Ordered categories following a beginner-to-advanced pedagogical flow:
+// 1. Core visual/thematic topics -> 2. Phrases -> 3. Grammar parts of speech
+const CATEGORY_ORDER: string[] = [
+  'Numbers',
+  'Colours',
+  'Family',
+  'Animals',
+  'Food & Drink',
+  'Clothes',
+  'Body',
+  'Home',
+  'School',
+  'Places',
+  'Transport',
+  'Weather',
+  'Time',
+  'Phrases',
+  'Verbs',
+  'Adjectives',
+  'Pronouns',
+  'Prepositions',
+  'Adverbs',
+  'Nouns',
+];
+
+const foundCategories = new Set(kidsWords.map((w) => w.category));
+const ALL_CATEGORIES = [
+  ...CATEGORY_ORDER.filter((cat) => foundCategories.has(cat)),
+  ...Array.from(foundCategories).filter((cat) => !CATEGORY_ORDER.includes(cat)),
+];
 
 const CATEGORY_EMOJI: Record<string, string> = {
   Verbs:        '🏃',
@@ -146,7 +174,7 @@ export default function CardsMode({ language }: Props): React.ReactElement {
                   <BookOpen size={16} color="white" strokeWidth={2} />
                 </button>
               )}
-              {w.category === 'Prepositions' && prepGroupByWord[w.pt]?.definite.length > 0 && (
+              {w.category === 'Prepositions' && prepGroupByWord[w.pt] != null && (prepGroupByWord[w.pt].definite.length > 0 || prepGroupByWord[w.pt].examples.length > 0) && (
                 <button
                   className="prep-group-btn"
                   aria-label={`Show contractions for ${w.pt}`}

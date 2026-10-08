@@ -28,7 +28,7 @@ function AudioBtn({ form }: { form: string }) {
     <button
       className="prep-audio-btn"
       aria-label={`Speak ${form}`}
-      onClick={(e) => { e.stopPropagation(); speakText(form); }}
+      onClick={(e) => { e.stopPropagation(); speakText(form, { rate: 0.65 }); }}
     >
       🔊
     </button>
@@ -96,18 +96,27 @@ export default function PrepositionModal({ group, language, onClose }: Props): R
 
   const hasDefiniteSection   = group.definite.length > 0;
   const hasIndefiniteSection = (group.indefinite?.length ?? 0) > 0;
+  const hasSpokenSection     = (group.spoken?.length ?? 0) > 0;
+  const hasTip               = !!group.tip;
 
-  const titleLabel = isTr
+  const titleLabel   = isTr
     ? `${group.base.toUpperCase()} — Edatı ve Birleşimleri`
     : `${group.base.toUpperCase()} — Preposition & Contractions`;
 
-  const defLabel   = isTr
+  const defLabel     = isTr
     ? 'Belirli Artikel + Edat Birleşimleri'
     : 'Preposition + Definite Article Contractions';
-  const indefLabel = isTr
+  const indefLabel   = isTr
     ? 'Belirsiz Artikel + Edat Birleşimleri'
     : 'Preposition + Indefinite Article Contractions';
-  const exLabel    = isTr ? 'Örnek Cümleler' : 'Example Sentences';
+  const spokenLabel  = isTr
+    ? 'Konuşma Dili Birleşimleri (Gayri Resmi)'
+    : 'Spoken / Informal Contractions';
+  const formalNote   = isTr
+    ? '📝 Resmi yazımda "para" herhangi bir artikel ile birleşmez (para o, para a … olarak ayrı yazılır).'
+    : '📝 In formal written Portuguese, "para" does not contract with articles (written separately: para o, para a …).';
+  const exLabel      = isTr ? 'Örnek Cümleler' : 'Example Sentences';
+  const tipLabel     = isTr ? 'İpucu' : 'Quick Tip';
 
   return (
     <div className="prep-backdrop" onClick={onClose}>
@@ -145,20 +154,76 @@ export default function PrepositionModal({ group, language, onClose }: Props): R
           </>
         )}
 
+        {/* ── Spoken / informal contractions ── */}
+        {hasSpokenSection && (
+          <>
+            <div className="prep-section-label">{spokenLabel}</div>
+            <p className="prep-formal-note">{formalNote}</p>
+            <div className="prep-spoken-table">
+              <div className="prep-spoken-header-row">
+                <span className="prep-spoken-col-head">Formal</span>
+                <span className="prep-spoken-col-head">Spoken</span>
+                <span className="prep-spoken-col-head">Example</span>
+              </div>
+              {group.spoken!.map((c) => {
+                const examples: Record<string, { pt: string; en: string; tr: string }> = {
+                  pro:  { pt: 'Eu vou pro mercado.',          en: 'I go to the market.',          tr: 'Pazara gidiyorum.' },
+                  pra:  { pt: 'Comprei flores pra mãe.',      en: 'I bought flowers for mum.',    tr: 'Annem için çiçek aldım.' },
+                  pros: { pt: 'Vou falar pros meninos.',      en: "I'll talk to the boys.",       tr: 'Çocuklarla konuşacağım.' },
+                  pras: { pt: 'Isto é pras meninas.',         en: 'This is for the girls.',       tr: 'Bu kızlar için.' },
+                };
+                const ex = examples[c.pt];
+                return (
+                  <div key={c.pt} className="prep-spoken-row">
+                    <span className="prep-spoken-formal">{isTr ? c.trHint.split('→')[0].trim() : c.enHint.split('→')[0].trim()}</span>
+                    <span className="prep-spoken-form">
+                      <strong>{c.pt}</strong>
+                      <AudioBtn form={c.pt} />
+                    </span>
+                    <span className="prep-spoken-example">
+                      {ex && (
+                        <>
+                          <em>{ex.pt}</em>
+                          <AudioBtn form={ex.pt} />
+                          <span className="prep-spoken-trans">{isTr ? ex.tr : ex.en}</span>
+                        </>
+                      )}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
+
         {/* ── Example sentences ── */}
         <div className="prep-section-label">{exLabel}</div>
         <div className="prep-examples-list">
-          {group.examples.map((ex) => (
-            <div key={ex.pt} className="prep-example-box">
-              <span className="prep-example-pt">
-                💬 {ex.pt} <AudioBtn form={ex.pt} />
-              </span>
-              <span className="prep-example-tr">
-                {isTr ? ex.tr : ex.en}
-              </span>
-            </div>
-          ))}
+          {group.examples.map((ex) => {
+            const label = isTr ? ex.labelTr : ex.label;
+            return (
+              <div key={ex.pt} className="prep-example-box">
+                {label && <span className="prep-example-label">{label}</span>}
+                <span className="prep-example-pt">
+                  💬 {ex.pt} <AudioBtn form={ex.pt} />
+                </span>
+                <span className="prep-example-tr">
+                  {isTr ? ex.tr : ex.en}
+                </span>
+              </div>
+            );
+          })}
         </div>
+
+        {/* ── Quick tip ── */}
+        {hasTip && (
+          <>
+            <div className="prep-section-label">{tipLabel}</div>
+            <div className="prep-tip-box">
+              {isTr ? group.tip!.tr : group.tip!.en}
+            </div>
+          </>
+        )}
 
       </div>
     </div>
