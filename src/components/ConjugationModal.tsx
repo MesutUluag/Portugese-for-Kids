@@ -99,15 +99,15 @@ function A1Table({ rows, infinitive, exPresente, exFuturo, exContinua, exPresent
     </div>
     <div className="conj-examples-row">
       <span className="conj-example">
-        {`💬 ${exPresente}`}
+        <span className="conj-example-text">{`💬 ${exPresente}`}<AudioBtn form={exPresente} /></span>
         <span className="conj-example-translation">{isTr ? exPresenteTr : exPresenteEn}</span>
       </span>
       <span className="conj-example">
-        {`💬 ${exFuturo}`}
+        <span className="conj-example-text">{`💬 ${exFuturo}`}<AudioBtn form={exFuturo} /></span>
         <span className="conj-example-translation">{isTr ? exFuturoTr : exFuturoEn}</span>
       </span>
       <span className="conj-example">
-        {`💬 ${exContinua}`}
+        <span className="conj-example-text">{`💬 ${exContinua}`}<AudioBtn form={exContinua} /></span>
         <span className="conj-example-translation">{isTr ? exContinuaTr : exContinuaEn}</span>
       </span>
     </div>
@@ -123,7 +123,7 @@ function A1Table({ rows, infinitive, exPresente, exFuturo, exContinua, exPresent
         <div className="conj-special-use-examples">
           {specialUse.examples.map((ex) => (
             <span key={ex.pt} className="conj-example">
-              {`💬 ${ex.pt}`}
+              <span className="conj-example-text">{`💬 ${ex.pt}`}<AudioBtn form={ex.pt} /></span>
               <span className="conj-example-translation">
                 {language === 'tr' ? ex.tr : ex.en}
               </span>
@@ -148,8 +148,10 @@ function A2Table({ perfeito, imperfeito, language }: A2TableProps) {
   const perfeitoHint   = isTr ? '🎯 Bitmiş / Dün'         : '🎯 Completed / Yesterday';
   const imperfeitoHint = isTr ? '🔄 Alışkanlık / Geçmiş'  : '🔄 Habit / Past';
 
-  const perfeitoExample   = `💬 Ontem ${perfeito[0].form} muito.`;
-  const imperfeitoExample = `💬 Antigamente ${imperfeito[0].form} muito.`;
+  const perfeitoExampleText   = `Ontem ${perfeito[0].form} muito.`;
+  const imperfeitoExampleText = `Antigamente ${imperfeito[0].form} muito.`;
+  const perfeitoExample   = `💬 ${perfeitoExampleText}`;
+  const imperfeitoExample = `💬 ${imperfeitoExampleText}`;
 
   return (
     <>
@@ -184,8 +186,12 @@ function A2Table({ perfeito, imperfeito, language }: A2TableProps) {
         </table>
       </div>
       <div className="conj-examples-row">
-        <span className="conj-example">{perfeitoExample}</span>
-        <span className="conj-example">{imperfeitoExample}</span>
+        <span className="conj-example">
+          <span className="conj-example-text">{perfeitoExample}<AudioBtn form={perfeitoExampleText} /></span>
+        </span>
+        <span className="conj-example">
+          <span className="conj-example-text">{imperfeitoExample}<AudioBtn form={imperfeitoExampleText} /></span>
+        </span>
       </div>
     </>
   );
@@ -279,7 +285,6 @@ export default function ConjugationModal({ verb, initialLevel, language, onClose
                   <tr>
                     <td className="conj-pronoun conj-pronoun--wrap">
                       Ter / Estar + <strong>{data.a2.participioPassado}</strong>
-                      <span className="conj-th-hint">📌 Tenho {data.a2.participioPassado} muito.</span>
                     </td>
                     <td className="conj-form">
                       {data.a2.participioPassado} <AudioBtn form={data.a2.participioPassado} />
@@ -290,6 +295,17 @@ export default function ConjugationModal({ verb, initialLevel, language, onClose
                   </tr>
                 </tbody>
               </table>
+            </div>
+            <div className="conj-examples-row">
+              <span className="conj-example">
+                <span className="conj-example-text">
+                  {`💬 Tenho ${data.a2.participioPassado} muito.`}
+                  <AudioBtn form={`Tenho ${data.a2.participioPassado} muito.`} />
+                </span>
+                <span className="conj-example-translation">
+                  {isTr ? data.a2.exParticipioTr : data.a2.exParticipioEn}
+                </span>
+              </span>
             </div>
           </div>
         )}
