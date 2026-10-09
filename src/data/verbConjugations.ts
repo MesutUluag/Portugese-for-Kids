@@ -48,6 +48,8 @@ export interface VerbConjugation {
     preteritoPerfeito: ConjugationRow[];
     preteritoImperfeito: ConjugationRow[];
     participioPassado: string;
+    exParticipioEn: string;   // e.g. "I have been here many times."
+    exParticipioTr: string;   // e.g. "Burada çok kez bulundum."
   };
 }
 
@@ -85,6 +87,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('fui',   'foste',  'foi',   'fomos',  'foram'),
       preteritoImperfeito: rows('era',   'eras',   'era',   'éramos', 'eram'),
       participioPassado: 'sido',
+      exParticipioEn: 'I have been a student.',
+      exParticipioTr: 'Öğrenci oldum.',
     },
   },
 
@@ -106,6 +110,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('estive',  'estiveste', 'esteve',  'estivemos', 'estiveram'),
       preteritoImperfeito: rows('estava',  'estavas',   'estava',  'estávamos', 'estavam'),
       participioPassado: 'estado',
+      exParticipioEn: 'I have been at home all day.',
+      exParticipioTr: 'Bütün gün evde kaldım.',
     },
   },
 
@@ -138,6 +144,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('tive',   'tiveste',  'teve',   'tivemos',  'tiveram'),
       preteritoImperfeito: rows('tinha',  'tinhas',   'tinha',  'tínhamos', 'tinham'),
       participioPassado: 'tido',
+      exParticipioEn: 'I have had lunch already.',
+      exParticipioTr: 'Öğle yemeğini çoktan yedim.',
     },
   },
 
@@ -159,6 +167,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('fui',   'foste',  'foi',   'fomos',  'foram'),
       preteritoImperfeito: rows('ia',    'ias',    'ia',    'íamos',  'iam'),
       participioPassado: 'ido',
+      exParticipioEn: 'I have already gone to school.',
+      exParticipioTr: 'Okula çoktan gittim.',
     },
   },
 
@@ -180,6 +190,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('vim',    'vieste',  'veio',   'viemos',  'vieram'),
       preteritoImperfeito: rows('vinha',  'vinhas',  'vinha',  'vínhamos','vinham'),
       participioPassado: 'vindo',
+      exParticipioEn: 'I have come here many times.',
+      exParticipioTr: 'Buraya defalarca geldim.',
     },
   },
 
@@ -201,6 +213,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('fiz',    'fizeste',  'fez',    'fizemos',  'fizeram'),
       preteritoImperfeito: rows('fazia',  'fazias',   'fazia',  'fazíamos', 'faziam'),
       participioPassado: 'feito',
+      exParticipioEn: 'I have already done my homework.',
+      exParticipioTr: 'Ev ödevimi çoktan yaptım.',
     },
   },
 
@@ -222,6 +236,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('falei',   'falaste',  'falou',   'falámos',  'falaram'),
       preteritoImperfeito: rows('falava',  'falavas',  'falava',  'falávamos','falavam'),
       participioPassado: 'falado',
+      exParticipioEn: 'I have spoken Portuguese a lot.',
+      exParticipioTr: 'Portekizce çok konuştum.',
     },
   },
 
@@ -243,6 +259,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('disse',  'disseste', 'disse',  'dissemos', 'disseram'),
       preteritoImperfeito: rows('dizia',  'dizias',   'dizia',  'dizíamos', 'diziam'),
       participioPassado: 'dito',
+      exParticipioEn: 'I have said the truth many times.',
+      exParticipioTr: 'Gerçeği defalarca söyledim.',
     },
   },
 
@@ -264,6 +282,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('comi',   'comeste',  'comeu',   'comemos',  'comeram'),
       preteritoImperfeito: rows('comia',  'comias',   'comia',   'comíamos', 'comiam'),
       participioPassado: 'comido',
+      exParticipioEn: 'I have already eaten dinner.',
+      exParticipioTr: 'Akşam yemeğini çoktan yedim.',
     },
   },
 
@@ -285,6 +305,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('bebi',   'bebeste',  'bebeu',   'bebemos',  'beberam'),
       preteritoImperfeito: rows('bebia',  'bebias',   'bebia',   'bebíamos', 'bebiam'),
       participioPassado: 'bebido',
+      exParticipioEn: 'I have drunk water already.',
+      exParticipioTr: 'Suyu çoktan içtim.',
     },
   },
 
@@ -306,6 +328,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('dormi',   'dormiste',  'dormiu',   'dormimos',  'dormiram'),
       preteritoImperfeito: rows('dormia',  'dormias',   'dormia',   'dormíamos', 'dormiam'),
       participioPassado: 'dormido',
+      exParticipioEn: 'I have slept well this week.',
+      exParticipioTr: 'Bu hafta iyi uyudum.',
     },
   },
 
@@ -327,6 +351,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('acordei',   'acordaste',  'acordou',   'acordámos',  'acordaram'),
       preteritoImperfeito: rows('acordava',  'acordavas',  'acordava',  'acordávamos','acordavam'),
       participioPassado: 'acordado',
+      exParticipioEn: 'I have woken up early every day.',
+      exParticipioTr: 'Her gün erken uyandım.',
     },
   },
 
@@ -348,6 +374,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('vi',    'viste',  'viu',   'vimos',  'viram'),
       preteritoImperfeito: rows('via',   'vias',   'via',   'víamos', 'viam'),
       participioPassado: 'visto',
+      exParticipioEn: 'I have seen that film before.',
+      exParticipioTr: 'O filmi daha önce gördüm.',
     },
   },
 
@@ -369,6 +397,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('ouvi',   'ouviste',  'ouviu',   'ouvimos',  'ouviram'),
       preteritoImperfeito: rows('ouvia',  'ouvias',   'ouvia',   'ouvíamos', 'ouviam'),
       participioPassado: 'ouvido',
+      exParticipioEn: 'I have listened to that song many times.',
+      exParticipioTr: 'O şarkıyı defalarca dinledim.',
     },
   },
 
@@ -390,6 +420,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('li',    'leste',  'leu',   'lemos',  'leram'),
       preteritoImperfeito: rows('lia',   'lias',   'lia',   'líamos', 'liam'),
       participioPassado: 'lido',
+      exParticipioEn: 'I have read three books this month.',
+      exParticipioTr: 'Bu ay üç kitap okudum.',
     },
   },
 
@@ -411,6 +443,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('escrevi',   'escreveste',  'escreveu',   'escrevemos',  'escreveram'),
       preteritoImperfeito: rows('escrevia',  'escrevias',   'escrevia',   'escrevíamos', 'escreviam'),
       participioPassado: 'escrito',
+      exParticipioEn: 'I have written a letter to my friend.',
+      exParticipioTr: 'Arkadaşıma bir mektup yazdım.',
     },
   },
 
@@ -432,6 +466,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('estudei',   'estudaste',  'estudou',   'estudámos',  'estudaram'),
       preteritoImperfeito: rows('estudava',  'estudavas',  'estudava',  'estudávamos','estudavam'),
       participioPassado: 'estudado',
+      exParticipioEn: 'I have studied Portuguese every day.',
+      exParticipioTr: 'Her gün Portekizce çalıştım.',
     },
   },
 
@@ -453,6 +489,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('trabalhei',   'trabalhaste',  'trabalhou',   'trabalhámos',  'trabalharam'),
       preteritoImperfeito: rows('trabalhava',  'trabalhavas',  'trabalhava',  'trabalhávamos','trabalhavam'),
       participioPassado: 'trabalhado',
+      exParticipioEn: 'I have worked a lot this week.',
+      exParticipioTr: 'Bu hafta çok çalıştım.',
     },
   },
 
@@ -474,6 +512,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('brinquei',  'brincaste',  'brincou',   'brincámos',  'brincaram'),
       preteritoImperfeito: rows('brincava',  'brincavas',  'brincava',  'brincávamos','brincavam'),
       participioPassado: 'brincado',
+      exParticipioEn: 'I have played in the park today.',
+      exParticipioTr: 'Bugün parkta oynadım.',
     },
   },
 
@@ -495,6 +535,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('corri',   'correste',  'correu',   'corremos',  'correram'),
       preteritoImperfeito: rows('corria',  'corrias',   'corria',   'corríamos', 'corriam'),
       participioPassado: 'corrido',
+      exParticipioEn: 'I have run five kilometres today.',
+      exParticipioTr: 'Bugün beş kilometre koştum.',
     },
   },
 
@@ -516,6 +558,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('andei',   'andaste',  'andou',   'andámos',  'andaram'),
       preteritoImperfeito: rows('andava',  'andavas',  'andava',  'andávamos','andavam'),
       participioPassado: 'andado',
+      exParticipioEn: 'I have walked to school every day.',
+      exParticipioTr: 'Her gün okula yürüdüm.',
     },
   },
 
@@ -537,6 +581,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('nadei',   'nadaste',  'nadou',   'nadámos',  'nadaram'),
       preteritoImperfeito: rows('nadava',  'nadavas',  'nadava',  'nadávamos','nadavam'),
       participioPassado: 'nadado',
+      exParticipioEn: 'I have swum in the sea this summer.',
+      exParticipioTr: 'Bu yaz denizde yüzdüm.',
     },
   },
 
@@ -558,6 +604,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('cantei',   'cantaste',  'cantou',   'cantámos',  'cantaram'),
       preteritoImperfeito: rows('cantava',  'cantavas',  'cantava',  'cantávamos','cantavam'),
       participioPassado: 'cantado',
+      exParticipioEn: 'I have sung in the school choir.',
+      exParticipioTr: 'Okul korosunda şarkı söyledim.',
     },
   },
 
@@ -579,6 +627,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('dancei',   'dançaste',  'dançou',   'dançámos',  'dançaram'),
       preteritoImperfeito: rows('dançava',  'dançavas',  'dançava',  'dançávamos','dançavam'),
       participioPassado: 'dançado',
+      exParticipioEn: 'I have danced at every party.',
+      exParticipioTr: 'Her partide dans ettim.',
     },
   },
 
@@ -600,6 +650,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('desenhei',   'desenhaste',  'desenhou',   'desenhámos',  'desenharam'),
       preteritoImperfeito: rows('desenhava',  'desenhavas',  'desenhava',  'desenhávamos','desenhavam'),
       participioPassado: 'desenhado',
+      exParticipioEn: 'I have drawn a lot of pictures.',
+      exParticipioTr: 'Çok fazla resim çizdim.',
     },
   },
 
@@ -621,6 +673,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('comprei',   'compraste',  'comprou',   'comprámos',  'compraram'),
       preteritoImperfeito: rows('comprava',  'compravas',  'comprava',  'comprávamos','compravam'),
       participioPassado: 'comprado',
+      exParticipioEn: 'I have bought a new book.',
+      exParticipioTr: 'Yeni bir kitap satın aldım.',
     },
   },
 
@@ -642,6 +696,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('dei',   'deste',  'deu',   'demos',  'deram'),
       preteritoImperfeito: rows('dava',  'davas',  'dava',  'dávamos','davam'),
       participioPassado: 'dado',
+      exParticipioEn: 'I have given a gift to my friend.',
+      exParticipioTr: 'Arkadaşıma hediye verdim.',
     },
   },
 
@@ -663,6 +719,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('ajudei',   'ajudaste',  'ajudou',   'ajudámos',  'ajudaram'),
       preteritoImperfeito: rows('ajudava',  'ajudavas',  'ajudava',  'ajudávamos','ajudavam'),
       participioPassado: 'ajudado',
+      exParticipioEn: 'I have helped my mum a lot.',
+      exParticipioTr: 'Anneme çok yardım ettim.',
     },
   },
 
@@ -695,6 +753,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('gostei',   'gostaste',  'gostou',   'gostámos',  'gostaram'),
       preteritoImperfeito: rows('gostava',  'gostavas',  'gostava',  'gostávamos','gostavam'),
       participioPassado: 'gostado',
+      exParticipioEn: 'I have always liked this song.',
+      exParticipioTr: 'Bu şarkıyı hep sevmişimdir.',
     },
   },
 
@@ -727,6 +787,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('quis',    'quiseste',  'quis',    'quisemos',  'quiseram'),
       preteritoImperfeito: rows('queria',  'querias',   'queria',  'queríamos', 'queriam'),
       participioPassado: 'querido',
+      exParticipioEn: 'I have always wanted to visit Portugal.',
+      exParticipioTr: 'Portekiz\'i ziyaret etmeyi hep istedim.',
     },
   },
 
@@ -759,6 +821,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('pude',    'pudeste',  'pôde',    'pudemos',  'puderam'),
       preteritoImperfeito: rows('podia',   'podias',   'podia',   'podíamos', 'podiam'),
       participioPassado: 'podido',
+      exParticipioEn: 'I have been able to finish the work.',
+      exParticipioTr: 'İşi bitirebilmiştim.',
     },
   },
 
@@ -792,6 +856,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('soube',   'soubeste',  'soube',   'soubemos',  'souberam'),
       preteritoImperfeito: rows('sabia',   'sabias',    'sabia',   'sabíamos',  'sabiam'),
       participioPassado: 'sabido',
+      exParticipioEn: 'I have known the answer all along.',
+      exParticipioTr: 'Cevabı başından beri biliyordum.',
     },
   },
 
@@ -813,6 +879,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('abri',   'abriste',  'abriu',   'abrimos',  'abriram'),
       preteritoImperfeito: rows('abria',  'abrias',   'abria',   'abríamos', 'abriam'),
       participioPassado: 'aberto',
+      exParticipioEn: 'I have already opened the window.',
+      exParticipioTr: 'Pencereyi çoktan açtım.',
     },
   },
 
@@ -834,6 +902,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('fechei',   'fechaste',  'fechou',   'fechámos',  'fecharam'),
       preteritoImperfeito: rows('fechava',  'fechavas',  'fechava',  'fechávamos','fechavam'),
       participioPassado: 'fechado',
+      exParticipioEn: 'I have closed the door already.',
+      exParticipioTr: 'Kapıyı çoktan kapattım.',
     },
   },
 
@@ -855,6 +925,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('comecei',   'começaste',  'começou',   'começámos',  'começaram'),
       preteritoImperfeito: rows('começava',  'começavas',  'começava',  'começávamos','começavam'),
       participioPassado: 'começado',
+      exParticipioEn: 'I have started learning Portuguese.',
+      exParticipioTr: 'Portekizce öğrenmeye başladım.',
     },
   },
 
@@ -876,6 +948,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('acabei',   'acabaste',  'acabou',   'acabámos',  'acabaram'),
       preteritoImperfeito: rows('acabava',  'acabavas',  'acabava',  'acabávamos','acabavam'),
       participioPassado: 'acabado',
+      exParticipioEn: 'I have finished the book.',
+      exParticipioTr: 'Kitabı bitirdim.',
     },
   },
 
@@ -897,6 +971,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('cheguei',  'chegaste',  'chegou',   'chegámos',  'chegaram'),
       preteritoImperfeito: rows('chegava',  'chegavas',  'chegava',  'chegávamos','chegavam'),
       participioPassado: 'chegado',
+      exParticipioEn: 'I have arrived at school on time.',
+      exParticipioTr: 'Okula zamanında vardım.',
     },
   },
 
@@ -918,6 +994,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('saí',    'saíste',  'saiu',   'saímos',  'saíram'),
       preteritoImperfeito: rows('saía',   'saías',   'saía',   'saíamos', 'saíam'),
       participioPassado: 'saído',
+      exParticipioEn: 'I have left the house already.',
+      exParticipioTr: 'Evden çoktan çıktım.',
     },
   },
 
@@ -939,6 +1017,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('entrei',   'entraste',  'entrou',   'entrámos',  'entraram'),
       preteritoImperfeito: rows('entrava',  'entravas',  'entrava',  'entrávamos','entravam'),
       participioPassado: 'entrado',
+      exParticipioEn: 'I have entered the classroom quietly.',
+      exParticipioTr: 'Sınıfa sessizce girdim.',
     },
   },
 
@@ -960,6 +1040,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('sentei',   'sentaste',  'sentou',   'sentámos',  'sentaram'),
       preteritoImperfeito: rows('sentava',  'sentavas',  'sentava',  'sentávamos','sentavam'),
       participioPassado: 'sentado',
+      exParticipioEn: 'I have sat in the front row today.',
+      exParticipioTr: 'Bugün ön sıraya oturdum.',
     },
   },
 
@@ -981,6 +1063,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('perguntei',   'perguntaste',  'perguntou',   'perguntámos',  'perguntaram'),
       preteritoImperfeito: rows('perguntava',  'perguntavas',  'perguntava',  'perguntávamos','perguntavam'),
       participioPassado: 'perguntado',
+      exParticipioEn: 'I have asked the teacher many questions.',
+      exParticipioTr: 'Öğretmene çok soru sordum.',
     },
   },
 
@@ -1002,6 +1086,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('respondi',   'respondeste',  'respondeu',   'respondemos',  'responderam'),
       preteritoImperfeito: rows('respondia',  'respondias',   'respondia',   'respondíamos', 'respondiam'),
       participioPassado: 'respondido',
+      exParticipioEn: 'I have replied to all the questions.',
+      exParticipioTr: 'Tüm soruları cevapladım.',
     },
   },
 
@@ -1023,6 +1109,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('pensei',   'pensaste',  'pensou',   'pensámos',  'pensaram'),
       preteritoImperfeito: rows('pensava',  'pensavas',  'pensava',  'pensávamos','pensavam'),
       participioPassado: 'pensado',
+      exParticipioEn: 'I have thought about it carefully.',
+      exParticipioTr: 'Bunu dikkatlice düşündüm.',
     },
   },
 
@@ -1044,6 +1132,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('trouxe',  'trouxeste', 'trouxe',  'trouxemos', 'trouxeram'),
       preteritoImperfeito: rows('trazia',  'trazias',   'trazia',  'trazíamos', 'traziam'),
       participioPassado: 'trazido',
+      exParticipioEn: 'I have brought lunch to school.',
+      exParticipioTr: 'Okula öğle yemeği getirdim.',
     },
   },
 
@@ -1065,6 +1155,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('fiquei',  'ficaste',  'ficou',   'ficámos',  'ficaram'),
       preteritoImperfeito: rows('ficava',  'ficavas',  'ficava',  'ficávamos','ficavam'),
       participioPassado: 'ficado',
+      exParticipioEn: 'I have stayed at home this weekend.',
+      exParticipioTr: 'Bu hafta sonu evde kaldım.',
     },
   },
 
@@ -1086,6 +1178,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('voltei',   'voltaste',  'voltou',   'voltámos',  'voltaram'),
       preteritoImperfeito: rows('voltava',  'voltavas',  'voltava',  'voltávamos','voltavam'),
       participioPassado: 'voltado',
+      exParticipioEn: 'I have returned home from school.',
+      exParticipioTr: 'Okuldan eve döndüm.',
     },
   },
 
@@ -1107,6 +1201,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('jantei',   'jantaste',  'jantou',   'jantámos',  'jantaram'),
       preteritoImperfeito: rows('jantava',  'jantavas',  'jantava',  'jantávamos','jantavam'),
       participioPassado: 'jantado',
+      exParticipioEn: 'I have had dinner with the family.',
+      exParticipioTr: 'Aileyle akşam yemeği yedim.',
     },
   },
 
@@ -1128,6 +1224,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('incomodei',   'incomodaste',  'incomodou',   'incomodámos',  'incomodaram'),
       preteritoImperfeito: rows('incomodava',  'incomodavas',  'incomodava',  'incomodávamos','incomodavam'),
       participioPassado: 'incomodado',
+      exParticipioEn: 'I have bothered my brother too much.',
+      exParticipioTr: 'Kardeşimi fazla rahatsız ettim.',
     },
   },
 
@@ -1149,6 +1247,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('medi',   'mediste',  'mediu',   'medimos',  'mediram'),
       preteritoImperfeito: rows('media',  'medias',   'media',   'medíamos', 'mediam'),
       participioPassado: 'medido',
+      exParticipioEn: 'I have measured the room already.',
+      exParticipioTr: 'Odayı çoktan ölçtüm.',
     },
   },
 
@@ -1170,6 +1270,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('odiei',   'odiaste',  'odiou',   'odiámos',  'odiaram'),
       preteritoImperfeito: rows('odiava',  'odiavas',  'odiava',  'odiávamos','odiavam'),
       participioPassado: 'odiado',
+      exParticipioEn: 'I have always hated traffic jams.',
+      exParticipioTr: 'Trafik sıkışıklığından hep nefret etmişimdir.',
     },
   },
 
@@ -1191,6 +1293,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('pintei',   'pintaste',  'pintou',   'pintámos',  'pintaram'),
       preteritoImperfeito: rows('pintava',  'pintavas',  'pintava',  'pintávamos','pintavam'),
       participioPassado: 'pintado',
+      exParticipioEn: 'I have painted many pictures.',
+      exParticipioTr: 'Çok fazla tablo boyadım.',
     },
   },
 
@@ -1212,6 +1316,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('joguei',  'jogaste',  'jogou',   'jogámos',  'jogaram'),
       preteritoImperfeito: rows('jogava',  'jogavas',  'jogava',  'jogávamos','jogavam'),
       participioPassado: 'jogado',
+      exParticipioEn: 'I have played football since I was five.',
+      exParticipioTr: 'Beş yaşından beri futbol oynadım.',
     },
   },
 
@@ -1233,6 +1339,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('subi',   'subiste',  'subiu',   'subimos',  'subiram'),
       preteritoImperfeito: rows('subia',  'subias',   'subia',   'subíamos', 'subiam'),
       participioPassado: 'subido',
+      exParticipioEn: 'I have climbed that hill before.',
+      exParticipioTr: 'O tepeye daha önce çıktım.',
     },
   },
 
@@ -1254,6 +1362,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('coube',   'coubeste',  'coube',   'coubemos',  'couberam'),
       preteritoImperfeito: rows('cabia',   'cabias',    'cabia',   'cabíamos',  'cabiam'),
       participioPassado: 'cabido',
+      exParticipioEn: 'Everything has fitted in the bag.',
+      exParticipioTr: 'Her şey çantaya sığdı.',
     },
   },
 
@@ -1275,6 +1385,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('aterrei',   'aterraste',  'aterrou',   'aterrámos',  'aterraram'),
       preteritoImperfeito: rows('aterrava',  'aterravas',  'aterrava',  'aterrávamos','aterravam'),
       participioPassado: 'aterrado',
+      exParticipioEn: 'The plane has landed safely.',
+      exParticipioTr: 'Uçak güvenli bir şekilde indi.',
     },
   },
 
@@ -1296,6 +1408,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('parei',   'paraste',  'parou',   'parámos',  'pararam'),
       preteritoImperfeito: rows('parava',  'paravas',  'parava',  'parávamos','paravam'),
       participioPassado: 'parado',
+      exParticipioEn: 'I have stopped eating sugar.',
+      exParticipioTr: 'Şeker yemeyi bıraktım.',
     },
   },
 
@@ -1317,6 +1431,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('chorei',   'choraste',  'chorou',   'chorámos',  'choraram'),
       preteritoImperfeito: rows('chorava',  'choravas',  'chorava',  'chorávamos','choravam'),
       participioPassado: 'chorado',
+      exParticipioEn: 'I have cried watching that film.',
+      exParticipioTr: 'O filmi izlerken ağladım.',
     },
   },
 
@@ -1338,6 +1454,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('esqueci',   'esqueceste',  'esqueceu',   'esquecemos',  'esqueceram'),
       preteritoImperfeito: rows('esquecia',  'esquecias',   'esquecia',   'esquecíamos', 'esqueciam'),
       participioPassado: 'esquecido',
+      exParticipioEn: 'I have forgotten my keys again.',
+      exParticipioTr: 'Anahtarlarımı yine unutmuşum.',
     },
   },
 
@@ -1360,6 +1478,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('levantei-me',   'levantaste-te',  'levantou-se',   'levantámo-nos',  'levantaram-se'),
       preteritoImperfeito: rows('levantava-me',  'levantavas-te',  'levantava-se',  'levantávamo-nos','levantavam-se'),
       participioPassado: 'levantado',
+      exParticipioEn: 'I have gotten up early every morning.',
+      exParticipioTr: 'Her sabah erken kalktım.',
     },
   },
 
@@ -1381,6 +1501,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('pareceu',  'pareceste',  'pareceu',   'parecemos',  'pareceram'),
       preteritoImperfeito: rows('parecia',  'parecias',   'parecia',   'parecíamos', 'pareciam'),
       participioPassado: 'parecido',
+      exParticipioEn: 'I have looked tired all week.',
+      exParticipioTr: 'Bütün hafta yorgun göründüm.',
     },
   },
   // ── tocar ─────────────────────────────────────────────────────────────────
@@ -1401,6 +1523,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('toquei',  'tocaste',  'tocou',   'tocámos',  'tocaram'),
       preteritoImperfeito: rows('tocava',  'tocavas',  'tocava',  'tocávamos','tocavam'),
       participioPassado: 'tocado',
+      exParticipioEn: 'I have played the piano since I was six.',
+      exParticipioTr: 'Altı yaşından beri piyano çalıyorum.',
     },
   },
 
@@ -1422,6 +1546,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('enchi',   'encheste',  'encheu',   'enchemos',  'encheram'),
       preteritoImperfeito: rows('enchia',  'enchias',   'enchia',   'enchíamos', 'enchiam'),
       participioPassado: 'enchido',
+      exParticipioEn: 'I have filled the bottle with water.',
+      exParticipioTr: 'Şişeyi suyla doldurdum.',
     },
   },
 
@@ -1443,6 +1569,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('menti',   'mentiste',  'mentiu',   'mentimos',  'mentiram'),
       preteritoImperfeito: rows('mentia',  'mentias',   'mentia',   'mentíamos', 'mentiam'),
       participioPassado: 'mentido',
+      exParticipioEn: 'I have never lied to my parents.',
+      exParticipioTr: 'Aileme hiç yalan söylemedim.',
     },
   },
 
@@ -1464,6 +1592,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('desisti',   'desististe',  'desistiu',   'desistimos',  'desistiram'),
       preteritoImperfeito: rows('desistia',  'desistias',   'desistia',   'desistíamos', 'desistiam'),
       participioPassado: 'desistido',
+      exParticipioEn: 'I have never given up on my dreams.',
+      exParticipioTr: 'Hayallerimden hiç vazgeçmedim.',
     },
   },
 
@@ -1485,6 +1615,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('pedi',   'pediste',  'pediu',   'pedimos',  'pediram'),
       preteritoImperfeito: rows('pedia',  'pedias',   'pedia',   'pedíamos', 'pediam'),
       participioPassado: 'pedido',
+      exParticipioEn: 'I have asked for help from my teacher.',
+      exParticipioTr: 'Öğretmenimden yardım istedim.',
     },
   },
 
@@ -1506,6 +1638,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('lembrei',   'lembraste',  'lembrou',   'lembrámos',  'lembraram'),
       preteritoImperfeito: rows('lembrava',  'lembravas',  'lembrava',  'lembrávamos','lembravam'),
       participioPassado: 'lembrado',
+      exParticipioEn: 'I have remembered every word.',
+      exParticipioTr: 'Her kelimeyi hatırladım.',
     },
   },
 
@@ -1528,6 +1662,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('cumpri',   'cumpriste',  'cumpriu',   'cumprimos',  'cumpriram'),
       preteritoImperfeito: rows('cumpria',  'cumprias',   'cumpria',   'cumpríamos', 'cumpriam'),
       participioPassado: 'cumprido',
+      exParticipioEn: 'I have kept my promise.',
+      exParticipioTr: 'Sözümü tuttum.',
     },
   },
 
@@ -1549,6 +1685,8 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('esperei',   'esperaste',  'esperou',   'esperámos',  'esperaram'),
       preteritoImperfeito: rows('esperava',  'esperavas',  'esperava',  'esperávamos','esperavam'),
       participioPassado: 'esperado',
+      exParticipioEn: 'I have waited for the bus for ages.',
+      exParticipioTr: 'Otobüsü çok uzun süre bekledim.',
     },
   },
 
@@ -1570,6 +1708,224 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       preteritoPerfeito:   rows('vivi',   'viveste',  'viveu',   'vivemos',  'viveram'),
       preteritoImperfeito: rows('vivia',  'vivias',   'vivia',   'vivíamos', 'viviam'),
       participioPassado: 'vivido',
+      exParticipioEn: 'I have lived in Lisbon for two years.',
+      exParticipioTr: 'İki yıldır Lizbon\'da yaşıyorum.',
+    },
+  },
+
+  // ── ligar ─────────────────────────────────────────────────────────────────
+  ligar: {
+    a1: {
+      presente: rows('ligo', 'ligas', 'liga', 'ligamos', 'ligam'),
+      exPresente: 'Eu ligo à minha mãe todos os dias.',
+      exFuturo:   'Eu vou ligar mais tarde para ti.',
+      exContinua: 'Eu estou a ligar para o meu pai.',
+      exPresenteEn: 'I call my mother every day.',
+      exFuturoEn:   'I am going to call you later.',
+      exContinuaEn: 'I am calling my father.',
+      exPresenteTr: 'Her gün annemi arıyorum.',
+      exFuturoTr:   'Seni daha sonra arayacağım.',
+      exContinuaTr: 'Babamı arıyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('liguei',   'ligaste',  'ligou',   'ligámos',  'ligaram'),
+      preteritoImperfeito: rows('ligava',   'ligavas',  'ligava',  'ligávamos','ligavam'),
+      participioPassado: 'ligado',
+      exParticipioEn: 'I have called my grandparents on weekends.',
+      exParticipioTr: 'Hafta sonları büyükanne ve büyükbabamı aradım.',
+    },
+  },
+
+  // ── tratar ────────────────────────────────────────────────────────────────
+  tratar: {
+    a1: {
+      presente: rows('trato', 'tratas', 'trata', 'tratamos', 'tratam'),
+      exPresente: 'Eu trato do meu cão com carinho.',
+      exFuturo:   'Eu vou tratar deste assunto amanhã.',
+      exContinua: 'Eu estou a tratar dos bilhetes para o cinema.',
+      exPresenteEn: 'I take care of my dog with care.',
+      exFuturoEn:   'I am going to handle this matter tomorrow.',
+      exContinuaEn: 'I am sorting out the tickets for the cinema.',
+      exPresenteTr: 'Köpeğime sevgiyle bakıyorum.',
+      exFuturoTr:   'Bu konuyla yarın ilgileneceğim.',
+      exContinuaTr: 'Sinema biletleriyle ilgileniyorum.',
+      specialUse: {
+        formula: 'tratar de + Infinitivo / Nome',
+        descEn: 'to take care of / handle something',
+        descTr: 'bir şeyle ilgilenmek / halletmek',
+        examples: [
+          { pt: 'Eu trato de pôr a mesa para o jantar.', en: 'I take care of setting the table for dinner.', tr: 'Akşam yemeği için masayı kurmayı ben hallederim.' },
+          { pt: 'Ela trata de comprar os bilhetes.', en: 'She takes care of buying the tickets.', tr: 'Biletleri alma işini o halleder.' },
+        ],
+      },
+    },
+    a2: {
+      preteritoPerfeito:   rows('tratei',   'trataste',  'tratou',   'tratámos',  'trataram'),
+      preteritoImperfeito: rows('tratava',  'tratavas',  'tratava',  'tratávamos','tratavam'),
+      participioPassado: 'tratado',
+      exParticipioEn: 'I have handled everything very calmly.',
+      exParticipioTr: 'Her şeyi çok sakince hallettim.',
+    },
+  },
+
+  // ── apanhar ───────────────────────────────────────────────────────────────
+  apanhar: {
+    a1: {
+      presente: rows('apanho', 'apanhas', 'apanha', 'apanhamos', 'apanham'),
+      exPresente: 'Eu apanho o autocarro para a escola.',
+      exFuturo:   'Eu vou apanhar a bola no ar.',
+      exContinua: 'Eu estou a apanhar conchas na praia.',
+      exPresenteEn: 'I catch the bus to school.',
+      exFuturoEn:   'I am going to catch the ball in the air.',
+      exContinuaEn: 'I am picking up shells on the beach.',
+      exPresenteTr: 'Okula gitmek için otobüse biniyorum.',
+      exFuturoTr:   'Topu havada yakalayacağım.',
+      exContinuaTr: 'Sahilde deniz kabukları topluyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('apanhei',   'apanhaste',  'apanhou',   'apanhámos',  'apanharam'),
+      preteritoImperfeito: rows('apanhava',  'apanhavas',  'apanhava',  'apanhávamos','apanhavam'),
+      participioPassado: 'apanhado',
+      exParticipioEn: 'I have caught the train on time.',
+      exParticipioTr: 'Trene vaktinde bindim.',
+    },
+  },
+
+  // ── emprestar ─────────────────────────────────────────────────────────────
+  emprestar: {
+    a1: {
+      presente: rows('empresto', 'emprestas', 'empresta', 'emprestamos', 'emprestam'),
+      exPresente: 'Eu empresto o meu lápis ao colega.',
+      exFuturo:   'Eu vou emprestar este livro à Maria.',
+      exContinua: 'Eu estou a emprestar a minha borracha.',
+      exPresenteEn: 'I lend my pencil to my classmate.',
+      exFuturoEn:   'I am going to lend this book to Maria.',
+      exContinuaEn: 'I am lending my rubber.',
+      exPresenteTr: 'Kalemimi sınıf arkadaşıma ödünç veriyorum.',
+      exFuturoTr:   'Bu kitabı Maria\'ya ödünç vereceğim.',
+      exContinuaTr: 'Silgimi ödünç veriyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('emprestei',   'emprestaste',  'emprestou',   'emprestámos',  'emprestaram'),
+      preteritoImperfeito: rows('emprestava',  'emprestavas',  'emprestava',  'emprestávamos','emprestavam'),
+      participioPassado: 'emprestado',
+      exParticipioEn: 'I have lent my games to my cousins.',
+      exParticipioTr: 'Oyunlarımı kuzenlerime ödünç verdim.',
+    },
+  },
+
+  // ── sugerir ───────────────────────────────────────────────────────────────
+  sugerir: {
+    a1: {
+      presente: rows('sugiro', 'sugeres', 'sugere', 'sugerimos', 'sugerem'),
+      exPresente: 'Eu sugiro um passeio no parque.',
+      exFuturo:   'Eu vou sugerir um jogo novo à turma.',
+      exContinua: 'Eu estou a sugerir uma boa sobremesa.',
+      exPresenteEn: 'I suggest a walk in the park.',
+      exFuturoEn:   'I am going to suggest a new game to the class.',
+      exContinuaEn: 'I am suggesting a good dessert.',
+      exPresenteTr: 'Parkta yürüyüş yapmayı öneriyorum.',
+      exFuturoTr:   'Sınıfa yeni bir oyun önereceğim.',
+      exContinuaTr: 'İyi bir tatlı öneriyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('sugeri',   'sugeriste',  'sugeriu',   'sugerimos',  'sugeriram'),
+      preteritoImperfeito: rows('sugeria',  'sugerias',   'sugeria',   'sugeríamos', 'sugeriam'),
+      participioPassado: 'sugerido',
+      exParticipioEn: 'I have suggested interesting books.',
+      exParticipioTr: 'İlginç kitaplar önerdim.',
+    },
+  },
+
+  // ── partilhar ─────────────────────────────────────────────────────────────
+  partilhar: {
+    a1: {
+      presente: rows('partilho', 'partilhas', 'partilha', 'partilhamos', 'partilham'),
+      exPresente: 'Eu partilho o meu lanche no recreio.',
+      exFuturo:   'Eu vou partilhar o bolo com a família.',
+      exContinua: 'Eu estou a partilhar os meus lápis de cor.',
+      exPresenteEn: 'I share my snack at break time.',
+      exFuturoEn:   'I am going to share the cake with the family.',
+      exContinuaEn: 'I am sharing my coloured pencils.',
+      exPresenteTr: 'Teneffüste atıştırmalığımı paylaşıyorum.',
+      exFuturoTr:   'Pastayı ailemle paylaşacağım.',
+      exContinuaTr: 'Boya kalemlerimi paylaşıyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('partilhei',   'partilhaste',  'partilhou',   'partilhámos',  'partilharam'),
+      preteritoImperfeito: rows('partilhava',  'partilhavas',  'partilhava',  'partilhávamos','partilhavam'),
+      participioPassado: 'partilhado',
+      exParticipioEn: 'I have shared the toys with my brother.',
+      exParticipioTr: 'Oyuncakları erkek kardeşimle paylaştım.',
+    },
+  },
+
+  // ── entender ──────────────────────────────────────────────────────────────
+  entender: {
+    a1: {
+      presente: rows('entendo', 'entendes', 'entende', 'entendemos', 'entendem'),
+      exPresente: 'Eu entendo a explicação da professora.',
+      exFuturo:   'Eu vou entender tudo com mais prática.',
+      exContinua: 'Eu estou a entender a história em português.',
+      exPresenteEn: 'I understand the teacher\'s explanation.',
+      exFuturoEn:   'I will understand everything with more practice.',
+      exContinuaEn: 'I am understanding the story in Portuguese.',
+      exPresenteTr: 'Öğretmenin açıklamasını anlıyorum.',
+      exFuturoTr:   'Daha fazla pratikle her şeyi anlayacağım.',
+      exContinuaTr: 'Portekizce hikayeyi anlıyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('entendi',   'entendeste',  'entendeu',   'entendemos',  'entenderam'),
+      preteritoImperfeito: rows('entendia',  'entendias',   'entendia',   'entendíamos', 'entendiam'),
+      participioPassado: 'entendido',
+      exParticipioEn: 'I have understood all the rules.',
+      exParticipioTr: 'Tüm kuralları anladım.',
+    },
+  },
+
+  // ── ganhar ────────────────────────────────────────────────────────────────
+  ganhar: {
+    a1: {
+      presente: rows('ganho', 'ganhas', 'ganha', 'ganhamos', 'ganham'),
+      exPresente: 'Eu ganho muitas partidas de xadrez.',
+      exFuturo:   'Eu vou ganhar o jogo de futebol amanhã.',
+      exContinua: 'Eu estou a ganhar este jogo com o meu irmão.',
+      exPresenteEn: 'I win many chess matches.',
+      exFuturoEn:   'I am going to win the football match tomorrow.',
+      exContinuaEn: 'I am winning this game with my brother.',
+      exPresenteTr: 'Birçok satranç maçı kazanıyorum.',
+      exFuturoTr:   'Yarınki futbol maçını kazanacağım.',
+      exContinuaTr: 'Kardeşimle oynadığımız bu oyunu kazanıyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('ganhei',   'ganhaste',  'ganhou',   'ganhámos',  'ganharam'),
+      preteritoImperfeito: rows('ganhava',  'ganhavas',  'ganhava',  'ganhávamos','ganhavam'),
+      participioPassado: 'ganho',
+      exParticipioEn: 'I have won medals at school.',
+      exParticipioTr: 'Okulda madalyalar kazandım.',
+    },
+  },
+
+  // ── adivinhar ─────────────────────────────────────────────────────────────
+  adivinhar: {
+    a1: {
+      presente: rows('adivinho', 'adivinhas', 'adivinha', 'adivinhamos', 'adivinham'),
+      exPresente: 'Eu adivinho sempre as charadas do avô.',
+      exFuturo:   'Eu vou adivinhar o que está dentro da caixa.',
+      exContinua: 'Eu estou a adivinhar quem bateu à porta.',
+      exPresenteEn: 'I always guess grandfather\'s riddles.',
+      exFuturoEn:   'I am going to guess what is inside the box.',
+      exContinuaEn: 'I am guessing who knocked on the door.',
+      exPresenteTr: 'Büyükbabamın bilmecelerini her zaman bilirim.',
+      exFuturoTr:   'Kutunun içinde ne olduğunu tahmin edeceğim.',
+      exContinuaTr: 'Kapıyı kimin çaldığını tahmin ediyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('adivinhei',   'adivinhaste',  'adivinhou',   'adivinhámos',  'adivinharam'),
+      preteritoImperfeito: rows('adivinhava',  'adivinhavas',  'adivinhava',  'adivinhávamos','adivinhavam'),
+      participioPassado: 'adivinhado',
+      exParticipioEn: 'I have guessed all the riddles.',
+      exParticipioTr: 'Bütün bilmeceleri bildim.',
     },
   },
 };

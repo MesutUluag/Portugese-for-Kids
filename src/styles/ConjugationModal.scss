@@ -273,6 +273,17 @@
   border: 1px solid #e5e7eb;
 }
 
+.conj-example-text {
+  display: inline;
+
+  .conj-audio-btn {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 3px;
+    white-space: nowrap;
+  }
+}
+
 .conj-example-translation {
   display: block;
   font-size: 10px;
