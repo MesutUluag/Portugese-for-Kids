@@ -2,9 +2,11 @@ import React, { useEffect, useMemo, useState } from 'react';
 import type { Word, PrepGroup } from '../data/index';
 import { speakText } from '../utils/speech';
 import { verbConjugations } from '../data/verbConjugations';
+import { adverbByWord } from '../data/adverbData';
 import ConjugationModal from './ConjugationModal';
 import PrepositionModal from './PrepositionModal';
-import { BookOpen, Link2 } from 'lucide-react';
+import AdverbModal from './AdverbModal';
+import { BookOpen, Link2, Zap } from 'lucide-react';
 import '../styles/CardsMode.scss';
 
 interface Props {
@@ -89,6 +91,7 @@ export default function CardsMode({ language }: Props): React.ReactElement {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [selectedVerb, setSelectedVerb] = useState<string | null>(null);
   const [selectedPrepGroup, setSelectedPrepGroup] = useState<PrepGroup | null>(null);
+  const [selectedAdverb, setSelectedAdverb] = useState<string | null>(null);
 
   useEffect(() => {
     import('../data/words').then((m) => setAllWords(shuffleArray(m.kidsWords)));
@@ -195,6 +198,18 @@ export default function CardsMode({ language }: Props): React.ReactElement {
                   <Link2 size={14} color="white" strokeWidth={2.5} />
                 </button>
               )}
+              {w.category === 'Adverbs' && adverbByWord[w.pt] != null && (
+                <button
+                  className="adv-examples-btn"
+                  aria-label={`Show examples for ${w.pt}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedAdverb(w.pt);
+                  }}
+                >
+                  <Zap size={14} color="white" strokeWidth={2.5} />
+                </button>
+              )}
             </div>
         ))}
       </div>
@@ -212,6 +227,13 @@ export default function CardsMode({ language }: Props): React.ReactElement {
           group={selectedPrepGroup}
           language={language}
           onClose={() => setSelectedPrepGroup(null)}
+        />
+      )}
+      {selectedAdverb && (
+        <AdverbModal
+          word={selectedAdverb}
+          language={language}
+          onClose={() => setSelectedAdverb(null)}
         />
       )}
     </>
