@@ -1928,4 +1928,50 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       exParticipioTr: 'Bütün bilmeceleri bildim.',
     },
   },
+
+  // ── mostrar ───────────────────────────────────────────────────────────────
+  mostrar: {
+    a1: {
+      presente: rows('mostro', 'mostras', 'mostra', 'mostramos', 'mostram'),
+      exPresente: 'Eu mostro os meus desenhos à professora.',
+      exFuturo:   'Eu vou mostrar as fotos das férias à família.',
+      exContinua: 'Eu estou a mostrar o caminho ao turista.',
+      exPresenteEn: 'I show my drawings to the teacher.',
+      exFuturoEn:   'I am going to show the holiday photos to the family.',
+      exContinuaEn: 'I am showing the way to the tourist.',
+      exPresenteTr: 'Resimlerimi öğretmenime gösteriyorum.',
+      exFuturoTr:   'Tatil fotoğraflarını aileye göstereceğim.',
+      exContinuaTr: 'Turiste yolu gösteriyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('mostrei',   'mostraste',  'mostrou',   'mostrámos',  'mostraram'),
+      preteritoImperfeito: rows('mostrava',  'mostravas',  'mostrava',  'mostrávamos','mostravam'),
+      participioPassado: 'mostrado',
+      exParticipioEn: 'I have shown my project to the whole class.',
+      exParticipioTr: 'Projeyi tüm sınıfa gösterdim.',
+    },
+  },
+
+  // ── acontecer ─────────────────────────────────────────────────────────────
+  acontecer: {
+    a1: {
+      presente: rows('aconteço', 'aconteces', 'acontece', 'acontecemos', 'acontecem'),
+      exPresente: 'Os acidentes acontecem quando não prestamos atenção.',
+      exFuturo:   'O que vai acontecer no final da história?',
+      exContinua: 'Está a acontecer um jogo de futebol no recreio.',
+      exPresenteEn: 'Accidents happen when we don\'t pay attention.',
+      exFuturoEn:   'What is going to happen at the end of the story?',
+      exContinuaEn: 'A football game is happening at break time.',
+      exPresenteTr: 'Dikkat etmediğimizde kazalar oluyor.',
+      exFuturoTr:   'Hikayenin sonunda ne olacak?',
+      exContinuaTr: 'Teneffüste bir futbol maçı oluyor.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('aconteci',   'aconteceste',  'aconteceu',   'acontecemos',  'aconteceram'),
+      preteritoImperfeito: rows('acontecia',  'acontecias',   'acontecia',   'acontecíamos', 'aconteciam'),
+      participioPassado: 'acontecido',
+      exParticipioEn: 'Something wonderful has happened at school today.',
+      exParticipioTr: 'Bugün okulda harika bir şey oldu.',
+    },
+  },
 };
