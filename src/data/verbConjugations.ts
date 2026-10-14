@@ -1974,4 +1974,26 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       exParticipioTr: 'Bugün okulda harika bir şey oldu.',
     },
   },
+  // ── morar ────────────────────────────────────────────────────────────────────
+  morar: {
+    a1: {
+      presente: rows('moro', 'moras', 'mora', 'moramos', 'moram'),
+      exPresente: 'Eu moro num apartamento em Lisboa.',
+      exFuturo:   'Vou morar perto da escola no próximo ano.',
+      exContinua: 'A Maria está a morar com os avós esta semana.',
+      exPresenteEn: 'I live in an apartment in Lisbon.',
+      exFuturoEn:   'I am going to live near the school next year.',
+      exContinuaEn: 'Maria is living with her grandparents this week.',
+      exPresenteTr: 'Lisboa\'da bir dairede yaşıyorum.',
+      exFuturoTr:   'Gelecek yıl okula yakın bir yerde yaşayacağım.',
+      exContinuaTr: 'Maria bu hafta büyükannesiyle yaşıyor.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('morei',   'moraste',  'morou',   'morámos',  'moraram'),
+      preteritoImperfeito: rows('morava',  'moravas',  'morava',  'morávamos', 'moravam'),
+      participioPassado: 'morado',
+      exParticipioEn: 'My family has lived in Porto for ten years.',
+      exParticipioTr: 'Ailem on yıldır Porto\'da yaşıyor.',
+    },
+  },
 };

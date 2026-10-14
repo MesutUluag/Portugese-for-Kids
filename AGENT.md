@@ -160,6 +160,23 @@ Audio feedback uses the Web Audio API (`playSynth`). `getNumberWord` handles Por
 
 ---
 
+## Adding New Vocabulary Words
+
+All vocabulary is maintained in `src/data/words.ts` (`kidsWords`), with companion modal data in `verbConjugations.ts`, `adverbData.ts`, and `prepGroups.ts`.
+
+A detailed step-by-step guide for adding words — including deduplication, category classification, emoji selection, insert positions, modal templates, A1/A2 sentence rules, and Portugal cultural references — is maintained as a Bob skill:
+
+👉 [`.bob/skills/add-portuguese-words/SKILL.md`](.bob/skills/add-portuguese-words/SKILL.md)
+
+**Follow that file for all vocabulary additions.** Key rules at a glance:
+
+- Grep `words.ts` for the `pt` field before adding — skip duplicates.
+- Every new adverb also needs an entry in `adverbData.ts` (Place, Time, Degree, etc.).
+- Every new regular `-ar / -er / -ir` verb also needs an entry in `verbConjugations.ts`.
+- Examples must be European Portuguese, A1/A2 level, kid-appropriate, and culturally grounded in Portugal.
+
+---
+
 ## Running & Validating Changes
 
 ```bash
