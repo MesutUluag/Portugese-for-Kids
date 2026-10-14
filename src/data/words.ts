@@ -83,6 +83,7 @@ export const kidsWords: Word[] = [
   { pt: "mostrar", en: "to show", tr: "göstermek", emoji: "🖐️", category: "Verbs" },
   { pt: "acontecer", en: "to happen", tr: "olmak / gerçekleşmek", emoji: "💫", category: "Verbs" },
   { pt: "trouxe", en: "I brought (past of trazer)", tr: "getirdim (trazer'in geçmişi)", emoji: "🎒", category: "Verbs" },
+  { pt: "morar", en: "to live (reside)", tr: "ikamet etmek / oturmak", emoji: "🏠", category: "Verbs" },
   // ── Family ───────────────────────────────────────────────────────────────────
   { pt: "pai", en: "father", tr: "baba", emoji: "👨", category: "Family" },
   { pt: "mãe", en: "mother", tr: "anne", emoji: "👩", category: "Family" },
@@ -305,6 +306,10 @@ export const kidsWords: Word[] = [
   { pt: "televisão", en: "television / TV", tr: "televizyon", emoji: "📺", category: "Home" },
   { pt: "candeeiro", en: "lamp / light", tr: "lamba", emoji: "💡", category: "Home" },
   { pt: "prateleira", en: "shelf", tr: "raf", emoji: "🗄️", category: "Home" },
+  { pt: "cave", en: "basement / cellar", tr: "bodrum / kiler", emoji: "🏚️", category: "Home" },
+  { pt: "chinelos", en: "slippers / flip-flops", tr: "terlik / parmak arası terlik", emoji: "🩴", category: "Home" },
+  { pt: "bolso", en: "pocket", tr: "cep", emoji: "👖", category: "Home" },
+  { pt: "carteira", en: "wallet", tr: "cüzdan", emoji: "👛", category: "Home" },
   // ── School ───────────────────────────────────────────────────────────────────
   { pt: "escola", en: "school", tr: "okul", emoji: "🏫", category: "School" },
   { pt: "jardim de infância", en: "kindergarten / preschool", tr: "anaokulu", emoji: "🧸", category: "School" },
@@ -513,6 +518,10 @@ export const kidsWords: Word[] = [
   { pt: "chaves", en: "keys", tr: "anahtarlar", emoji: "🔑", category: "Nouns" },
   { pt: "casamento", en: "wedding / marriage", tr: "düğün / evlilik", emoji: "💒", category: "Nouns" },
   { pt: "pavão", en: "peacock", tr: "tavus kuşu", emoji: "🦚", category: "Nouns" },
+  { pt: "carvalho", en: "oak (tree)", tr: "meşe (ağacı)", emoji: "🌳", category: "Nouns" },
+  { pt: "solo", en: "ground / soil", tr: "toprak / zemin", emoji: "🟤", category: "Nouns" },
+  { pt: "superfície", en: "surface", tr: "yüzey", emoji: "📐", category: "Nouns" },
+  { pt: "média", en: "average", tr: "ortalama", emoji: "📊", category: "Nouns" },
   // ── Pronouns & Function Words ─────────────────────────────────────────────────
   { pt: "meu", en: "my", tr: "benim", emoji: "👤", category: "Pronouns" },
   { pt: "nosso", en: "our", tr: "bizim", emoji: "👥", category: "Pronouns" },
@@ -573,6 +582,15 @@ export const kidsWords: Word[] = [
   { pt: "para", en: "to / for / until", tr: "için / -a / -e", emoji: "➡️", category: "Prepositions" },
   { pt: "por", en: "for / by", tr: "tarafından / için", emoji: "🔄", category: "Adverbs" },
   { pt: "há", en: "there is / for (time)", tr: "var / -dır", emoji: "⌛", category: "Adverbs" },
+  { pt: "dentro", en: "inside", tr: "içinde / içeri", emoji: "📦", category: "Adverbs" },
+  { pt: "atrás", en: "behind / at the back", tr: "arkasında / arkada", emoji: "⬅️", category: "Adverbs" },
+  { pt: "acima", en: "above / up", tr: "yukarıda / üstünde", emoji: "⬆️", category: "Adverbs" },
+  { pt: "abaixo", en: "below / down", tr: "aşağıda / altında", emoji: "⬇️", category: "Adverbs" },
+  { pt: "debaixo", en: "under / underneath", tr: "altında / altına", emoji: "🔽", category: "Adverbs" },
+  { pt: "cá", en: "here (general area)", tr: "buraya / bu tarafa", emoji: "🗺️", category: "Adverbs" },
+  { pt: "aí", en: "there (listener's location)", tr: "orada / orada (dinleyiciye yakın)", emoji: "👉", category: "Adverbs" },
+  { pt: "lá", en: "there (out of sight / general)", tr: "orada (görünmez mesafe)", emoji: "🌌", category: "Adverbs" },
+  { pt: "acolá", en: "over there (literary / distant)", tr: "şu tarafta (edebi / uzak)", emoji: "🏞️", category: "Adverbs" },
   // ── Prepositions ─────────────────────────────────────────────────────────────
   // Simple prepositions
   { pt: "de", en: "of / by / from", tr: "ait / tarafından / -den", emoji: "🏷️", category: "Prepositions" },
@@ -632,4 +650,5 @@ export const kidsWords: Word[] = [
   { pt: "juntos", en: "together", tr: "birlikte", emoji: "🤝", category: "Phrases" },
   { pt: "Que horas são?", en: "What time is it?", tr: "Saat kaç?", emoji: "🕐", category: "Phrases" },
   { pt: "Desculpe, quanto custa isto?", en: "Excuse me, how much does this cost?", tr: "Affedersiniz, bu ne kadar?", emoji: "💬", category: "Phrases" },
+  { pt: "Estás aí?", en: "Are you there?", tr: "Orada mısın?", emoji: "📞", category: "Phrases" },
 ];
