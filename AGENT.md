@@ -166,9 +166,7 @@ All vocabulary is maintained in `src/data/words.ts` (`kidsWords`), with companio
 
 A detailed step-by-step guide for adding words — including deduplication, category classification, emoji selection, insert positions, modal templates, A1/A2 sentence rules, and Portugal cultural references — is maintained as a Bob skill:
 
-```
-.bob/skills/add-portuguese-words/SKILL.md
-```
+👉 [`.bob/skills/add-portuguese-words/SKILL.md`](.bob/skills/add-portuguese-words/SKILL.md)
 
 **Follow that file for all vocabulary additions.** Key rules at a glance:
 
