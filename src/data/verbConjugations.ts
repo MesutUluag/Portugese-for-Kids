@@ -1996,4 +1996,48 @@ export const verbConjugations: Record<string, VerbConjugation> = {
       exParticipioTr: 'Ailem on yıldır Porto\'da yaşıyor.',
     },
   },
+  // ── mudar ─────────────────────────────────────────────────────────────────
+  mudar: {
+    a1: {
+      presente: rows('mudo', 'mudas', 'muda', 'mudamos', 'mudam'),
+      exPresente: 'Eu mudo de roupa depois da escola.',
+      exFuturo:   'Vou mudar de turma no próximo ano.',
+      exContinua: 'O tempo está a mudar rapidamente.',
+      exPresenteEn: 'I change clothes after school.',
+      exFuturoEn:   'I am going to change class next year.',
+      exContinuaEn: 'The weather is changing quickly.',
+      exPresenteTr: 'Okuldan sonra kıyafetlerimi değiştiriyorum.',
+      exFuturoTr:   'Gelecek yıl sınıf değiştireceğim.',
+      exContinuaTr: 'Hava hızla değişiyor.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('mudei',   'mudaste',  'mudou',   'mudámos',  'mudaram'),
+      preteritoImperfeito: rows('mudava',  'mudavas',  'mudava',  'mudávamos', 'mudavam'),
+      participioPassado: 'mudado',
+      exParticipioEn: 'The school has changed a lot this year.',
+      exParticipioTr: 'Okul bu yıl çok değişti.',
+    },
+  },
+  // ── passar ────────────────────────────────────────────────────────────────
+  passar: {
+    a1: {
+      presente: rows('passo', 'passas', 'passa', 'passamos', 'passam'),
+      exPresente: 'Eu passo o fim de semana com os meus avós.',
+      exFuturo:   'Vou passar as férias na Praia de Cascais.',
+      exContinua: 'Estou a passar a tarde no parque com os meus amigos.',
+      exPresenteEn: 'I spend the weekend with my grandparents.',
+      exFuturoEn:   'I am going to spend the holidays at Cascais Beach.',
+      exContinuaEn: 'I am spending the afternoon in the park with my friends.',
+      exPresenteTr: 'Hafta sonunu büyükannem ve büyükbabamla geçiriyorum.',
+      exFuturoTr:   'Tatilimi Cascais Plajı\'nda geçireceğim.',
+      exContinuaTr: 'Arkadaşlarımla parkta öğleden sonrayı geçiriyorum.',
+    },
+    a2: {
+      preteritoPerfeito:   rows('passei',   'passaste',  'passou',   'passámos',  'passaram'),
+      preteritoImperfeito: rows('passava',  'passavas',  'passava',  'passávamos', 'passavam'),
+      participioPassado: 'passado',
+      exParticipioEn: 'We have spent many summers in Sintra.',
+      exParticipioTr: 'Sintra\'da pek çok yaz geçirdik.',
+    },
+  },
 };

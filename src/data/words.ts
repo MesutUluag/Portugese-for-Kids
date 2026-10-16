@@ -84,6 +84,8 @@ export const kidsWords: Word[] = [
   { pt: "acontecer", en: "to happen", tr: "olmak / gerçekleşmek", emoji: "💫", category: "Verbs" },
   { pt: "trouxe", en: "I brought (past of trazer)", tr: "getirdim (trazer'in geçmişi)", emoji: "🎒", category: "Verbs" },
   { pt: "morar", en: "to live (reside)", tr: "ikamet etmek / oturmak", emoji: "🏠", category: "Verbs" },
+  { pt: "mudar", en: "to change", tr: "değişmek / değiştirmek", emoji: "🔄", category: "Verbs" },
+  { pt: "passar", en: "to spend time / pass", tr: "vakit geçirmek / geçmek", emoji: "🏖️", category: "Verbs" },
   // ── Family ───────────────────────────────────────────────────────────────────
   { pt: "pai", en: "father", tr: "baba", emoji: "👨", category: "Family" },
   { pt: "mãe", en: "mother", tr: "anne", emoji: "👩", category: "Family" },
@@ -522,6 +524,17 @@ export const kidsWords: Word[] = [
   { pt: "solo", en: "ground / soil", tr: "toprak / zemin", emoji: "🟤", category: "Nouns" },
   { pt: "superfície", en: "surface", tr: "yüzey", emoji: "📐", category: "Nouns" },
   { pt: "média", en: "average", tr: "ortalama", emoji: "📊", category: "Nouns" },
+  { pt: "geração", en: "generation", tr: "nesil / kuşak", emoji: "👨‍👩‍👧‍👦", category: "Nouns" },
+  { pt: "século", en: "century", tr: "yüzyıl", emoji: "📜", category: "Nouns" },
+  { pt: "era", en: "era", tr: "çağ / dönem", emoji: "🏺", category: "Nouns" },
+  { pt: "fase", en: "phase / stage", tr: "aşama / evre", emoji: "🔵", category: "Nouns" },
+  { pt: "etapa", en: "stage / step", tr: "aşama / adım", emoji: "🪜", category: "Nouns" },
+  { pt: "primavera", en: "spring", tr: "ilkbahar", emoji: "🌸", category: "Nouns" },
+  { pt: "verão", en: "summer", tr: "yaz", emoji: "☀️", category: "Nouns" },
+  { pt: "outono", en: "autumn", tr: "sonbahar", emoji: "🍂", category: "Nouns" },
+  { pt: "inverno", en: "winter", tr: "kış", emoji: "❄️", category: "Nouns" },
+  { pt: "estações", en: "seasons", tr: "mevsimler", emoji: "🌿", category: "Nouns" },
+  { pt: "temporada", en: "season (TV show)", tr: "sezon (dizi)", emoji: "📺", category: "Nouns" },
   // ── Pronouns & Function Words ─────────────────────────────────────────────────
   { pt: "meu", en: "my", tr: "benim", emoji: "👤", category: "Pronouns" },
   { pt: "nosso", en: "our", tr: "bizim", emoji: "👥", category: "Pronouns" },
@@ -624,6 +637,7 @@ export const kidsWords: Word[] = [
   { pt: "duma", en: "of a (f)", tr: "bir (dişil) -den eki", emoji: "🏷️", category: "Prepositions" },
   { pt: "duns", en: "of some (m, pl)", tr: "bazı (eril) -den eki", emoji: "🏷️", category: "Prepositions" },
   { pt: "dumas", en: "of some (f, pl)", tr: "bazı (dişil) -den eki", emoji: "🏷️", category: "Prepositions" },
+  { pt: "desde", en: "since / from", tr: "beri / -den beri", emoji: "📅", category: "Prepositions" },
   // ── Idioms & Expressions ──────────────────────────────────────────────────────
   // ── Common phrases ───────────────────────────────────────────────────────────
   { pt: "olá", en: "hello", tr: "merhaba", emoji: "👋", category: "Phrases" },
@@ -651,4 +665,6 @@ export const kidsWords: Word[] = [
   { pt: "Que horas são?", en: "What time is it?", tr: "Saat kaç?", emoji: "🕐", category: "Phrases" },
   { pt: "Desculpe, quanto custa isto?", en: "Excuse me, how much does this cost?", tr: "Affedersiniz, bu ne kadar?", emoji: "💬", category: "Phrases" },
   { pt: "Estás aí?", en: "Are you there?", tr: "Orada mısın?", emoji: "📞", category: "Phrases" },
+  { pt: "num momento", en: "in a moment", tr: "bir an içinde / hemen", emoji: "⏱️", category: "Phrases" },
+  { pt: "demora cinco minutos", en: "it takes five minutes", tr: "beş dakika sürer", emoji: "🕔", category: "Phrases" },
 ];
