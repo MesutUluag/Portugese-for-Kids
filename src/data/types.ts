@@ -4,6 +4,7 @@ export interface Word {
   tr: string;
   emoji: string;
   category: string;
+  gender?: 'm' | 'f';
 }
 
 export interface StoryPage {

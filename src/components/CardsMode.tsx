@@ -210,6 +210,24 @@ export default function CardsMode({ language }: Props): React.ReactElement {
                   <Zap size={14} color="white" strokeWidth={2.5} />
                 </button>
               )}
+              {w.gender && (
+                <span className={`noun-gender-badge noun-gender-badge--${w.gender}`}>
+                  {w.gender === 'm' ? (
+                    <svg viewBox="0 0 20 20" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="8" cy="13" r="5.5" />
+                      <line x1="12.5" y1="8.5" x2="18.5" y2="2.5" />
+                      <line x1="13.5" y1="2.5" x2="18.5" y2="2.5" />
+                      <line x1="18.5" y1="2.5" x2="18.5" y2="7.5" />
+                    </svg>
+                  ) : (
+                    <svg viewBox="0 0 20 22" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="10" cy="7.5" r="5.5" />
+                      <line x1="10" y1="13" x2="10" y2="21" />
+                      <line x1="6.5" y1="17" x2="13.5" y2="17" />
+                    </svg>
+                  )}
+                </span>
+              )}
             </div>
         ))}
       </div>
