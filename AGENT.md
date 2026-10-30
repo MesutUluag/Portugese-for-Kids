@@ -76,7 +76,7 @@ Up to 10 previous sentences are sent to the backend on each request (`MAX_CONVER
 Each context has a set of conversational `StoryPage` objects in `data/words.ts`. Reply pages carry a `replyTo` field that matches the `pt` text of the opener. `generateTemplateStoryPage` searches for a matching reply first; if none found it picks a random opener. Always add pairs (opener + reply with `replyTo`) — never add orphaned reply pages.
 
 ### Image fetch chain (`useBackendImage.ts` / `useStoryPrefetch.ts`)
-`fetchImageBlobUrl` calls the backend `/api/image` endpoint and returns a blob URL. It retries up to 3 times with exponential back-off; 429 responses trigger a 10-second wait before the next attempt. `useStoryPrefetch` deduplicates in-flight requests using a `ref`-based `Set` and revokes blob URLs on unmount (via `useEffect` cleanup).
+`fetchImageBlobUrl` calls the backend `/api/image` endpoint and returns a blob URL. It retries up to 3 times total (`RETRY_DELAYS_MS = [2_000, 5_000]`) for transient failures; `429` responses (daily rate limit exceeded) throw `'rate-limited'` immediately without retrying. `useStoryPrefetch` deduplicates in-flight requests using a `ref`-based `Set` and revokes blob URLs on unmount (via `useEffect` cleanup).
 
 ### Music player
 5 MP3 tracks in `public/music/`. Stored in `MUSIC_TRACKS`. Played via a detached `<audio>` element (not in the React tree). On `ended` it shuffles to a different track. Autoplay is attempted immediately; if blocked by the browser, a one-time `click`/`keydown` listener restarts it. The mute preference is stored in `localStorage` under `kids_music_enabled`. Music is disabled in dev mode by default (`!import.meta.env.DEV`).
