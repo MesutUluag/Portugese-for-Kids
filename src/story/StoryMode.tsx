@@ -301,57 +301,55 @@ export default function StoryMode({ aiState, onAiChange, language, prefetchPromi
   } as React.CSSProperties : {};
 
   return (
-    <div className="game-container" style={{ display: 'block', borderColor: '#0284c7' }}>
-      <div className="story-card">
-        <div className="story-context-row">
-          <select
-            className="story-context-select"
-            value={context}
-            onChange={(e) => setContext(e.target.value as StoryContext)}
-            aria-label={language === 'tr' ? 'Senaryo seç' : 'Choose scenario'}
-          >
-            {CONTEXTS.map(({ value, label, labelTr, emoji }) => (
-              <option key={value} value={value}>
-                {emoji} {language === 'tr' ? labelTr : label}
-              </option>
-            ))}
-          </select>
-        </div>
-        {page && theme
-          ? <StoryIllustration
-              key={pageKey}
-              page={page}
-              pageKey={pageKey}
-              sceneVars={sceneVars}
-              prefetchedImageUrl={imageCache.get(buildStoryImagePrompt(page, context))}
-            />
-          : <div className="story-illustration" style={sceneVars} />
-        }
-        <div className="story-audio-buttons">
-          <button className="btn-story-audio" onClick={() => page && speakText(page.pt)} title="Listen to Sentence">
-            <Volume2 size={20} strokeWidth={2} />
-          </button>
-          <button className="btn-story-audio btn-story-audio--slow" onClick={() => page && speakText(page.pt, { rate: 0.3 })} title="Listen to Sentence Slowly">
-            <Gauge size={20} strokeWidth={2} />
-          </button>
-        </div>
-        <div key={`text-${pageKey}`} className={`story-text-pt story-text--enter ${slideClass}`}>
-          {loading ? (language === 'tr' ? '🤖 Hikaye oluşturuluyor...' : '🤖 Generating story...') : page?.pt ?? '...'}
-        </div>
-        <div className="story-text-en">
-          {loading ? '' : language === 'tr' ? (trText || (page ? '🔄' : '')) : (page?.en ?? '')}
-        </div>
-        <div className="story-nav">
-          <button className="btn-story-action" onClick={handlePrev} disabled={index === 0}>
-            <ChevronLeft size={16} strokeWidth={2.5} style={{ marginRight: 4 }} />
-            Anterior
-          </button>
-          <span style={{ fontWeight: 'bold', color: '#0284c7' }}>{`Página ${index + 1}`}</span>
-          <button className="btn-story-action" onClick={() => void handleNext()} disabled={loading}>
-            Próxima
-            <ChevronRight size={16} strokeWidth={2.5} style={{ marginLeft: 4 }} />
-          </button>
-        </div>
+    <div className="story-card">
+      <div className="story-context-row">
+        <select
+          className="story-context-select"
+          value={context}
+          onChange={(e) => setContext(e.target.value as StoryContext)}
+          aria-label={language === 'tr' ? 'Senaryo seç' : 'Choose scenario'}
+        >
+          {CONTEXTS.map(({ value, label, labelTr, emoji }) => (
+            <option key={value} value={value}>
+              {emoji} {language === 'tr' ? labelTr : label}
+            </option>
+          ))}
+        </select>
+      </div>
+      {page && theme
+        ? <StoryIllustration
+            key={pageKey}
+            page={page}
+            pageKey={pageKey}
+            sceneVars={sceneVars}
+            prefetchedImageUrl={imageCache.get(buildStoryImagePrompt(page, context))}
+          />
+        : <div className="story-illustration" style={sceneVars} />
+      }
+      <div className="story-audio-buttons">
+        <button className="btn-story-audio" onClick={() => page && speakText(page.pt)} title="Listen to Sentence">
+          <Volume2 size={20} strokeWidth={2} />
+        </button>
+        <button className="btn-story-audio btn-story-audio--slow" onClick={() => page && speakText(page.pt, { rate: 0.3 })} title="Listen to Sentence Slowly">
+          <Gauge size={20} strokeWidth={2} />
+        </button>
+      </div>
+      <div key={`text-${pageKey}`} className={`story-text-pt story-text--enter ${slideClass}`}>
+        {loading ? (language === 'tr' ? '🤖 Hikaye oluşturuluyor...' : '🤖 Generating story...') : page?.pt ?? '...'}
+      </div>
+      <div className="story-text-en">
+        {loading ? '' : language === 'tr' ? (trText || (page ? '🔄' : '')) : (page?.en ?? '')}
+      </div>
+      <div className="story-nav">
+        <button className="btn-story-action" onClick={handlePrev} disabled={index === 0}>
+          <ChevronLeft size={16} strokeWidth={2.5} style={{ marginRight: 4 }} />
+          Anterior
+        </button>
+        <span style={{ fontWeight: 'bold', color: '#0284c7' }}>{`Página ${index + 1}`}</span>
+        <button className="btn-story-action" onClick={() => void handleNext()} disabled={loading}>
+          Próxima
+          <ChevronRight size={16} strokeWidth={2.5} style={{ marginLeft: 4 }} />
+        </button>
       </div>
     </div>
   );
