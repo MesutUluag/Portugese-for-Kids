@@ -86,6 +86,11 @@ export const kidsWords: Word[] = [
   { pt: "morar", en: "to live (reside)", tr: "ikamet etmek / oturmak", emoji: "🏠", category: "Verbs" },
   { pt: "mudar", en: "to change", tr: "değişmek / değiştirmek", emoji: "🔄", category: "Verbs" },
   { pt: "passar", en: "to spend time / pass", tr: "vakit geçirmek / geçmek", emoji: "🏖️", category: "Verbs" },
+  { pt: "vestir", en: "to dress / to put on (clothes)", tr: "giymek / giyinmek", emoji: "👕", category: "Verbs" },
+  { pt: "calçar", en: "to put on (shoes / socks)", tr: "giymek (ayakkabı / çorap)", emoji: "👟", category: "Verbs" },
+  { pt: "rir", en: "to laugh", tr: "gülmek", emoji: "😂", category: "Verbs" },
+  { pt: "sorrir", en: "to smile", tr: "gülümsemek", emoji: "🙂", category: "Verbs" },
+  { pt: "cair", en: "to fall", tr: "düşmek", emoji: "🤸", category: "Verbs" },
   // ── Family ───────────────────────────────────────────────────────────────────
   { pt: "pai", en: "father", tr: "baba", emoji: "👨", category: "Family", gender: 'm' },
   { pt: "mãe", en: "mother", tr: "anne", emoji: "👩", category: "Family", gender: 'f' },
@@ -284,6 +289,10 @@ export const kidsWords: Word[] = [
   { pt: "meias", en: "socks", tr: "çorap", emoji: "🧦", category: "Clothes", gender: 'f' },
   { pt: "cinto", en: "belt", tr: "kemer", emoji: "🔗", category: "Clothes", gender: 'm' },
   { pt: "fato de banho", en: "swimsuit / swimming costume", tr: "mayo", emoji: "🩱", category: "Clothes", gender: 'm' },
+  { pt: "gravata", en: "tie", tr: "kravat", emoji: "👔", category: "Clothes", gender: 'f' },
+  { pt: "cuecas", en: "underpants / briefs", tr: "külot / iç çamaşırı", emoji: "🩲", category: "Clothes", gender: 'f' },
+  { pt: "sutiã", en: "bra", tr: "sütyen", emoji: "👙", category: "Clothes", gender: 'm' },
+  { pt: "gorro", en: "winter hat / beanie", tr: "bere / kışlık şapka", emoji: "🎅", category: "Clothes", gender: 'm' },
   // ── Home ─────────────────────────────────────────────────────────────────────
   { pt: "casa", en: "house / home", tr: "ev", emoji: "🏠", category: "Home", gender: 'f' },
   { pt: "porta", en: "door", tr: "kapı", emoji: "🚪", category: "Home", gender: 'f' },
@@ -535,6 +544,9 @@ export const kidsWords: Word[] = [
   { pt: "inverno", en: "winter", tr: "kış", emoji: "❄️", category: "Nouns", gender: 'm' },
   { pt: "estações", en: "seasons", tr: "mevsimler", emoji: "🌿", category: "Nouns", gender: 'f' },
   { pt: "temporada", en: "season (TV show)", tr: "sezon (dizi)", emoji: "📺", category: "Nouns", gender: 'f' },
+  { pt: "emprego", en: "job / employment", tr: "iş / meslek", emoji: "💼", category: "Nouns", gender: 'm' },
+  { pt: "aposta", en: "bet / wager", tr: "iddia / bahis", emoji: "🎲", category: "Nouns", gender: 'f' },
+  { pt: "caminho", en: "path / way", tr: "yol / patika", emoji: "🛤️", category: "Nouns", gender: 'm' },
   // ── Pronouns & Function Words ─────────────────────────────────────────────────
   { pt: "meu", en: "my", tr: "benim", emoji: "👤", category: "Pronouns" },
   { pt: "nosso", en: "our", tr: "bizim", emoji: "👥", category: "Pronouns" },
