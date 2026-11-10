@@ -16,6 +16,7 @@ interface Props {
 }
 
 const CATEGORY_LIST = [
+  'Mixed',
   'Verbs',
   'Numbers',
   'Colours',
@@ -39,6 +40,7 @@ const CATEGORY_LIST = [
 ] as const;
 
 const CATEGORY_EMOJI: Record<string, string> = {
+  Mixed: '🔀',
   Verbs: '🏃',
   Family: '👨‍👩‍👧',
   Animals: '🐾',
@@ -63,6 +65,7 @@ const CATEGORY_EMOJI: Record<string, string> = {
 };
 
 const CATEGORY_TR: Record<string, string> = {
+  Mixed: 'Karışık',
   Verbs: 'Fiiller',
   Family: 'Aile',
   Animals: 'Hayvanlar',
@@ -121,7 +124,7 @@ export default function Game8({ onScore, language }: Props): React.ReactElement 
   // Filter words by selected category
   const filteredWords = useMemo(() => {
     if (!allWords.length) return [];
-    if (selectedCategory === 'ALL') return allWords;
+    if (selectedCategory === 'ALL' || selectedCategory === 'Mixed') return allWords;
     return allWords.filter((w) => w.category === selectedCategory);
   }, [allWords, selectedCategory]);
 
