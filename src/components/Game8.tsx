@@ -441,9 +441,9 @@ export default function Game8({ onScore, language }: Props): React.ReactElement 
               className="game8-btn-action game8-btn-action--sound"
               onClick={() => speakText(activeWord.word.pt)}
               title={language === 'tr' ? 'Telaffuzunu Dinle' : 'Listen pronunciation'}
+              aria-label={language === 'tr' ? 'Telaffuzunu Dinle' : 'Listen pronunciation'}
             >
-              <Volume2 size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: 2 }} />
-              🔊
+              <Volume2 size={15} />
             </button>
           </div>
 
