@@ -29,6 +29,7 @@ src/
 │   ├── Game5.tsx               # Scramble (unscramble letters; prev/next history)
 │   ├── Game6.tsx               # Jigsaw Puzzle (canvas drag-and-snap, 3×3 grid)
 │   ├── Game7.tsx               # Market Game (drag items → animated cart, bunny mascot)
+│   ├── Game8.tsx               # Arrowword / Crossword Puzzle (dynamic grid, category filter, TR/EN clues)
 │   └── InAppBrowserGuard.tsx   # WebView detection + redirect prompt (Turkish UI)
 ├── data/
 │   ├── verbConjugations.ts     # A1 & A2 conjugation tables and example sentences for 60 verbs
@@ -43,6 +44,7 @@ src/
 │   └── useStoryPrefetch.ts     # Image prefetch cache hook + buildStoryImagePrompt
 └── utils/
     ├── ai.ts                   # AiState, StoryContext, CONTEXT_TOPICS, backend story fetch + template fallback
+    ├── crosswordGenerator.ts   # Dynamic Arrowword / Crossword conflict-free grid generator
     ├── speech.ts               # Web Speech API (pt-PT, slow mode, Chrome utterance GC fix)
     ├── translate.ts            # EN→TR via MyMemory
     ├── usePollinationsImage.ts # Pollinations AI image hook
@@ -98,6 +100,18 @@ Audio feedback uses the Web Audio API (`playSynth`). `getNumberWord` handles Por
 
 ### Scene themes (`sceneTheme.ts`)
 `getSceneTheme` inspects `mainEmoji`, `bgLeft`, `bgRight` of a `StoryPage` and returns a `SceneTheme` record of CSS colour values. The returned values are applied as CSS custom properties (`--sky-top`, `--hill-color`, etc.) on the illustration container. There are 5 named themes plus the default day theme.
+
+### Crossword / Çengel Bulmaca Game (`Game8.tsx` & `crosswordGenerator.ts`)
+Dynamic Arrowword / Crossword puzzle generated at runtime from category vocabulary (`Verbs`, `Numbers`, `Colours`, `Animals`, etc.).
+- **Generator Rules**:
+  - Word count: 9–12 words per puzzle (9 base words + up to 3 pocket-filling bonus words when space permits).
+  - Bounding box: constrained to `width <= 10` and `height <= 13` for mobile fit.
+  - Clue placement: Clue boxes occupy the cell directly before the word (`(startR, startC - 1)` for Across, `(startR - 1, startC)` for Down). Can merge into split clues (1 across + 1 down in one box).
+  - **Neighbor Constraints (Çengel Bulmaca standard)**: A clue cell must **never** have a letter cell to its left or above it (ensuring no blank fill-in cells appear to the left of across clues or above down clues).
+- **Mobile UI**:
+  - Single-row header on mobile with category select, `New` button, and score badge.
+  - 2-row active clue banner (row 1: direction badge, clue text, audio; row 2: letter dashes, hint, check, solve buttons).
+  - Balanced 9-9-9 on-screen keyboard (`A-H` including `Ç`, `I-Q`, `R-Z + Del`) with `flex-wrap: nowrap` preventing orphan keys.
 
 ### Verb Conjugation Modal (`ConjugationModal.tsx` & `verbConjugations.ts`)
 - **Trigger**: Displayed from `CardsMode.tsx` via a book icon button (`BookOpen`) on verb cards when `verbConjugations[word.pt]` exists.

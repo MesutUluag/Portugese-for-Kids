@@ -18,7 +18,7 @@ export interface StoryPage {
   replyTo?: string;
 }
 
-export type Mode = 'cards' | 'story' | 'game1' | 'game2' | 'game3' | 'game4' | 'game5' | 'game6' | 'game7';
+export type Mode = 'cards' | 'story' | 'game8' | 'game1' | 'game2' | 'game3' | 'game4' | 'game5' | 'game6' | 'game7';
 
 export interface MarketItem {
   id: string;

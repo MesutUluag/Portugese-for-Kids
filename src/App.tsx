@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import LoadingSpinner from './commons/LoadingSpinner';
-import { LayoutGrid, BookOpen, Image, Headphones, Layers, PencilLine, Puzzle, Globe, Timer, Volume2, VolumeX, ShoppingCart } from 'lucide-react';
+import { LayoutGrid, BookOpen, Image, Headphones, Layers, PencilLine, Puzzle, Globe, Timer, Volume2, VolumeX, ShoppingCart, Grid3X3 } from 'lucide-react';
 import { Mode, StoryPage } from './data/index';
 import { AiState, initAI, getNewStoryPage } from './utils/ai';
 import { buildStoryImagePrompt } from './story/useStoryPrefetch';
@@ -14,6 +14,7 @@ const Game4 = React.lazy(() => import('./components/Game4'));
 const Game5 = React.lazy(() => import('./components/Game5'));
 const Game6 = React.lazy(() => import('./components/Game6'));
 const Game7 = React.lazy(() => import('./components/Game7'));
+const Game8 = React.lazy(() => import('./components/Game8'));
 
 const MUSIC_TRACKS = [
   'alex-morgan-kids-background-music-579469.mp3',
@@ -189,6 +190,7 @@ export default function App(): React.ReactElement {
   const navButtons: NavButton[] = [
     { key: 'cards',  label: 'Cards',        labelTr: 'Kartlar',        cls: 'btn-kids',   icon: <LayoutGrid  size={15} strokeWidth={2} /> },
     { key: 'story',  label: 'Story',        labelTr: 'Hikaye',         cls: 'btn-story',  icon: <BookOpen    size={15} strokeWidth={2} /> },
+    { key: 'game8',  label: 'Crossword',    labelTr: 'Çengel Bulmaca', cls: 'btn-game8',  icon: <Grid3X3     size={15} strokeWidth={2} /> },
     { key: 'game1',  label: 'Picture Game', labelTr: 'Resim Oyunu',    cls: 'btn-game1',  icon: <Image       size={15} strokeWidth={2} /> },
     { key: 'game2',  label: 'Listen & Find',labelTr: 'Dinle & Bul',    cls: 'btn-game2',  icon: <Headphones  size={15} strokeWidth={2} /> },
     { key: 'game3',  label: 'Memory Match', labelTr: 'Hafıza Oyunu',   cls: 'btn-game3',  icon: <Layers      size={15} strokeWidth={2} /> },
@@ -252,6 +254,7 @@ export default function App(): React.ReactElement {
             replyImagePrefetchPromise={replyImagePrefetchRef.current ?? undefined}
           />
         )}
+        {mode === 'game8' && <Game8 onScore={addScore} language={language} />}
         {mode === 'game1' && <Game1 onScore={addScore} language={language} />}
         {mode === 'game2' && <Game2 onScore={addScore} language={language} />}
         {mode === 'game3' && <Game3 onScore={addScore} language={language} />}
