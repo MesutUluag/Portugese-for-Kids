@@ -106,7 +106,7 @@ const ACCENT_MAP: Record<string, string[]> = {
 
 export default function Game8({ onScore, language }: Props): React.ReactElement {
   const [allWords, setAllWords] = useState<Word[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('Verbs');
+  const [selectedCategory, setSelectedCategory] = useState<string>('Mixed');
   const [puzzle, setPuzzle] = useState<CrosswordPuzzle | null>(null);
   const [activeWordId, setActiveWordId] = useState<string>('');
   const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
