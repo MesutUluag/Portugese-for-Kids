@@ -7,7 +7,7 @@ import {
   type CrosswordPuzzle,
   type PlacedWord,
 } from '../utils/crosswordGenerator';
-import { Volume2, Dices } from 'lucide-react';
+import { Volume2, Dices, Delete } from 'lucide-react';
 import '../styles/Game8.scss';
 
 interface Props {
@@ -654,8 +654,9 @@ export default function Game8({ onScore, language }: Props): React.ReactElement 
             className="game8-key-btn game8-key-btn--backspace"
             onClick={deleteLetter}
             title={language === 'tr' ? 'Harf sil' : 'Delete letter'}
+            aria-label={language === 'tr' ? 'Harf sil' : 'Delete letter'}
           >
-            ⌫ {language === 'tr' ? 'Sil' : 'Del'}
+            <Delete size={17} strokeWidth={2.2} />
           </button>
         </div>
       </div>
