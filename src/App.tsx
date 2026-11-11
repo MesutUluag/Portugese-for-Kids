@@ -1,10 +1,31 @@
 import React, { Suspense, useEffect, useRef, useState } from 'react';
 import LoadingSpinner from './commons/LoadingSpinner';
-import { LayoutGrid, BookOpen, Image, Headphones, Layers, PencilLine, Puzzle, Globe, Timer, Volume2, VolumeX, ShoppingCart, Grid3X3 } from 'lucide-react';
+import {
+  LayoutGrid,
+  BookOpen,
+  Image,
+  Headphones,
+  Layers,
+  PencilLine,
+  Puzzle,
+  Globe,
+  Timer,
+  Volume2,
+  VolumeX,
+  ShoppingCart,
+  Grid3X3,
+  Flame,
+  LogIn,
+} from 'lucide-react';
 import { Mode, StoryPage } from './data/index';
 import { AiState, initAI, getNewStoryPage } from './utils/ai';
 import { buildStoryImagePrompt } from './story/useStoryPrefetch';
 import { fetchImageBlobUrl } from './story/useBackendImage';
+import { useAuth } from './auth/AuthContext';
+import { useStatsTracker } from './auth/useStatsTracker';
+import AuthModal from './auth/AuthModal';
+import StatsModal from './auth/StatsModal';
+
 const CardsMode = React.lazy(() => import('./components/CardsMode'));
 const StoryMode = React.lazy(() => import('./story/StoryMode'));
 const Game1 = React.lazy(() => import('./components/Game1'));
@@ -26,39 +47,80 @@ const MUSIC_TRACKS = [
 const BACKGROUND_MUSIC_VOLUME = 0.03;
 
 export default function App(): React.ReactElement {
+  const { user, profile, openAuthModal, openStatsModal } = useAuth();
   const [mode, setMode] = useState<Mode>('cards');
+  const [pendingStoryAfterAuth, setPendingStoryAfterAuth] = useState(false);
   const [_score, setScore] = useState(0);
   const [_bounce, setBounce] = useState(false);
   const [aiState, setAiState] = useState<AiState>(null);
-  // Lazy-initialise once: useRef(value) evaluates `value` on every render even though
-  // React only uses it on the first render, so wrapping in a ref-guarded pattern ensures
-  // the fetch fires exactly once regardless of how often App re-renders.
+  const [language, setLanguage] = useState<'en' | 'tr'>('en');
+
+  // Stats Tracker hook
+  const { recordStoryView, recordGameScore, recordSpeechListen } = useStatsTracker(mode);
+
+  // Authenticated prefetch refs
   const storyPrefetchRef = useRef<Promise<StoryPage> | null>(null);
-  // Image for page 1 — started as soon as page 1 text resolves.
   const imagePrefetchRef = useRef<Promise<string> | null>(null);
-  // Page 2 text — started as soon as page 1 text resolves (reply prefetch).
   const replyPrefetchRef = useRef<Promise<StoryPage> | null>(null);
-  // Image for page 2 — started as soon as page 2 text resolves.
   const replyImagePrefetchRef = useRef<Promise<string> | null>(null);
+  const createdBlobUrlsRef = useRef<string[]>([]);
 
-  if (storyPrefetchRef.current === null) {
-    storyPrefetchRef.current = getNewStoryPage('backend', () => {}, 'school');
+  // Authenticated background prefetch pipeline:
+  // Starts only when user is logged in (session restored or fresh login).
+  // Cleans up & revokes blob URLs on logout or guest state.
+  useEffect(() => {
+    if (!user) {
+      if (mode === 'story') {
+        setMode('cards');
+      }
+      storyPrefetchRef.current = null;
+      imagePrefetchRef.current = null;
+      replyPrefetchRef.current = null;
+      replyImagePrefetchRef.current = null;
+      createdBlobUrlsRef.current.forEach((url) => {
+        try {
+          URL.revokeObjectURL(url);
+        } catch {
+          // ignore
+        }
+      });
+      createdBlobUrlsRef.current = [];
+      return;
+    }
 
-    // As soon as page 1 arrives: kick off its image AND prefetch page 2.
-    imagePrefetchRef.current = storyPrefetchRef.current
-      .then((page) => fetchImageBlobUrl(buildStoryImagePrompt(page)))
+    if (pendingStoryAfterAuth) {
+      setPendingStoryAfterAuth(false);
+      setMode('story');
+    }
+
+    if (storyPrefetchRef.current !== null) return;
+
+    const p1 = getNewStoryPage('backend', () => {}, 'school');
+    storyPrefetchRef.current = p1;
+
+    imagePrefetchRef.current = p1
+      .then(async (page) => {
+        const url = await fetchImageBlobUrl(buildStoryImagePrompt(page));
+        if (url) createdBlobUrlsRef.current.push(url);
+        return url;
+      })
       .catch(() => '');
 
-    replyPrefetchRef.current = storyPrefetchRef.current
+    const p2 = p1
       .then((page) => getNewStoryPage('backend', () => {}, 'school', page.pt, [page.pt]))
       .catch(() => undefined as unknown as StoryPage);
+    replyPrefetchRef.current = p2;
 
-    // As soon as page 2 arrives: kick off its image.
-    replyImagePrefetchRef.current = replyPrefetchRef.current
-      .then((reply) => reply ? fetchImageBlobUrl(buildStoryImagePrompt(reply)) : '')
+    replyImagePrefetchRef.current = p2
+      .then(async (reply) => {
+        if (!reply) return '';
+        const url = await fetchImageBlobUrl(buildStoryImagePrompt(reply));
+        if (url) createdBlobUrlsRef.current.push(url);
+        return url;
+      })
       .catch(() => '');
-  }
-  const [language, setLanguage] = useState<'en' | 'tr'>('en');
+  }, [user]);
+
   const [musicEnabled, setMusicEnabled] = useState<boolean>(() => {
     try {
       const saved = localStorage.getItem('kids_music_enabled');
@@ -93,13 +155,48 @@ export default function App(): React.ReactElement {
     return 0;
   });
 
+  const syncedProfileUidRef = useRef<string | null>(null);
+
+  // Sync local timeSpent with server dailyTimeSeconds when profile loads or user changes
+  useEffect(() => {
+    const today = getTodayDateString();
+    if (!user) {
+      if (syncedProfileUidRef.current !== null) {
+        syncedProfileUidRef.current = null;
+        setTimeSpent(0);
+        try {
+          localStorage.setItem('kids_study_time_date', today);
+          localStorage.setItem('kids_study_time_seconds', '0');
+        } catch {
+          // ignore
+        }
+      }
+      return;
+    }
+
+    if (!profile) return;
+
+    const serverTodaySeconds = profile.stats?.dailyTimeSeconds?.[today] ?? 0;
+    const isInitialSyncForUser = syncedProfileUidRef.current !== profile.uid;
+
+    if (isInitialSyncForUser || serverTodaySeconds > timeSpent) {
+      syncedProfileUidRef.current = profile.uid;
+      setTimeSpent(serverTodaySeconds);
+      try {
+        localStorage.setItem('kids_study_time_date', today);
+        localStorage.setItem('kids_study_time_seconds', String(serverTodaySeconds));
+      } catch {
+        // ignore
+      }
+    }
+  }, [user, profile, timeSpent]);
+
   useEffect(() => {
     void initAI((_label, _color) => {}).then((state) => setAiState(state));
   }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      // Pause the timer if the user is on a different tab or the window is minimized
       if (document.visibilityState !== 'visible') {
         return;
       }
@@ -120,7 +217,6 @@ export default function App(): React.ReactElement {
     return () => clearInterval(timer);
   }, []);
 
-  // Stable function — safe to call from any child via startMusicRef
   function playTrack() {
     const audio = audioRef.current;
     if (!audio || !musicEnabledRef.current) return;
@@ -140,10 +236,8 @@ export default function App(): React.ReactElement {
     audioRef.current = audio;
     audio.addEventListener('ended', playTrack);
 
-    // Try immediately — works if browser allows autoplay
     playTrack();
 
-    // If autoplay was blocked, start on first user interaction
     function onFirstInteraction() {
       if (!musicEnabledRef.current || !audio.paused) return;
       playTrack();
@@ -182,9 +276,24 @@ export default function App(): React.ReactElement {
 
   function addScore(pts: number) {
     setScore((s) => s + pts);
+    recordGameScore(mode, pts);
     setBounce(true);
     setTimeout(() => setBounce(false), 300);
   }
+
+  const handleModeSelect = (key: Mode) => {
+    if (key === 'story' && !user) {
+      setPendingStoryAfterAuth(true);
+      openAuthModal(
+        language === 'tr'
+          ? 'Yapay zeka hikaye modunu açmak ve ilerlemenizi kaydetmek için lütfen giriş yapın!'
+          : 'Please sign in to access AI Story Mode and save your reading progress!'
+      );
+      return;
+    }
+    setPendingStoryAfterAuth(false);
+    setMode(key);
+  };
 
   type NavButton = { key: Mode; label: string; labelTr: string; cls: string; icon: React.ReactNode };
   const navButtons: NavButton[] = [
@@ -223,9 +332,35 @@ export default function App(): React.ReactElement {
           </button>
         </div>
       </div>
-      <div className="time-badge">
-        <Timer size={14} strokeWidth={2} style={{ marginRight: 4 }} />
-        {language === 'tr' ? 'Bugün' : 'Time Today'}: {formatTime(timeSpent)}
+
+      <div className="top-stats-bar">
+        <div className="time-badge">
+          <Timer size={14} strokeWidth={2} style={{ marginRight: 4 }} />
+          {language === 'tr' ? 'Bugün' : 'Time Today'}: {formatTime(timeSpent)}
+        </div>
+
+        {user ? (
+          <button
+            className="btn-profile-badge"
+            onClick={openStatsModal}
+            title={language === 'tr' ? 'Profil ve İstatistikler' : 'Profile & Stats'}
+          >
+            <Flame size={14} color="#ea580c" strokeWidth={2.5} style={{ marginRight: 3 }} />
+            <span className="streak-count">{profile?.stats?.currentStreakDays ?? 0}</span>
+            <span className="user-name-chip">
+              {profile?.displayName ? profile.displayName.split(' ')[0] : 'Profile'}
+            </span>
+          </button>
+        ) : (
+          <button
+            className="btn-auth-prompt-badge"
+            onClick={() => openAuthModal()}
+            title={language === 'tr' ? 'Giriş Yap' : 'Sign In'}
+          >
+            <LogIn size={13} style={{ marginRight: 4 }} />
+            <span>{language === 'tr' ? 'Giriş Yap' : 'Sign In'}</span>
+          </button>
+        )}
       </div>
 
       <div className="nav-buttons">
@@ -233,7 +368,7 @@ export default function App(): React.ReactElement {
           <button
             key={key}
             className={`btn ${cls}${mode === key ? ' btn--active' : ''}`}
-            onClick={() => setMode(key)}
+            onClick={() => handleModeSelect(key)}
           >
             {icon}
             <span style={{ marginLeft: 5 }}>{language === 'tr' ? labelTr : label}</span>
@@ -252,6 +387,8 @@ export default function App(): React.ReactElement {
             imagePrefetchPromise={imagePrefetchRef.current ?? undefined}
             replyPrefetchPromise={replyPrefetchRef.current ?? undefined}
             replyImagePrefetchPromise={replyImagePrefetchRef.current ?? undefined}
+            onStoryPracticed={recordStoryView}
+            onSpeechListen={recordSpeechListen}
           />
         )}
         {mode === 'game8' && <Game8 onScore={addScore} language={language} />}
@@ -263,6 +400,9 @@ export default function App(): React.ReactElement {
         {mode === 'game6' && <Game6 onScore={addScore} language={language} />}
         {mode === 'game7' && <Game7 onScore={addScore} language={language} />}
       </Suspense>
+
+      <AuthModal language={language} />
+      <StatsModal language={language} />
     </main>
   );
 }

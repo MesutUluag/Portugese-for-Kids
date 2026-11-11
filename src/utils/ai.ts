@@ -1,4 +1,5 @@
 import { StoryPage, templatePagesByContext } from '../data/index';
+import { auth, getAuthToken } from '../auth/firebase';
 
 export type AiState = 'backend' | 'template' | null;
 export type StoryContext =
@@ -297,6 +298,32 @@ async function fetchWithTimeout(url: string, options: RequestInit, ms: number): 
   }
 }
 
+async function fetchWithAuth(
+  url: string,
+  options: RequestInit,
+  timeoutMs = 25000,
+): Promise<Response> {
+  let token = await getAuthToken(false);
+  const headers = new Headers(options.headers || {});
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
+  }
+
+  let res = await fetchWithTimeout(url, { ...options, headers }, timeoutMs);
+
+  // If 401 Unauthorized, force token refresh and retry once
+  if (res.status === 401 && auth.currentUser) {
+    token = await getAuthToken(true);
+    if (token) {
+      const retryHeaders = new Headers(options.headers || {});
+      retryHeaders.set('Authorization', `Bearer ${token}`);
+      res = await fetchWithTimeout(url, { ...options, headers: retryHeaders }, timeoutMs);
+    }
+  }
+
+  return res;
+}
+
 const MAX_CONVERSATION_HISTORY = 10;
 
 async function fetchBackendStory(
@@ -321,7 +348,7 @@ async function fetchBackendStory(
     // Keep only the most recent MAX_CONVERSATION_HISTORY items to cap payload size.
     body.conversationHistory = conversationHistory.slice(-MAX_CONVERSATION_HISTORY);
   }
-  const res = await fetchWithTimeout(BACKEND_URL, {
+  const res = await fetchWithAuth(BACKEND_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(body),

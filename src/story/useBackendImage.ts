@@ -1,3 +1,5 @@
+import { auth, getAuthToken } from '../auth/firebase';
+
 const IMAGE_BACKEND_URL = import.meta.env.DEV
   ? 'http://127.0.0.1:8081/api/image'
   : 'https://portugese-for-kids-backend-784137631227.us-central1.run.app/api/image';
@@ -11,8 +13,8 @@ function sleep(ms: number): Promise<void> {
 /**
  * Fetches an AI-generated image and returns a blob URL.
  * Retries up to 3 times total (2 retries) with backoff.
- * On a 429 response throws immediately without retrying.
- * Throws if all attempts fail.
+ * On a 429 or 401 response throws immediately without burning retries.
+ * Automatically attempts 1 token refresh retry on 401 before giving up.
  */
 export async function fetchImageBlobUrl(prompt: string, timeoutMs = 30000): Promise<string> {
   const url = `${IMAGE_BACKEND_URL}?imagePrompt=${encodeURIComponent(prompt)}&width=768&height=336`;
@@ -24,18 +26,43 @@ export async function fetchImageBlobUrl(prompt: string, timeoutMs = 30000): Prom
     const timer = setTimeout(() => controller.abort(), timeoutMs);
 
     try {
-      const res = await fetch(url, { signal: controller.signal });
+      let token = await getAuthToken(false);
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      let res = await fetch(url, { signal: controller.signal, headers });
       clearTimeout(timer);
+
+      // On 401, force-refresh token and retry once
+      if (res.status === 401 && auth.currentUser) {
+        token = await getAuthToken(true);
+        if (token) {
+          const retryController = new AbortController();
+          const retryTimer = setTimeout(() => retryController.abort(), timeoutMs);
+          try {
+            res = await fetch(url, {
+              signal: retryController.signal,
+              headers: { Authorization: `Bearer ${token}` },
+            });
+          } finally {
+            clearTimeout(retryTimer);
+          }
+        }
+      }
 
       if (res.ok) {
         const blob = await res.blob();
         return URL.createObjectURL(blob);
       }
 
-      const isRateLimited = res.status === 429;
-      if (isRateLimited) {
-        // Daily rate limit exceeded — retrying will not succeed today
+      if (res.status === 429) {
         throw new Error('rate-limited');
+      }
+
+      if (res.status === 401) {
+        throw new Error('unauthorized');
       }
 
       const isLastAttempt = attempt === maxAttempts - 1;
@@ -48,13 +75,13 @@ export async function fetchImageBlobUrl(prompt: string, timeoutMs = 30000): Prom
       await sleep(delay);
     } catch (err) {
       clearTimeout(timer);
-      if (err instanceof Error && err.message === 'rate-limited') throw err;
-      // Re-throw on last attempt or if it was an abort/network error on last attempt
+      if (err instanceof Error && (err.message === 'rate-limited' || err.message === 'unauthorized')) {
+        throw err;
+      }
       if (attempt === maxAttempts - 1) throw err;
       await sleep(RETRY_DELAYS_MS[attempt]);
     }
   }
 
-  // Unreachable, but satisfies TypeScript
   throw new Error('Image fetch failed after all retries');
 }
