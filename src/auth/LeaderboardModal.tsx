@@ -165,56 +165,13 @@ export default function LeaderboardModal({ language }: Props): React.ReactElemen
       isCurrentUser: true,
     };
 
-    const mockPeers: LeaderboardEntry[] = [
-      {
-        rank: 0,
-        displayName: 'Beatriz M.',
-        avatarInitial: 'B',
-        totalScore: 240,
-        scoreByMode: { game8: 95, game3: 65, game1: 40, game6: 40 },
-        gamesCompleted: 14,
-        isCurrentUser: false,
-      },
-      {
-        rank: 0,
-        displayName: 'Lucas S.',
-        avatarInitial: 'L',
-        totalScore: 195,
-        scoreByMode: { game8: 75, game5: 45, game2: 45, game7: 30 },
-        gamesCompleted: 11,
-        isCurrentUser: false,
-      },
-      {
-        rank: 0,
-        displayName: 'Tiago R.',
-        avatarInitial: 'T',
-        totalScore: 150,
-        scoreByMode: { game3: 50, game4: 40, game1: 35, game6: 25 },
-        gamesCompleted: 9,
-        isCurrentUser: false,
-      },
-      {
-        rank: 0,
-        displayName: 'Sofia C.',
-        avatarInitial: 'S',
-        totalScore: 115,
-        scoreByMode: { game1: 30, game2: 30, game7: 35, game4: 20 },
-        gamesCompleted: 7,
-        isCurrentUser: false,
-      },
-    ];
-
-    const all = [...mockPeers, currentUserEntry].sort((a, b) => b.totalScore - a.totalScore);
-    all.forEach((entry, idx) => {
-      entry.rank = idx + 1;
-    });
-
-    const resolvedCurrent = all.find((e) => e.isCurrentUser) ?? currentUserEntry;
+    const hasActivity = userScore > 0 || userGamesCompleted > 0 || !!profile;
+    const topUsers = hasActivity ? [currentUserEntry] : [];
 
     return {
-      topUsers: all,
-      currentUser: resolvedCurrent,
-      totalUsersCount: all.length,
+      topUsers,
+      currentUser: currentUserEntry,
+      totalUsersCount: topUsers.length,
       lastUpdated: Date.now(),
     };
   }, [profile, language]);
@@ -410,67 +367,85 @@ export default function LeaderboardModal({ language }: Props): React.ReactElemen
               </div>
             )}
 
-            <div className="ranking-list">
-              {data?.topUsers.map((player) => {
-                const isUser = player.isCurrentUser;
-                const isPodium = player.rank <= 3;
+            {!loading && data && data.topUsers.length === 0 && (
+              <div className="empty-ranking-state">
+                <div className="empty-icon-wrap">
+                  <Trophy size={36} color="#cbd5e1" />
+                </div>
+                <p className="empty-title">
+                  {language === 'tr' ? 'Henüz sıralamada kimse yok!' : 'No scores on the leaderboard yet!'}
+                </p>
+                <p className="empty-desc">
+                  {language === 'tr'
+                    ? 'Oyunları oyna, ilk puanları toplayarak liderlik tablosundaki ilk kaşif sen ol!'
+                    : 'Play games, earn points, and become the very first explorer on the leaderboard!'}
+                </p>
+              </div>
+            )}
 
-                return (
-                  <div
-                    key={`${player.rank}-${player.displayName}`}
-                    className={`ranking-row ${isUser ? 'ranking-row--user' : ''} ${
-                      isPodium ? `ranking-row--podium-${player.rank}` : ''
-                    }`}
-                  >
-                    {/* Rank Indicator */}
-                    <div className="rank-col">
-                      {player.rank === 1 ? (
-                        <span className="medal gold" title="1st Place">
-                          🥇
-                        </span>
-                      ) : player.rank === 2 ? (
-                        <span className="medal silver" title="2nd Place">
-                          🥈
-                        </span>
-                      ) : player.rank === 3 ? (
-                        <span className="medal bronze" title="3rd Place">
-                          🥉
-                        </span>
-                      ) : (
-                        <span className="rank-num">#{player.rank}</span>
-                      )}
-                    </div>
+            {data && data.topUsers.length > 0 && (
+              <div className="ranking-list">
+                {data.topUsers.map((player) => {
+                  const isUser = player.isCurrentUser;
+                  const isPodium = player.rank <= 3;
 
-                    {/* Avatar */}
+                  return (
                     <div
-                      className="player-avatar"
-                      style={{ background: getAvatarColor(player.displayName) }}
+                      key={`${player.rank}-${player.displayName}`}
+                      className={`ranking-row ${isUser ? 'ranking-row--user' : ''} ${
+                        isPodium ? `ranking-row--podium-${player.rank}` : ''
+                      }`}
                     >
-                      {player.avatarInitial}
-                    </div>
-
-                    {/* Name & Games */}
-                    <div className="player-details">
-                      <div className="player-name-line">
-                        <span className="player-name">{player.displayName}</span>
-                        {isUser && (
-                          <span className="user-tag">{language === 'tr' ? 'Sen' : 'You'}</span>
+                      {/* Rank Indicator */}
+                      <div className="rank-col">
+                        {player.rank === 1 ? (
+                          <span className="medal gold" title="1st Place">
+                            🥇
+                          </span>
+                        ) : player.rank === 2 ? (
+                          <span className="medal silver" title="2nd Place">
+                            🥈
+                          </span>
+                        ) : player.rank === 3 ? (
+                          <span className="medal bronze" title="3rd Place">
+                            🥉
+                          </span>
+                        ) : (
+                          <span className="rank-num">#{player.rank}</span>
                         )}
                       </div>
-                      <span className="player-games">
-                        {player.gamesCompleted} {language === 'tr' ? 'oyun' : 'games'}
-                      </span>
-                    </div>
 
-                    {/* Score */}
-                    <div className="player-score-col">
-                      <span className="star-icon">⭐</span>
-                      <span className="score-num">{player.totalScore}</span>
+                      {/* Avatar */}
+                      <div
+                        className="player-avatar"
+                        style={{ background: getAvatarColor(player.displayName) }}
+                      >
+                        {player.avatarInitial}
+                      </div>
+
+                      {/* Name & Games */}
+                      <div className="player-details">
+                        <div className="player-name-line">
+                          <span className="player-name">{player.displayName}</span>
+                          {isUser && (
+                            <span className="user-tag">{language === 'tr' ? 'Sen' : 'You'}</span>
+                          )}
+                        </div>
+                        <span className="player-games">
+                          {player.gamesCompleted} {language === 'tr' ? 'oyun' : 'games'}
+                        </span>
+                      </div>
+
+                      {/* Score */}
+                      <div className="player-score-col">
+                        <span className="star-icon">⭐</span>
+                        <span className="score-num">{player.totalScore}</span>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
 
             {data && data.totalUsersCount > 0 && (
               <div className="ranking-footer-note">
@@ -478,7 +453,9 @@ export default function LeaderboardModal({ language }: Props): React.ReactElemen
                 <span>
                   {language === 'tr'
                     ? `Toplam ${data.totalUsersCount} kaşif yarışıyor!`
-                    : `${data.totalUsersCount} explorers playing worldwide!`}
+                    : `${data.totalUsersCount} ${
+                        data.totalUsersCount === 1 ? 'explorer' : 'explorers'
+                      } playing worldwide!`}
                 </span>
               </div>
             )}
