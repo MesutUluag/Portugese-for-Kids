@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useAuth } from './AuthContext';
-import { X, Flame, Clock, BookOpen, Trophy, LogOut, Award, BarChart3 } from 'lucide-react';
+import { X, Flame, Clock, BookOpen, Trophy, LogOut, Award, BarChart3, CalendarDays } from 'lucide-react';
 import './StatsModal.scss';
 
 interface Props {
@@ -48,12 +48,29 @@ function formatDuration(seconds: number, language: 'en' | 'tr'): string {
   return `${mins} ${language === 'tr' ? 'dk' : 'm'}`;
 }
 
-function getTodayString(): string {
-  const d = new Date();
+function formatDateKey(d: Date): string {
   const year = d.getFullYear();
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const day = String(d.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
+}
+
+function getTodayString(): string {
+  return formatDateKey(new Date());
+}
+
+const WEEKDAYS_EN = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] as const;
+const WEEKDAYS_TR = ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'] as const;
+
+function formatCompactDuration(seconds: number): string {
+  if (seconds <= 0) return '—';
+  if (seconds < 60) return `${seconds}s`;
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.round((seconds % 3600) / 60);
+  if (hrs > 0) {
+    return mins > 0 ? `${hrs}h${mins}m` : `${hrs}h`;
+  }
+  return `${ Math.max(1, Math.floor(seconds / 60)) }m`;
 }
 
 export default function StatsModal({ language }: Props): React.ReactElement | null {
@@ -83,6 +100,23 @@ export default function StatsModal({ language }: Props): React.ReactElement | nu
   const longestStreak = stats?.longestStreakDays ?? 0;
   const totalStories = stats?.totalStoriesPracticed ?? 0;
   const totalScore = stats?.totalScore ?? 0;
+
+  // Build last 7 calendar days (oldest -> today)
+  const last7Days = Array.from({ length: 7 }, (_, idx) => {
+    const offset = 6 - idx;
+    const d = new Date();
+    d.setDate(d.getDate() - offset);
+    const key = formatDateKey(d);
+    const seconds = stats?.dailyTimeSeconds?.[key] ?? 0;
+    const dayIndex = d.getDay();
+    return {
+      key,
+      seconds,
+      isToday: offset === 0,
+      dayLabel: language === 'tr' ? WEEKDAYS_TR[dayIndex] : WEEKDAYS_EN[dayIndex],
+    };
+  });
+  const maxDailySeconds = Math.max(...last7Days.map((d) => d.seconds), 60);
 
   // Compute top modes by time spent
   const modeStats = Object.keys(MODE_META).map((key) => {
@@ -216,6 +250,41 @@ export default function StatsModal({ language }: Props): React.ReactElement | nu
               <span className="metric-subtext">
                 {language === 'tr' ? 'Oyun başarıları' : 'Game achievements'}
               </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 7-Day Activity Bar Chart */}
+        <div className="section-block">
+          <div className="section-title">
+            <CalendarDays size={16} />
+            <span>{language === 'tr' ? 'Son 7 Gün Aktivite' : 'Last 7 Days Activity'}</span>
+          </div>
+          <div className="weekly-chart-card">
+            <div className="weekly-chart-grid">
+              {last7Days.map((day) => {
+                const heightPct = day.seconds > 0
+                  ? Math.max(12, Math.min(100, Math.round((day.seconds / maxDailySeconds) * 100)))
+                  : 0;
+                return (
+                  <div
+                    key={day.key}
+                    className={`weekly-day-col${day.isToday ? ' is-today' : ''}${day.seconds > 0 ? ' has-activity' : ''}`}
+                    title={`${day.key}: ${formatDuration(day.seconds, language)}`}
+                  >
+                    <span className="weekly-day-value">{formatCompactDuration(day.seconds)}</span>
+                    <div className="weekly-bar-track">
+                      <div
+                        className="weekly-bar-fill"
+                        style={{ height: `${heightPct}%` }}
+                      />
+                    </div>
+                    <span className="weekly-day-label">
+                      {day.isToday ? (language === 'tr' ? 'Bugün' : 'Today') : day.dayLabel}
+                    </span>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

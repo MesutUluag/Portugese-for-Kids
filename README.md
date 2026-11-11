@@ -13,6 +13,7 @@ An interactive language-learning app for children to practice Portuguese through
 | React | 19.2.8 | UI framework |
 | TypeScript | 5.8.3 | Type safety |
 | Vite | 6.3.5 | Build tool & dev server |
+| Firebase Auth | 13.2.0 | Google Sign-In, Email/Password auth & password reset |
 | SASS/SCSS | 1.102.0 | Mobile-first responsive styling |
 | framer-motion | 13.1.1 | Animations (Market game cart, flying items, confetti) |
 | @dnd-kit/core | 6.3.1 | Drag-and-drop primitives (Puzzle game) |
@@ -24,7 +25,8 @@ An interactive language-learning app for children to practice Portuguese through
 
 ## Features
 
-- **9 Learning Modes** — flashcards, 7 games (including Market game), and AI-generated story sentences
+- **10 Learning Modes** — flashcards, 8 games (including Crossword & Market game), and AI-generated story sentences
+- **Firebase Authentication & Cloud Stats** — Google Sign-In and Email/Password login gating AI Story Mode, paired with a crash-safe `localStorage` outbox that syncs daily study streaks, per-game time, story scenarios, and a 7-day activity chart to Cloud Firestore
 - **Portuguese TTS** — Web Speech API with pt-PT voice detection, slow-mode playback, and Chrome gesture-block workaround
 - **AI Story Generation** — backend LLM (Gemini via Cloud Run) with curated per-context template pages as a fallback; 12 real-life conversation contexts
 - **Story Prefetch** — first page and its image are fetched at app load so Story mode opens instantly; page 2 is also prefetched while the user reads page 1
@@ -81,9 +83,16 @@ An interactive language-learning app for children to practice Portuguese through
 
 ```
 src/
-├── App.tsx                     # Mode router, score, language toggle, music player, study timer, story prefetch
+├── App.tsx                     # Mode router, auth/profile badges, language toggle, music player, study timer, story prefetch
 ├── index.scss                  # Mobile-first global styles
-├── main.tsx                    # Entry point (InAppBrowserGuard wraps App)
+├── main.tsx                    # Entry point (InAppBrowserGuard + AuthProvider wrap App)
+├── auth/
+│   ├── AuthContext.tsx         # Firebase Auth provider, token refresh, password reset & profile state
+│   ├── AuthModal.tsx           # Bilingual (EN/TR) login, sign-up & password reset dialog
+│   ├── StatsModal.tsx          # Bilingual (EN/TR) user stats dashboard with 7-day activity chart
+│   ├── firebase.ts             # Firebase Web SDK initialisation & getAuthToken helper
+│   ├── types.ts                # UserProfile, UserStats & StatsSyncRequest types
+│   └── useStatsTracker.ts      # 1s active study timer, 3m AFK detection & crash-safe outbox sync
 ├── commons/
 │   └── WordImage.tsx           # Wikipedia image fetch with emoji fallback
 ├── components/
