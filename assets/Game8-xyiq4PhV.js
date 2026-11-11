@@ -1,4 +1,4 @@
-import{c as de,r as j,_ as pe,j as n,V as fe}from"./index-B5UlaG7h.js";import{c as we,s as ae}from"./speech-CGS2wwkd.js";import{G as ge}from"./GameScoreBadge-Bb_lmxYR.js";/**
+import{c as de,r as j,_ as pe,j as n,V as fe}from"./index-aDW08r4U.js";import{c as we,s as ae}from"./speech-CGS2wwkd.js";import{G as ge}from"./GameScoreBadge-B45dEvYb.js";/**
  * @license lucide-react v1.34.0 - ISC
  *
  * This source code is licensed under the ISC license.
