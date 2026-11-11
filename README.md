@@ -26,7 +26,9 @@ An interactive language-learning app for children to practice Portuguese through
 ## Features
 
 - **10 Learning Modes** — flashcards, 8 games (including Crossword & Market game), and AI-generated story sentences
-- **Firebase Authentication & Cloud Stats** — Google Sign-In and Email/Password login gating AI Story Mode, paired with a crash-safe `localStorage` outbox that syncs daily study streaks, per-game time, story scenarios, and a 7-day activity chart to Cloud Firestore
+- **Tiered Game Scoring & Live Score Badge** — difficulty-scaled points across Level 1 (Easy), Level 2 (Medium), and Level 3 (Master) games with an interactive top-right score badge (`⭐`) and animated `+N` point popups
+- **Global Leaderboard & Game Scores Modal** — top-bar Rank pill (`🏆`) opens a bilingual modal featuring real-time global rankings backed by Cloud Firestore and a per-game score breakdown
+- **Firebase Authentication & Cloud Stats** — Google Sign-In and Email/Password login gating AI Story Mode, paired with a crash-safe `localStorage` outbox that syncs daily study streaks, per-game time, per-game scores (`scoreByMode`), story scenarios, and a 7-day activity chart to Cloud Firestore
 - **Portuguese TTS** — Web Speech API with pt-PT voice detection, slow-mode playback, and Chrome gesture-block workaround
 - **AI Story Generation** — backend LLM (Gemini via Cloud Run) with curated per-context template pages as a fallback; 12 real-life conversation contexts
 - **Story Prefetch** — first page and its image are fetched at app load so Story mode opens instantly; page 2 is also prefetched while the user reads page 1
@@ -36,25 +38,25 @@ An interactive language-learning app for children to practice Portuguese through
 - **Daily Study Tracker** — time spent today persisted in `localStorage`, pauses on tab-visibility change
 - **Background Music** — 5 kids music tracks with random shuffle, autoplay + first-interaction fallback, mute toggle persisted in `localStorage`
 - **Image Fetching** — multi-source chain: backend AI image API → Wikipedia → Wikimedia Commons → emoji fallback
-- **Market Game** — drag-to-cart shopping game with an animated bunny mascot, flying item animations, confetti burst, and Portuguese number/gender grammar
+- **Market Game** — Level 1 drag-to-cart shopping game with an animated bunny mascot, flying item animations, confetti burst, and Portuguese number/gender grammar
 - **In-App Browser Guard** — detects WhatsApp / Instagram / Telegram WebViews and prompts users to open in Chrome or Safari (Turkish-language UI)
-- **Gamification** — score counter with bounce animation
 
 ---
 
-## Learning Modes
+## Learning Modes & Scoring Tiers
 
-| Mode | Component | Description |
-|---|---|---|
-| 🖼️ Cards | `CardsMode` | Flashcard vocabulary review with shuffle, search, and category filter |
-| 📖 Story | `StoryMode` | AI-generated conversational story sentences with scene illustrations; 12 real-life contexts |
-| 🎯 Picture Game | `Game1` | Match a Portuguese word to the correct picture (4-choice MCQ) |
-| 🎧 Listen & Find | `Game2` | Hear a word spoken aloud, select the matching image |
-| 🃏 Memory Match | `Game3` | Flip cards to match Portuguese–English pairs |
-| ✍️ Fill in the Blank | `Game4` | Complete words with missing letters (supports accented chars: á é í ó ú ã õ ç) |
-| 🧩 Scramble | `Game5` | Unscramble letters to form the correct Portuguese word; navigation history |
-| 🧩 Jigsaw Puzzle | `Game6` | Canvas-based jigsaw — drag pieces from tray slots onto a 3×3 board to complete the word image |
-| 🛒 Market Game | `Game7` | Drag grocery items into an animated cart; animated bunny mascot reacts to correct/wrong answers |
+| Mode | Component | Tier | Scoring Rules | Description |
+|---|---|---|---|---|
+| 🖼️ Cards | `CardsMode` | — | — | Flashcard vocabulary review with shuffle, search, category filter, and grammar modals (Verbs, Adverbs, Prepositions) |
+| 📖 Story | `StoryMode` | — | — | AI-generated conversational story sentences with scene illustrations; 12 real-life contexts |
+| 🎯 Picture Game | `Game1` | Level 1 (Easy) | `4–6 pts` (`-2` per wrong guess, min `1`) | Match a Portuguese word to the correct picture (4-choice MCQ) |
+| 🎧 Listen & Find | `Game2` | Level 1 (Easy) | `5–7 pts` (`-2` per wrong guess, `-1` per extra replay, min `1`) | Hear a word spoken aloud, select the matching image |
+| ✍️ Fill in the Blank | `Game4` | Level 1 (Easy) | `5–7 pts` (`-2` per wrong guess, min `1`) | Complete words with missing letters (supports accented chars: á é í ó ú ã õ ç) |
+| 🛒 Market Game | `Game7` | Level 1 (Easy) | `5–7 pts` (`-2` per wrong item, min `1`) | Drag 2 requested grocery items into an animated cart; bunny mascot reacts to answers |
+| 🃏 Memory Match | `Game3` | Level 2 (Medium) | `20–25 pts` (`-2` per mismatch after 2 grace tries, min `5`) | Flip cards to match 6 Portuguese–English pairs |
+| 🧩 Scramble | `Game5` | Level 2 (Medium) | `13–17 pts` (`-3` per wrong tap, `-4` per hint, min `2`) | Unscramble letters to form the correct Portuguese word; navigation history |
+| 🧩 Jigsaw Puzzle | `Game6` | Level 3 (Master) | `30 pts` (`-2` per misplaced piece drop, min `5`) | Canvas-based jigsaw — drag pieces from tray slots onto a 3×3 board |
+| ✏️ Crossword | `Game8` | Level 3 (Master) | `10 pts/word` (`-2` check/hint/audio, min `1`) + `25 pts` board bonus | Dynamic Arrowword / Çengel Bulmaca puzzle with category filter & on-screen keyboard |
 
 ---
 
@@ -83,40 +85,56 @@ An interactive language-learning app for children to practice Portuguese through
 
 ```
 src/
-├── App.tsx                     # Mode router, auth/profile badges, language toggle, music player, study timer, story prefetch
+├── App.tsx                     # Mode router, auth/rank/profile badges, language toggle, music player, study timer, story prefetch
 ├── index.scss                  # Mobile-first global styles
 ├── main.tsx                    # Entry point (InAppBrowserGuard + AuthProvider wrap App)
 ├── auth/
-│   ├── AuthContext.tsx         # Firebase Auth provider, token refresh, password reset & profile state
+│   ├── AuthContext.tsx         # Firebase Auth provider, token refresh, password reset & profile/modal state
 │   ├── AuthModal.tsx           # Bilingual (EN/TR) login, sign-up & password reset dialog
+│   ├── LeaderboardModal.tsx    # Bilingual (EN/TR) Global Ranking & My Game Scores breakdown modal
+│   ├── LeaderboardModal.scss   # Leaderboard & game score cards styling
 │   ├── StatsModal.tsx          # Bilingual (EN/TR) user stats dashboard with 7-day activity chart
 │   ├── firebase.ts             # Firebase Web SDK initialisation & getAuthToken helper
-│   ├── types.ts                # UserProfile, UserStats & StatsSyncRequest types
+│   ├── types.ts                # UserProfile, UserStats, StatsSyncRequest & Leaderboard types
 │   └── useStatsTracker.ts      # 1s active study timer, 3m AFK detection & crash-safe outbox sync
 ├── commons/
+│   ├── GameScoreBadge.tsx      # Top-right live session score badge with animated +N popup
+│   ├── GameScoreBadge.scss     # Score badge styles & pop animations
+│   ├── LoadingSpinner.tsx      # Lazy-load suspense fallback spinner
 │   └── WordImage.tsx           # Wikipedia image fetch with emoji fallback
 ├── components/
-│   ├── CardsMode.tsx           # Flashcard grid with search + category filter
-│   ├── Game1.tsx               # Picture Game — word-to-image MCQ
-│   ├── Game2.tsx               # Listen & Find — TTS → image MCQ
-│   ├── Game3.tsx               # Memory Match — flip-card pairs
-│   ├── Game4.tsx               # Fill in the Blank — missing letter MCQ
-│   ├── Game5.tsx               # Scramble — unscramble letters; prev/next history
-│   ├── Game6.tsx               # Jigsaw Puzzle — canvas drag-and-snap
-│   ├── Game7.tsx               # Market Game — drag items to cart; bunny mascot; animations
-│   └── InAppBrowserGuard.tsx   # WhatsApp/Instagram WebView detection + redirect prompt
+│   ├── AdverbsModal.tsx        # Adverbs reference modal (Place, Time, Degree, Frequency, Manner)
+│   ├── CardsMode.tsx           # Flashcard grid with search, category filter & grammar modal triggers
+│   ├── ConjugationModal.tsx    # Verb conjugation modal (A1/A2 levels, audio, EN/TR examples)
+│   ├── Game1.tsx               # Picture Game — word-to-image MCQ (Level 1)
+│   ├── Game2.tsx               # Listen & Find — TTS → image MCQ (Level 1)
+│   ├── Game3.tsx               # Memory Match — flip-card pairs (Level 2)
+│   ├── Game4.tsx               # Fill in the Blank — missing letter MCQ (Level 1)
+│   ├── Game5.tsx               # Scramble — unscramble letters; prev/next history (Level 2)
+│   ├── Game6.tsx               # Jigsaw Puzzle — canvas drag-and-snap (Level 3)
+│   ├── Game7.tsx               # Market Game — drag items to cart; bunny mascot; animations (Level 1)
+│   ├── Game8.tsx               # Crossword Puzzle — dynamic Arrowword / Çengel Bulmaca (Level 3)
+│   ├── InAppBrowserGuard.tsx   # WhatsApp/Instagram WebView detection + redirect prompt
+│   └── PrepositionsModal.tsx   # Prepositions & contractions reference modal
 ├── data/
-│   └── words.ts                # kidsWords (~200 words), marketItems, StoryPage templates, Mode type
+│   ├── index.ts                # Barrel exports & Mode / Word / StoryPage / MarketItem types
+│   ├── words.ts                # kidsWords vocabulary dataset
+│   ├── marketItems.ts          # Market Game items dataset
+│   ├── storyTemplates.ts       # templatePagesByContext fallback stories
+│   ├── verbConjugations.ts     # A1 & A2 conjugation tables & examples
+│   ├── adverbData.ts           # Categorised Portuguese adverbs with examples
+│   └── prepGroups.ts           # Prepositions & contractions reference data
 ├── story/
 │   ├── SceneProp.tsx           # Emoji → Wikimedia image mapper
 │   ├── StoryIllustration.tsx   # Backend AI illustration + CSS scene fallback
 │   ├── StoryMode.tsx           # Story UI, context switcher, prefetch consumer, history navigation
 │   ├── StoryMode.scss          # Story-specific styles
 │   ├── sceneTheme.ts           # Emoji-to-CSS-variable theme engine (night, rain, snow, ocean, sunset)
-│   ├── useBackendImage.ts      # fetchImageBlobUrl — backend image API with retry + 429 handling
+│   ├── useBackendImage.ts      # fetchImageBlobUrl — backend image API with retry handling
 │   └── useStoryPrefetch.ts     # Image prefetch cache; buildStoryImagePrompt helper
 └── utils/
     ├── ai.ts                   # AiState, StoryContext, CONTEXT_TOPICS; backend story fetch + template fallback
+    ├── crosswordGenerator.ts   # Conflict-free Arrowword / Crossword grid generator
     ├── speech.ts               # Web Speech API wrapper (pt-PT, slow mode, Chrome GC fix)
     ├── translate.ts            # EN→TR translation (MyMemory)
     ├── usePollinationsImage.ts # React hook — Pollinations AI (rate-limit throttle)
@@ -160,10 +178,20 @@ interface MarketItem {
   unit?: 'kg' | 'piece';
 }
 
-type Mode = 'cards' | 'story' | 'game1' | 'game2' | 'game3' | 'game4' | 'game5' | 'game6' | 'game7';
+type Mode =
+  | 'cards'
+  | 'story'
+  | 'game1'
+  | 'game2'
+  | 'game3'
+  | 'game4'
+  | 'game5'
+  | 'game6'
+  | 'game7'
+  | 'game8';
 ```
 
-**Vocabulary categories:** Verbs, Family, Animals, Food & Drink, Colours, Numbers, Body, Clothes, Home, School, Places, Transport, Adjectives, Time, Weather, Phrases (~200 words total)
+**Vocabulary categories:** Verbs, Family, Animals, Food & Drink, Colours, Numbers, Body, Clothes, Home, School, Places, Transport, Adjectives, Time, Weather, Phrases, Adverbs, Prepositions & Contractions
 
 **Market items:** Frutas (16 items, kg), Padaria, Lacticínios, Bebidas, Legumes (13, kg), Peixaria, Talho, Mercearia, Doces, Snacks
 
@@ -173,7 +201,7 @@ type Mode = 'cards' | 'story' | 'game1' | 'game2' | 'game3' | 'game4' | 'game5' 
 
 | Service | Used For |
 |---|---|
-| Backend (Cloud Run / `localhost:8081`) | Story generation (`POST /api/story`) and AI image generation (`GET /api/image`) |
+| Backend (Cloud Run / `localhost:8081`) | Story generation (`POST /api/story`), AI image generation (`GET /api/image`), user profile (`GET /api/user/me`), stats sync (`POST /api/user/stats/sync`), and global leaderboard (`GET /api/user/leaderboard`) |
 | Web Speech API | Portuguese TTS (built-in browser) |
 | MyMemory | EN→TR story translation |
 | Wikipedia REST API | Word images in cards and games |
