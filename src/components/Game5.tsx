@@ -1,15 +1,25 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { Word } from '../data/index';
 import { cancelSpeech, speakText } from '../utils/speech';
 import WordImage from '../commons/WordImage.tsx';
+import GameScoreBadge from '../commons/GameScoreBadge.tsx';
 import '../styles/Game5.scss';
 
 interface Props {
   onScore: (pts: number) => void;
   language: 'en' | 'tr';
+  gameScore?: number;
+  recentGain?: number | null;
+  gainKey?: number;
 }
 
-export default function Game5({ onScore, language }: Props): React.ReactElement {
+export default function Game5({
+  onScore,
+  language,
+  gameScore = 0,
+  recentGain = null,
+  gainKey,
+}: Props): React.ReactElement {
   const [words, setWords] = useState<Word[]>([]);
   const [target, setTarget] = useState<Word | null>(null);
   const [scrambled, setScrambled] = useState<string[]>([]);
@@ -18,9 +28,11 @@ export default function Game5({ onScore, language }: Props): React.ReactElement 
   const [animClass, setAnimClass] = useState('');
   const [history, setHistory] = useState<Word[]>([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
+  const hadResetRef = useRef<boolean>(false);
 
   const loadWord = useCallback((word: Word) => {
     setTarget(word);
+    hadResetRef.current = false;
     speakText(word.pt);
     const sc = word.pt.split('').sort(() => Math.random() - 0.5);
     setScrambled(sc);
@@ -77,10 +89,13 @@ export default function Game5({ onScore, language }: Props): React.ReactElement 
     if (newInput.length === target.pt.length) {
       if (newInput.join('') === target.pt) {
         setAnimClass('correct-anim');
-        onScore(15);
+        const base = target.pt.length <= 4 ? 10 : 14;
+        const bonus = hadResetRef.current ? 0 : 3;
+        onScore(base + bonus);
         speakText(target.pt);
         setTimeout(() => { setAnimClass(''); loadNew(); }, 1200);
       } else {
+        hadResetRef.current = true;
         setAnimClass('wrong-anim');
         speakText(target.pt);
         setTimeout(() => { setAnimClass(''); handleReset(); }, 600);
@@ -89,6 +104,7 @@ export default function Game5({ onScore, language }: Props): React.ReactElement 
   }
 
   function handleReset() {
+    hadResetRef.current = true;
     setInput([]);
     if (scrambled.length > 0) setHidden(new Array(scrambled.length).fill(false));
   }
@@ -98,6 +114,7 @@ export default function Game5({ onScore, language }: Props): React.ReactElement 
 
   return (
     <div className={`game-container ${animClass}`} style={{ display: 'block', borderColor: '#f97316' }}>
+      <GameScoreBadge score={gameScore} recentGain={recentGain} gainKey={gainKey} />
       <h2 style={{ color: '#f97316', margin: 0 }}>🧩 {language === 'tr' ? 'Kelimeyi Bul' : 'Unscramble Word'}</h2>
       <WordImage
         en={target?.en ?? ''}

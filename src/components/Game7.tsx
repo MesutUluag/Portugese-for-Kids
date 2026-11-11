@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import type { MarketItem } from '../data/index';
 import { cancelSpeech, speakText } from '../utils/speech';
+import GameScoreBadge from '../commons/GameScoreBadge.tsx';
 import '../styles/Game7.scss';
 
 // ─── Sound Effects ────────────────────────────────────────────────────────────
@@ -98,7 +99,13 @@ interface FlyingItemEntry {
   toX: number;   toY: number;     // page coords of cart centre
 }
 type MascotState = 'idle' | 'happy' | 'sad' | 'talking';
-interface Props { onScore: (pts: number) => void; language: 'en' | 'tr'; }
+interface Props {
+  onScore: (pts: number) => void;
+  language: 'en' | 'tr';
+  gameScore?: number;
+  recentGain?: number | null;
+  gainKey?: number;
+}
 
 // ─── Flying Item Overlay ──────────────────────────────────────────────────────
 // Single animation: departs from source, arcs above the cart, then slowly
@@ -684,7 +691,13 @@ const ConfettiBurst = React.memo(function ConfettiBurst() {
 });
 
 // ─── Component ────────────────────────────────────────────────────────────────
-export default function Game7({ onScore, language }: Props): React.ReactElement {
+export default function Game7({
+  onScore,
+  language,
+  gameScore = 0,
+  recentGain = null,
+  gainKey,
+}: Props): React.ReactElement {
   const [allMarketItems, setAllMarketItems] = useState<MarketItem[]>([]);
   const [_level, setLevel]              = useState(1);
   const [_coins, setCoins]              = useState(10);
@@ -703,6 +716,7 @@ export default function Game7({ onScore, language }: Props): React.ReactElement 
   const [mascotState, setMascotState]   = useState<MascotState>('idle');
   const [speechText, setSpeechText]     = useState('');
   const [flyingItems, setFlyingItems]   = useState<FlyingItemEntry[]>([]);
+  const wrongDropsRef                   = useRef(0);
 
   const cartItemsRef     = useRef<CartItemEntry[]>([]);   // mirror of cartItems for sync reads
   const cartRef          = useRef<HTMLDivElement | null>(null);
@@ -753,6 +767,7 @@ export default function Game7({ onScore, language }: Props): React.ReactElement 
     setOrder({ item: target, count });
     setCartCount(0);
     setIsSuccess(false);
+    wrongDropsRef.current = 0;
     if (!keepCartState) setCartState('idle');
     setMascotState('idle');
     pendingCountRef.current  = 0;  // reset spoken-count whenever a new round starts
@@ -829,7 +844,8 @@ export default function Game7({ onScore, language }: Props): React.ReactElement 
         setIsSuccess(true);
         setStars(s => s + 1);
         setCoins(c => c + 5);
-        onScore(20);
+        const points = wrongDropsRef.current === 0 ? 7 : 5;
+        onScore(points);
 
         // itemsAfterDrop = total items in the cart pile after this drop.
         // cartItemsRef.current is a mirror of cartItems state; the setCartItems updater
@@ -878,6 +894,7 @@ export default function Game7({ onScore, language }: Props): React.ReactElement 
       // already incremented. Decrement it so the next correct tap targets the
       // right slot (the wrong item still lands but handleItemDrop ignores it).
       inFlightCountRef.current = Math.max(0, inFlightCountRef.current - 1);
+      wrongDropsRef.current += 1;
       playSynth('error');
       setMascotState('sad');
       speakText(`Não! Isso é ${dropped.ptName}.`);
@@ -1015,6 +1032,7 @@ export default function Game7({ onScore, language }: Props): React.ReactElement 
 
   return (
     <div className="game-container game7">
+      <GameScoreBadge score={gameScore} recentGain={recentGain} gainKey={gainKey} />
 
       {/* ── Mascot + speech bubble ── */}
       <div className="mascot-row">

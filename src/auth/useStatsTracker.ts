@@ -31,6 +31,9 @@ function loadOutbox(currentUid: string): TelemetryOutbox {
     if (raw) {
       const parsed = JSON.parse(raw) as TelemetryOutbox;
       if (parsed && typeof parsed.activeSecondsDelta === 'number') {
+        if (!parsed.scoreByModeDelta) {
+          parsed.scoreByModeDelta = {};
+        }
         // If guest outbox exists and user just logged in, re-tag owner
         if (parsed.ownerUid === 'guest' && currentUid !== 'guest') {
           parsed.ownerUid = currentUid;
@@ -53,6 +56,7 @@ function loadOutbox(currentUid: string): TelemetryOutbox {
     gamesCompletedDelta: {},
     storiesByContextDelta: {},
     scoreDelta: 0,
+    scoreByModeDelta: {},
     speechListenDelta: 0,
   };
 }
@@ -66,7 +70,7 @@ function saveOutbox(outbox: TelemetryOutbox): void {
 }
 
 export function useStatsTracker(currentMode: Mode) {
-  const { user, authReady, setProfile, registerBeforeSignOut, registerFlushHandler } = useAuth();
+  const { user, profile, authReady, setProfile, registerBeforeSignOut, registerFlushHandler } = useAuth();
   const currentUid = user ? user.uid : 'guest';
 
   const outboxRef = useRef<TelemetryOutbox>(loadOutbox(currentUid));
@@ -96,6 +100,15 @@ export function useStatsTracker(currentMode: Mode) {
     outbox.activeSecondsDelta = Math.max(0, outbox.activeSecondsDelta - payload.activeSecondsDelta);
     outbox.scoreDelta = Math.max(0, outbox.scoreDelta - payload.scoreDelta);
     outbox.speechListenDelta = Math.max(0, outbox.speechListenDelta - payload.speechListenDelta);
+
+    if (payload.scoreByModeDelta) {
+      for (const m of Object.keys(payload.scoreByModeDelta) as Mode[]) {
+        const current = outbox.scoreByModeDelta[m] ?? 0;
+        const sent = payload.scoreByModeDelta[m] ?? 0;
+        if (current <= sent) delete outbox.scoreByModeDelta[m];
+        else outbox.scoreByModeDelta[m] = current - sent;
+      }
+    }
 
     for (const m of Object.keys(payload.timeByModeDelta) as Mode[]) {
       const current = outbox.timeByModeDelta[m] ?? 0;
@@ -130,6 +143,7 @@ export function useStatsTracker(currentMode: Mode) {
         outbox.activeSecondsDelta > 0 ||
         outbox.scoreDelta > 0 ||
         outbox.speechListenDelta > 0 ||
+        Object.keys(outbox.scoreByModeDelta || {}).length > 0 ||
         Object.keys(outbox.timeByModeDelta).length > 0 ||
         Object.keys(outbox.gamesCompletedDelta).length > 0 ||
         Object.keys(outbox.storiesByContextDelta).length > 0;
@@ -145,6 +159,7 @@ export function useStatsTracker(currentMode: Mode) {
         gamesCompletedDelta: { ...outbox.gamesCompletedDelta },
         storiesByContextDelta: { ...outbox.storiesByContextDelta },
         scoreDelta: outbox.scoreDelta,
+        scoreByModeDelta: { ...outbox.scoreByModeDelta },
         speechListenDelta: outbox.speechListenDelta,
         clientDate: getLocalDateString(),
       };
@@ -229,6 +244,7 @@ export function useStatsTracker(currentMode: Mode) {
           gamesCompletedDelta: {},
           storiesByContextDelta: {},
           scoreDelta: 0,
+          scoreByModeDelta: {},
           speechListenDelta: 0,
         };
         saveOutbox(outboxRef.current);
@@ -243,6 +259,7 @@ export function useStatsTracker(currentMode: Mode) {
         gamesCompletedDelta: {},
         storiesByContextDelta: {},
         scoreDelta: 0,
+        scoreByModeDelta: {},
         speechListenDelta: 0,
       };
       saveOutbox(outboxRef.current);
@@ -319,13 +336,24 @@ export function useStatsTracker(currentMode: Mode) {
 
   const recordGameScore = useCallback(
     (mode: Mode, points: number) => {
+      const pts = Math.max(0, points);
       const outbox = outboxRef.current;
-      outbox.scoreDelta += Math.max(0, points);
+      outbox.scoreDelta += pts;
+      outbox.scoreByModeDelta[mode] = (outbox.scoreByModeDelta[mode] ?? 0) + pts;
       outbox.gamesCompletedDelta[mode] = (outbox.gamesCompletedDelta[mode] ?? 0) + 1;
       saveOutbox(outbox);
       void flush(false);
     },
     [flush]
+  );
+
+  const getScoreForMode = useCallback(
+    (m: Mode): number => {
+      const stored = profile?.stats?.scoreByMode?.[m] ?? 0;
+      const unsynced = outboxRef.current.scoreByModeDelta?.[m] ?? 0;
+      return stored + unsynced;
+    },
+    [profile]
   );
 
   const recordSpeechListen = useCallback(() => {
@@ -338,6 +366,7 @@ export function useStatsTracker(currentMode: Mode) {
     recordStoryView,
     recordGameScore,
     recordSpeechListen,
+    getScoreForMode,
     flushNow: () => flush(false),
   };
 }

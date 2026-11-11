@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { Word } from '../data/index';
 import { cancelSpeech, speakText } from '../utils/speech';
 import WordImage from '../commons/WordImage.tsx';
+import GameScoreBadge from '../commons/GameScoreBadge.tsx';
 import '../styles/Game3.scss';
 
 interface FlippedEntry {
@@ -12,14 +13,24 @@ interface FlippedEntry {
 interface Props {
   onScore: (pts: number) => void;
   language: 'en' | 'tr';
+  gameScore?: number;
+  recentGain?: number | null;
+  gainKey?: number;
 }
 
-export default function Game3({ onScore, language }: Props): React.ReactElement {
+export default function Game3({
+  onScore,
+  language,
+  gameScore = 0,
+  recentGain = null,
+  gainKey,
+}: Props): React.ReactElement {
   const [words, setWords] = useState<Word[]>([]);
   const [deck, setDeck] = useState<Word[]>([]);
   const [flipped, setFlipped] = useState<number[]>([]);
   const [matched, setMatched] = useState<number[]>([]);
   const [blocked, setBlocked] = useState(false);
+  const turnsRef = useRef<number>(0);
 
   useEffect(() => {
     import('../data/words').then((m) => setWords(m.kidsWords));
@@ -36,6 +47,7 @@ export default function Game3({ onScore, language }: Props): React.ReactElement 
     setFlipped([]);
     setMatched([]);
     setBlocked(false);
+    turnsRef.current = 0;
   }, [words]);
 
   useEffect(() => { load(); }, [load]);
@@ -49,6 +61,7 @@ export default function Game3({ onScore, language }: Props): React.ReactElement 
     speakText(item.pt);
 
     if (newFlipped.length === 2) {
+      turnsRef.current += 1;
       const [a, b] = newFlipped as [number, number];
       const entry1: FlippedEntry = { idx: a, item: deck[a] };
       const entry2: FlippedEntry = { idx: b, item: deck[b] };
@@ -57,8 +70,10 @@ export default function Game3({ onScore, language }: Props): React.ReactElement 
         const newMatched = [...matched, a, b];
         setMatched(newMatched);
         setFlipped([]);
-        onScore(15);
+        onScore(4);
         if (newMatched.length === 6) {
+          const boardBonus = turnsRef.current <= 4 ? 13 : 8;
+          onScore(boardBonus);
           setTimeout(() => { load(); }, 1000);
         }
       } else {
@@ -73,6 +88,7 @@ export default function Game3({ onScore, language }: Props): React.ReactElement 
 
   return (
     <div className="game-container" style={{ display: 'block', borderColor: '#8b5cf6' }}>
+      <GameScoreBadge score={gameScore} recentGain={recentGain} gainKey={gainKey} />
       <h2 style={{ color: '#8b5cf6', margin: 0 }}>🃏 {language === 'tr' ? 'Hafıza Oyunu' : 'Memory Match'}</h2>
       <p style={{ color: '#64748b', margin: '5px 0' }}>{language === 'tr' ? 'Eşleşen emoji çiftlerini bul!' : 'Find matching emoji pairs!'}</p>
       <div className="memory-grid">

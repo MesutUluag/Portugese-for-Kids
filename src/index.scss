@@ -59,36 +59,49 @@ body {
   justify-content: center;
   width: 100%;
   position: relative;
-  margin-bottom: 8px;
+  margin-bottom: 12px;
 
   h1 {
     margin: 0;
+    color: #d97706;
+    font-size: 18px;
+    text-shadow: 1px 1px $color-amber-light;
+    text-align: center;
+    line-height: 1.2;
+    padding: 0 82px;
+
+    @media (min-width: 480px) {
+      font-size: 24px;
+      text-shadow: 2px 2px $color-amber-light;
+      padding: 0 92px;
+    }
   }
 }
 
-// ─── Header controls (language + music toggle) ───────────────────────────────
+// ─── Header controls (language + music toggle side-by-side) ───────────────────
 .header-controls {
   position: absolute;
   right: 0;
   top: 50%;
-  transform: translateY(-30%);
+  transform: translateY(-50%);
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 6px;
+  flex-direction: row;
+  align-items: center;
+  gap: 5px;
 }
 
 .btn-lang-toggle {
   background: #fef3c7;
-  border: 2px solid #d97706;
+  border: 1.5px solid #d97706;
   border-radius: $radius-pill;
   font-size: 11px;
   font-weight: bold;
-  padding: 4px 7px;
+  padding: 4px 8px;
   cursor: pointer;
-  min-height: 28px;
-  min-width: 38px;
+  height: 28px;
+  min-width: 30px;
   color: #92400e;
+  box-shadow: $shadow-sm;
   transition: transform 0.15s, background 0.15s;
   display: inline-flex;
   align-items: center;
@@ -103,23 +116,7 @@ body {
   @media (min-width: 480px) {
     font-size: 12px;
     padding: 5px 9px;
-  }
-}
-
-h1 {
-  color: #d97706;
-  margin-bottom: 5px;
-  font-size: 18px;
-  text-shadow: 1px 1px $color-amber-light;
-  text-align: center;
-  line-height: 1.2;
-  // Extra right padding so title text doesn't overlap the stacked header buttons
-  padding-right: 54px;
-
-  @media (min-width: 480px) {
-    font-size: 24px;
-    text-shadow: 2px 2px $color-amber-light;
-    padding-right: 62px;
+    height: 30px;
   }
 }
 
@@ -198,6 +195,48 @@ h1 {
   &:hover {
     background: #fff7ed;
     border-color: #fdba74;
+  }
+
+  &:active {
+    transform: scale(0.96);
+  }
+
+  @media (min-width: 480px) {
+    padding: 7px 14px;
+    font-size: 14px;
+  }
+}
+
+.btn-leaderboard-badge {
+  background: #ffffff;
+  border: 1.5px solid #fde68a;
+  color: #b45309;
+  border-radius: $radius-pill;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: $shadow-sm;
+  transition: transform 0.15s, background 0.15s, border-color 0.15s;
+
+  .total-score-count {
+    margin-right: 6px;
+    color: #d97706;
+    font-weight: 800;
+  }
+
+  .leaderboard-chip {
+    color: #78350f;
+    border-left: 1px solid #fde68a;
+    padding-left: 6px;
+  }
+
+  &:hover {
+    background: #fffbeb;
+    border-color: #fcd34d;
+    transform: translateY(-1px);
   }
 
   &:active {

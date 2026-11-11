@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Word } from '../data/index';
 import { cancelSpeech, speakText } from '../utils/speech';
 import { useWikiImage } from '../utils/useWikiImage';
+import GameScoreBadge from '../commons/GameScoreBadge.tsx';
 import '../styles/Game6.scss';
 
 // ─── Layout constants ─────────────────────────────────────────────────────────
@@ -82,7 +83,13 @@ const EXCLUDE_PATTERNS = [
 ];
 
 // ─── Types ────────────────────────────────────────────────────────────────────
-interface Props { onScore: (pts: number) => void; language: 'en' | 'tr'; }
+interface Props {
+  onScore: (pts: number) => void;
+  language: 'en' | 'tr';
+  gameScore?: number;
+  recentGain?: number | null;
+  gainKey?: number;
+}
 
 interface Piece {
   col: number; row: number;  // grid position (0-indexed)
@@ -164,7 +171,13 @@ function drawJigsawPath(
 }
 
 // ─── Game6 ────────────────────────────────────────────────────────────────────
-export default function Game6({ onScore, language }: Props): React.ReactElement {
+export default function Game6({
+  onScore,
+  language,
+  gameScore = 0,
+  recentGain = null,
+  gainKey,
+}: Props): React.ReactElement {
   const [words,        setWords]        = useState<Word[]>([]);
   const [target,       setTarget]       = useState<Word | null>(null);
   const [animClass,    setAnimClass]    = useState('');
@@ -606,7 +619,7 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
       if (piecesRef.current.every(p => p.solved)) {
         solvedRef.current = true;
         setAnimClass('correct-anim');
-        onScore(15);
+        onScore(30);
         speakText(targetRef.current!.pt);
         setTimeout(() => { setAnimClass(''); load(); }, 1400);
       }
@@ -624,6 +637,7 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
 
   return (
     <div className={`game-container ${animClass}`} style={{ display: 'block', borderColor: '#f43f5e' }}>
+      <GameScoreBadge score={gameScore} recentGain={recentGain} gainKey={gainKey} />
       <h2 style={{ color: '#f43f5e', margin: 0 }}>
         {language === 'tr' ? '🧩 Yapboz' : '🧩 Puzzle'}
       </h2>
@@ -639,7 +653,7 @@ export default function Game6({ onScore, language }: Props): React.ReactElement 
             <div className="puzzle-subtitle">
               {target ? (language === 'tr' ? target.tr : target.en) : ''}
             </div>
-            <button className="game-opt" onClick={() => { onScore(10); load(); }}>
+            <button className="game-opt" onClick={() => { onScore(5); load(); }}>
               {language === 'tr' ? '✓ Anladım!' : '✓ Got it!'}
             </button>
           </div>

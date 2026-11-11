@@ -1,20 +1,31 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { Word } from '../data/index';
 import { cancelSpeech, speakText } from '../utils/speech';
 import WordImage from '../commons/WordImage.tsx';
+import GameScoreBadge from '../commons/GameScoreBadge.tsx';
 import '../styles/Game2.scss';
 
 interface Props {
   onScore: (pts: number) => void;
   language: 'en' | 'tr';
+  gameScore?: number;
+  recentGain?: number | null;
+  gainKey?: number;
 }
 
-export default function Game2({ onScore, language }: Props): React.ReactElement {
+export default function Game2({
+  onScore,
+  language,
+  gameScore = 0,
+  recentGain = null,
+  gainKey,
+}: Props): React.ReactElement {
   const [words, setWords] = useState<Word[]>([]);
   const [target, setTarget] = useState<Word | null>(null);
   const [options, setOptions] = useState<Word[]>([]);
   const [animClass, setAnimClass] = useState('');
   const [correctPt, setCorrectPt] = useState<string | null>(null);
+  const attemptsRef = useRef<number>(0);
 
   const triggerAnim = (correct: boolean) => {
     setAnimClass(correct ? 'correct-anim' : 'wrong-anim');
@@ -30,6 +41,7 @@ export default function Game2({ onScore, language }: Props): React.ReactElement 
     const t = words[Math.floor(Math.random() * words.length)];
     setTarget(t);
     setCorrectPt(null);
+    attemptsRef.current = 0;
     speakText(t.pt);
     const opts: Word[] = [t];
     while (opts.length < 4) {
@@ -47,10 +59,12 @@ export default function Game2({ onScore, language }: Props): React.ReactElement 
     if (opt.pt === target.pt) {
       setCorrectPt(target.pt);
       triggerAnim(true);
-      onScore(10);
+      const points = attemptsRef.current === 0 ? 7 : 5;
+      onScore(points);
       speakText(target.pt);
       setTimeout(load, 1000);
     } else {
+      attemptsRef.current += 1;
       triggerAnim(false);
       speakText(target.pt);
     }
@@ -58,6 +72,7 @@ export default function Game2({ onScore, language }: Props): React.ReactElement 
 
   return (
     <div className={`game-container ${animClass}`} style={{ display: 'block', borderColor: '#ec4899' }}>
+      <GameScoreBadge score={gameScore} recentGain={recentGain} gainKey={gainKey} />
       <h2 style={{ color: '#ec4899', margin: 0 }}>{language === 'tr' ? 'Dinle! 🔊' : 'Tap to Listen! 🔊'}</h2>
       <div className="audio-speaker-btn" onClick={() => target && speakText(target.pt)}>🔊</div>
       <p style={{ color: '#64748b', fontWeight: 'bold', margin: 0 }}>{language === 'tr' ? 'Hangi resmi duydun?' : 'Which picture did you hear?'}</p>

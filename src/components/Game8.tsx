@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Word } from '../data/types';
 import { cancelSpeech, speakText } from '../utils/speech';
 import {
@@ -8,11 +8,15 @@ import {
   type PlacedWord,
 } from '../utils/crosswordGenerator';
 import { Volume2, Dices, Delete } from 'lucide-react';
+import GameScoreBadge from '../commons/GameScoreBadge.tsx';
 import '../styles/Game8.scss';
 
 interface Props {
   onScore: (pts: number) => void;
   language: 'en' | 'tr';
+  gameScore?: number;
+  recentGain?: number | null;
+  gainKey?: number;
 }
 
 const CATEGORY_LIST = [
@@ -104,7 +108,13 @@ const ACCENT_MAP: Record<string, string[]> = {
   C: ['Ç', 'C'],
 };
 
-export default function Game8({ onScore, language }: Props): React.ReactElement {
+export default function Game8({
+  onScore,
+  language,
+  gameScore = 0,
+  recentGain = null,
+  gainKey,
+}: Props): React.ReactElement {
   const [allWords, setAllWords] = useState<Word[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('Mixed');
   const [puzzle, setPuzzle] = useState<CrosswordPuzzle | null>(null);
@@ -113,6 +123,11 @@ export default function Game8({ onScore, language }: Props): React.ReactElement 
   const [userInputs, setUserInputs] = useState<Record<string, string>>({});
   const [cellStatus, setCellStatus] = useState<Record<string, 'correct' | 'wrong' | null>>({});
   const [completedWords, setCompletedWords] = useState<Set<string>>(new Set());
+
+  // Score deduction and completion tracking
+  const audioUsedWordsRef = useRef<Set<string>>(new Set());
+  const hintsUsedWordsRef = useRef<Map<string, number>>(new Map());
+  const revealedAllRef = useRef<boolean>(false);
 
   // Load words from data module
   useEffect(() => {
@@ -137,6 +152,9 @@ export default function Game8({ onScore, language }: Props): React.ReactElement 
       setUserInputs({});
       setCellStatus({});
       setCompletedWords(new Set());
+      audioUsedWordsRef.current.clear();
+      hintsUsedWordsRef.current.clear();
+      revealedAllRef.current = false;
       const firstWord = newPuzzle.wordList[0];
       setActiveWordId(firstWord.id);
       setSelectedCell(firstWord.cells[0]);
@@ -193,7 +211,7 @@ export default function Game8({ onScore, language }: Props): React.ReactElement 
   const checkWordCompletion = useCallback(
     (wordId: string, currentInputs: Record<string, string>) => {
       const w = puzzle?.words[wordId];
-      if (!w || completedWords.has(wordId)) return;
+      if (!w || completedWords.has(wordId) || revealedAllRef.current) return;
 
       const isCompleteAndCorrect = w.cells.every(([r, c], idx) => {
         const char = currentInputs[`${r},${c}`];
@@ -201,9 +219,22 @@ export default function Game8({ onScore, language }: Props): React.ReactElement 
       });
 
       if (isCompleteAndCorrect) {
-        setCompletedWords((prev) => new Set(prev).add(wordId));
+        setCompletedWords((prev) => {
+          const next = new Set(prev).add(wordId);
+          // Check full puzzle completion bonus (+25)
+          if (puzzle && next.size === puzzle.wordList.length && !revealedAllRef.current) {
+            setTimeout(() => onScore(25), 300);
+          }
+          return next;
+        });
         speakText(w.word.pt);
-        onScore(10);
+
+        // Scoring: 10 base, -2 audio used, -2 per hint, min floor 3 pts
+        const audioUsed = audioUsedWordsRef.current.has(wordId);
+        const hintsCount = hintsUsedWordsRef.current.get(wordId) ?? 0;
+        const deductions = (audioUsed ? 2 : 0) + hintsCount * 2;
+        const pts = Math.max(3, 10 - deductions);
+        onScore(pts);
       }
     },
     [puzzle, completedWords, onScore]
@@ -275,6 +306,11 @@ export default function Game8({ onScore, language }: Props): React.ReactElement 
     const cell = puzzle.grid[r][c];
     if (cell.type !== 'letter') return;
 
+    hintsUsedWordsRef.current.set(
+      activeWord.id,
+      (hintsUsedWordsRef.current.get(activeWord.id) ?? 0) + 1
+    );
+
     const key = `${r},${c}`;
     const newInputs = { ...userInputs, [key]: cell.solution };
     setUserInputs(newInputs);
@@ -315,6 +351,7 @@ export default function Game8({ onScore, language }: Props): React.ReactElement 
   // Reveal all answers
   const handleRevealAll = () => {
     if (!puzzle) return;
+    revealedAllRef.current = true;
     const filled: Record<string, string> = {};
     const status: Record<string, 'correct' | 'wrong' | null> = {};
 
@@ -420,6 +457,8 @@ export default function Game8({ onScore, language }: Props): React.ReactElement 
           <div className="game8-score-pill">
             ⭐ {solvedCount}/{totalWords}
           </div>
+
+          <GameScoreBadge score={gameScore} recentGain={recentGain} gainKey={gainKey} />
         </div>
       </div>
 
@@ -442,7 +481,12 @@ export default function Game8({ onScore, language }: Props): React.ReactElement 
 
             <button
               className="game8-btn-action game8-btn-action--sound"
-              onClick={() => speakText(activeWord.word.pt)}
+              onClick={() => {
+                if (activeWord) {
+                  audioUsedWordsRef.current.add(activeWord.id);
+                }
+                speakText(activeWord.word.pt);
+              }}
               title={language === 'tr' ? 'Telaffuzunu Dinle' : 'Listen pronunciation'}
               aria-label={language === 'tr' ? 'Telaffuzunu Dinle' : 'Listen pronunciation'}
             >

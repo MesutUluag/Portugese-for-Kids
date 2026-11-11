@@ -36,10 +36,13 @@ interface AuthContextType {
   resetOobCode: string | null;
   clearResetOobCode: () => void;
   isStatsModalOpen: boolean;
+  isLeaderboardModalOpen: boolean;
   openAuthModal: (reason?: string) => void;
   closeAuthModal: () => void;
   openStatsModal: () => void;
   closeStatsModal: () => void;
+  openLeaderboardModal: () => void;
+  closeLeaderboardModal: () => void;
   signInWithGoogle: () => Promise<void>;
   signInWithEmail: (email: string, pass: string) => Promise<void>;
   signUpWithEmail: (email: string, pass: string, displayName?: string) => Promise<void>;
@@ -80,6 +83,7 @@ export function createDefaultProfile(uid: string, email: string, displayName: st
       speechListenCount: 0,
       timeByModeSeconds: {},
       gamesCompletedByMode: {},
+      scoreByMode: {},
       storiesByContext: {},
       dailyTimeSeconds: {},
     },
@@ -94,6 +98,9 @@ function loadOrCreateDevProfile(email: string, displayName: string): UserProfile
     if (raw) {
       const parsed = JSON.parse(raw) as UserProfile;
       if (parsed && parsed.stats) {
+        if (!parsed.stats.scoreByMode) {
+          parsed.stats.scoreByMode = {};
+        }
         return { ...parsed, email, displayName, updatedAt: Date.now() };
       }
     }
@@ -168,6 +175,11 @@ export function applySyncToProfile(base: UserProfile, payload: StatsSyncRequest)
     if (v && v > 0) gamesCompletedByMode[k] = (gamesCompletedByMode[k] ?? 0) + v;
   }
 
+  const scoreByMode = { ...(s.scoreByMode || {}) };
+  for (const [k, v] of Object.entries(payload.scoreByModeDelta || {})) {
+    if (v && v > 0) scoreByMode[k] = (scoreByMode[k] ?? 0) + v;
+  }
+
   const storiesByContext = { ...s.storiesByContext };
   for (const [k, v] of Object.entries(payload.storiesByContextDelta || {})) {
     if (v && v > 0) storiesByContext[k] = (storiesByContext[k] ?? 0) + v;
@@ -179,6 +191,11 @@ export function applySyncToProfile(base: UserProfile, payload: StatsSyncRequest)
       (dailyTimeSeconds[payload.clientDate] ?? 0) + payload.activeSecondsDelta;
   }
 
+  const scoreDeltaTotal = Math.max(
+    payload.scoreDelta,
+    Object.values(payload.scoreByModeDelta || {}).reduce<number>((acc, v) => acc + (v ?? 0), 0)
+  );
+
   return {
     ...base,
     updatedAt: Date.now(),
@@ -188,10 +205,11 @@ export function applySyncToProfile(base: UserProfile, payload: StatsSyncRequest)
       longestStreakDays: longestStreak,
       lastActiveDate,
       totalStoriesPracticed: s.totalStoriesPracticed + storiesDelta,
-      totalScore: s.totalScore + payload.scoreDelta,
+      totalScore: s.totalScore + scoreDeltaTotal,
       speechListenCount: s.speechListenCount + payload.speechListenDelta,
       timeByModeSeconds,
       gamesCompletedByMode,
+      scoreByMode,
       storiesByContext,
       dailyTimeSeconds,
     },
@@ -206,6 +224,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
   const [authReason, setAuthReason] = useState<string | undefined>(undefined);
   const [resetOobCode, setResetOobCode] = useState<string | null>(null);
   const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
+  const [isLeaderboardModalOpen, setIsLeaderboardModalOpen] = useState(false);
   const beforeSignOutRef = useRef<(() => Promise<void>) | null>(null);
   const flushHandlerRef = useRef<(() => Promise<void>) | null>(null);
 
@@ -315,6 +334,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
 
   const closeStatsModal = () => {
     setIsStatsModalOpen(false);
+  };
+
+  const openLeaderboardModal = () => {
+    setIsLeaderboardModalOpen(true);
+    void (async () => {
+      if (flushHandlerRef.current) {
+        await flushHandlerRef.current();
+      }
+      await fetchProfile();
+    })();
+  };
+
+  const closeLeaderboardModal = () => {
+    setIsLeaderboardModalOpen(false);
   };
 
   const signInWithGoogle = async (): Promise<void> => {
@@ -440,10 +473,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
         resetOobCode,
         clearResetOobCode,
         isStatsModalOpen,
+        isLeaderboardModalOpen,
         openAuthModal,
         closeAuthModal,
         openStatsModal,
         closeStatsModal,
+        openLeaderboardModal,
+        closeLeaderboardModal,
         signInWithGoogle,
         signInWithEmail,
         signUpWithEmail,

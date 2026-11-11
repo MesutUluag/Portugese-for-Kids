@@ -25,10 +25,13 @@
   h2 {
     font-size: 18px;
     margin: 0 0 10px 0;
+    padding: 0 48px;
+    line-height: 1.25;
 
     @media (min-width: 480px) {
       font-size: 20px;
       margin: 0 0 15px 0;
+      padding: 0 54px;
     }
   }
 

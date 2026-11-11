@@ -1,17 +1,27 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import type { Word } from '../data/index';
 import { cancelSpeech, speakText } from '../utils/speech';
 import WordImage from '../commons/WordImage.tsx';
+import GameScoreBadge from '../commons/GameScoreBadge.tsx';
 import '../styles/Game4.scss';
 
 interface Props {
   onScore: (pts: number) => void;
   language: 'en' | 'tr';
+  gameScore?: number;
+  recentGain?: number | null;
+  gainKey?: number;
 }
 
 const ALPHABET = 'abcdefghijklmnopqrstuvwxyzáéíóúãõç';
 
-export default function Game4({ onScore, language }: Props): React.ReactElement {
+export default function Game4({
+  onScore,
+  language,
+  gameScore = 0,
+  recentGain = null,
+  gainKey,
+}: Props): React.ReactElement {
   const [words, setWords] = useState<Word[]>([]);
   const [target, setTarget] = useState<Word | null>(null);
   const [blank, setBlank] = useState('');
@@ -19,6 +29,7 @@ export default function Game4({ onScore, language }: Props): React.ReactElement 
   const [options, setOptions] = useState<string[]>([]);
   const [animClass, setAnimClass] = useState('');
   const [showSuccess, setShowSuccess] = useState(false);
+  const hasWrongAttemptRef = useRef<boolean>(false);
 
   useEffect(() => {
     import('../data/words').then((m) => setWords(m.kidsWords));
@@ -29,6 +40,7 @@ export default function Game4({ onScore, language }: Props): React.ReactElement 
     const valid = words.filter((w) => w.pt.length >= 3 && !w.pt.includes(' '));
     const t = valid[Math.floor(Math.random() * valid.length)];
     setTarget(t);
+    hasWrongAttemptRef.current = false;
     speakText(t.pt);
 
     const missingIndex = Math.floor(Math.random() * t.pt.length);
@@ -56,10 +68,12 @@ export default function Game4({ onScore, language }: Props): React.ReactElement 
       setAnimClass('correct-anim');
       setShowSuccess(true);
       setBlank(target.pt.split('').join(' '));
-      onScore(10);
+      const points = hasWrongAttemptRef.current ? 5 : 7;
+      onScore(points);
       speakText(target.pt);
       setTimeout(() => { setAnimClass(''); setShowSuccess(false); load(); }, 2000);
     } else {
+      hasWrongAttemptRef.current = true;
       setAnimClass('wrong-anim');
       speakText(target.pt);
       setTimeout(() => setAnimClass(''), 600);
@@ -68,6 +82,7 @@ export default function Game4({ onScore, language }: Props): React.ReactElement 
 
   return (
     <div className={`game-container ${animClass}`} style={{ display: 'block', borderColor: '#3b82f6' }}>
+      <GameScoreBadge score={gameScore} recentGain={recentGain} gainKey={gainKey} />
       <h2 style={{ color: '#3b82f6', margin: 0 }}>✍️ {language === 'tr' ? 'Eksik Harfi Bul' : 'Fill Missing Letter'}</h2>
       <WordImage en={target?.en ?? ''} emoji={target?.emoji ?? '😴'} size={120} className="game-target" />
       <div className="blank-display">{blank}</div>

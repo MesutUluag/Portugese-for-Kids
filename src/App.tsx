@@ -16,6 +16,7 @@ import {
   Grid3X3,
   Flame,
   LogIn,
+  Trophy,
 } from 'lucide-react';
 import { Mode, StoryPage } from './data/index';
 import { AiState, initAI, getNewStoryPage } from './utils/ai';
@@ -25,6 +26,7 @@ import { useAuth } from './auth/AuthContext';
 import { useStatsTracker } from './auth/useStatsTracker';
 import AuthModal from './auth/AuthModal';
 import StatsModal from './auth/StatsModal';
+import LeaderboardModal from './auth/LeaderboardModal';
 
 const CardsMode = React.lazy(() => import('./components/CardsMode'));
 const StoryMode = React.lazy(() => import('./story/StoryMode'));
@@ -47,16 +49,19 @@ const MUSIC_TRACKS = [
 const BACKGROUND_MUSIC_VOLUME = 0.03;
 
 export default function App(): React.ReactElement {
-  const { user, profile, openAuthModal, openStatsModal } = useAuth();
+  const { user, profile, openAuthModal, openStatsModal, openLeaderboardModal } = useAuth();
   const [mode, setMode] = useState<Mode>('cards');
   const [pendingStoryAfterAuth, setPendingStoryAfterAuth] = useState(false);
   const [_score, setScore] = useState(0);
   const [_bounce, setBounce] = useState(false);
+  const [recentGain, setRecentGain] = useState<number | null>(null);
+  const [gainKey, setGainKey] = useState<number>(0);
+  const recentGainTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [aiState, setAiState] = useState<AiState>(null);
   const [language, setLanguage] = useState<'en' | 'tr'>('en');
 
   // Stats Tracker hook
-  const { recordStoryView, recordGameScore, recordSpeechListen } = useStatsTracker(mode);
+  const { recordStoryView, recordGameScore, recordSpeechListen, getScoreForMode } = useStatsTracker(mode);
 
   // Authenticated prefetch refs
   const storyPrefetchRef = useRef<Promise<StoryPage> | null>(null);
@@ -279,6 +284,15 @@ export default function App(): React.ReactElement {
     recordGameScore(mode, pts);
     setBounce(true);
     setTimeout(() => setBounce(false), 300);
+
+    setGainKey((k) => k + 1);
+    setRecentGain(pts);
+    if (recentGainTimerRef.current) {
+      clearTimeout(recentGainTimerRef.current);
+    }
+    recentGainTimerRef.current = setTimeout(() => {
+      setRecentGain(null);
+    }, 1000);
   }
 
   const handleModeSelect = (key: Mode) => {
@@ -309,10 +323,12 @@ export default function App(): React.ReactElement {
     { key: 'game7',  label: 'Market',       labelTr: 'Market Oyunu',   cls: 'btn-game7',  icon: <ShoppingCart size={15} strokeWidth={2} /> },
   ];
 
+  const currentGameScore = getScoreForMode(mode);
+
   return (
     <main className="app">
       <div className="app-header-row">
-        <h1>Portuguese Kids Playground</h1>
+        <h1>{language === 'tr' ? 'Portekizce Çocuk Oyun Alanı' : 'Portuguese Kids Playground'}</h1>
         <div className="header-controls">
           <button
             className="btn-lang-toggle"
@@ -338,6 +354,19 @@ export default function App(): React.ReactElement {
           <Timer size={14} strokeWidth={2} style={{ marginRight: 4 }} />
           {language === 'tr' ? 'Bugün' : 'Time Today'}: {formatTime(timeSpent)}
         </div>
+
+        <button
+          className="btn-leaderboard-badge"
+          onClick={openLeaderboardModal}
+          title={language === 'tr' ? 'Liderlik Tablosu & Puanlar' : 'Leaderboard & Scores'}
+          aria-label={language === 'tr' ? 'Liderlik Tablosu & Puanlar' : 'Leaderboard & Scores'}
+        >
+          <Trophy size={14} color="#d97706" strokeWidth={2.5} style={{ marginRight: 4 }} />
+          <span className="total-score-count">{profile?.stats?.totalScore ?? 0}</span>
+          <span className="leaderboard-chip">
+            {language === 'tr' ? 'Sıralama' : 'Ranks'}
+          </span>
+        </button>
 
         {user ? (
           <button
@@ -391,18 +420,19 @@ export default function App(): React.ReactElement {
             onSpeechListen={recordSpeechListen}
           />
         )}
-        {mode === 'game8' && <Game8 onScore={addScore} language={language} />}
-        {mode === 'game1' && <Game1 onScore={addScore} language={language} />}
-        {mode === 'game2' && <Game2 onScore={addScore} language={language} />}
-        {mode === 'game3' && <Game3 onScore={addScore} language={language} />}
-        {mode === 'game4' && <Game4 onScore={addScore} language={language} />}
-        {mode === 'game5' && <Game5 onScore={addScore} language={language} />}
-        {mode === 'game6' && <Game6 onScore={addScore} language={language} />}
-        {mode === 'game7' && <Game7 onScore={addScore} language={language} />}
+        {mode === 'game8' && <Game8 onScore={addScore} language={language} gameScore={currentGameScore} recentGain={recentGain} gainKey={gainKey} />}
+        {mode === 'game1' && <Game1 onScore={addScore} language={language} gameScore={currentGameScore} recentGain={recentGain} gainKey={gainKey} />}
+        {mode === 'game2' && <Game2 onScore={addScore} language={language} gameScore={currentGameScore} recentGain={recentGain} gainKey={gainKey} />}
+        {mode === 'game3' && <Game3 onScore={addScore} language={language} gameScore={currentGameScore} recentGain={recentGain} gainKey={gainKey} />}
+        {mode === 'game4' && <Game4 onScore={addScore} language={language} gameScore={currentGameScore} recentGain={recentGain} gainKey={gainKey} />}
+        {mode === 'game5' && <Game5 onScore={addScore} language={language} gameScore={currentGameScore} recentGain={recentGain} gainKey={gainKey} />}
+        {mode === 'game6' && <Game6 onScore={addScore} language={language} gameScore={currentGameScore} recentGain={recentGain} gainKey={gainKey} />}
+        {mode === 'game7' && <Game7 onScore={addScore} language={language} gameScore={currentGameScore} recentGain={recentGain} gainKey={gainKey} />}
       </Suspense>
 
       <AuthModal language={language} />
       <StatsModal language={language} />
+      <LeaderboardModal language={language} />
     </main>
   );
 }
