@@ -89,6 +89,24 @@
     }
   }
 
+  .gis-button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .gis-button-container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      min-height: 44px;
+
+      > div {
+        margin: 0 auto;
+      }
+    }
+  }
+
   .btn-google-auth {
     width: 100%;
     display: flex;

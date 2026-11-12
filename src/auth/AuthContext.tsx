@@ -2,7 +2,10 @@ import React, { createContext, useContext, useEffect, useState, useRef } from 'r
 import {
   User,
   onAuthStateChanged,
-  signInWithPopup,
+  signInWithCredential,
+  signInWithRedirect,
+  getRedirectResult,
+  GoogleAuthProvider,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   updateProfile,
@@ -14,12 +17,14 @@ import {
 import {
   auth,
   googleProvider,
+  googleClientId,
   getAuthToken,
   isFirebaseConfigured,
   isDevMockAuthEnabled,
   DEV_SESSION_KEY,
   DEV_PROFILE_KEY,
 } from './firebase';
+import './gis.d';
 import { StatsSyncRequest, UserProfile } from './types';
 
 const API_BASE_URL = import.meta.env.DEV
@@ -44,6 +49,7 @@ interface AuthContextType {
   openLeaderboardModal: () => void;
   closeLeaderboardModal: () => void;
   signInWithGoogle: () => Promise<void>;
+  signInWithGoogleCredential: (idToken: string) => Promise<void>;
   signInWithEmail: (email: string, pass: string) => Promise<void>;
   signUpWithEmail: (email: string, pass: string, displayName?: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
@@ -294,6 +300,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
       return;
     }
 
+    // Process redirect result if returning from a same-tab redirect
+    getRedirectResult(auth)
+      .then(async (result) => {
+        if (result?.user) {
+          setUser(result.user);
+          await fetchProfile();
+        }
+      })
+      .catch((err) => {
+        console.warn('[auth] Redirect result handler error:', err);
+      });
+
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
       setUser(firebaseUser);
       setAuthReady(true);
@@ -306,6 +324,67 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
 
     return () => unsubscribe();
   }, []);
+
+  // Google Identity Services (One Tap / FedCM) initialization
+  useEffect(() => {
+    if (user || !isFirebaseConfigured || !googleClientId) {
+      return;
+    }
+
+    let isMounted = true;
+    const initializeGis = () => {
+      if (!isMounted || !window.google?.accounts?.id) {
+        return false;
+      }
+
+      try {
+        window.google.accounts.id.initialize({
+          client_id: googleClientId,
+          callback: async (response) => {
+            if (!response?.credential) return;
+            try {
+              await signInWithGoogleCredential(response.credential);
+            } catch (err) {
+              console.error('[auth] Google One Tap login error:', err);
+            }
+          },
+          auto_select: false,
+          cancel_on_tap_outside: true,
+          itp_support: true,
+          use_fedcm_for_prompt: true,
+        });
+
+        window.google.accounts.id.prompt();
+        return true;
+      } catch (err) {
+        console.warn('[auth] Google Identity Services init error:', err);
+        return false;
+      }
+    };
+
+    if (!initializeGis()) {
+      const interval = setInterval(() => {
+        if (initializeGis()) {
+          clearInterval(interval);
+        }
+      }, 300);
+      const timeout = setTimeout(() => clearInterval(interval), 6000);
+      return () => {
+        isMounted = false;
+        clearInterval(interval);
+        clearTimeout(timeout);
+      };
+    }
+
+    return () => {
+      isMounted = false;
+      try {
+        window.google?.accounts?.id?.cancel();
+      } catch {
+        // ignore
+      }
+    };
+  }, [user]);
 
   const openAuthModal = (reason?: string) => {
     setAuthReason(reason);
@@ -350,6 +429,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
     setIsLeaderboardModalOpen(false);
   };
 
+  const signInWithGoogleCredential = async (idToken: string): Promise<void> => {
+    if (isDevMockAuthEnabled) {
+      const mockUser = createMockDevUser('explorer@kids.com', 'Kid Explorer');
+      try {
+        localStorage.setItem(DEV_SESSION_KEY, JSON.stringify({ email: 'explorer@kids.com', name: 'Kid Explorer' }));
+      } catch { /* ignore */ }
+      setUser(mockUser);
+      setProfile(loadOrCreateDevProfile('explorer@kids.com', 'Kid Explorer'));
+      void fetchProfile();
+      closeAuthModal();
+      return;
+    }
+
+    const credential = GoogleAuthProvider.credential(idToken);
+    await signInWithCredential(auth, credential);
+    closeAuthModal();
+  };
+
   const signInWithGoogle = async (): Promise<void> => {
     if (isDevMockAuthEnabled) {
       const mockUser = createMockDevUser('explorer@kids.com', 'Kid Explorer');
@@ -363,8 +460,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
       return;
     }
 
-    await signInWithPopup(auth, googleProvider);
-    closeAuthModal();
+    // Same-tab redirect: avoids opening a separate pop-up window
+    await signInWithRedirect(auth, googleProvider);
   };
 
   const signInWithEmail = async (email: string, pass: string): Promise<void> => {
@@ -454,6 +551,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
     } catch { /* ignore */ }
 
     if (isFirebaseConfigured) {
+      try {
+        window.google?.accounts?.id?.disableAutoSelect();
+      } catch {
+        // ignore
+      }
       await signOut(auth);
     }
     setUser(null);
@@ -481,6 +583,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
         openLeaderboardModal,
         closeLeaderboardModal,
         signInWithGoogle,
+        signInWithGoogleCredential,
         signInWithEmail,
         signUpWithEmail,
         resetPassword,

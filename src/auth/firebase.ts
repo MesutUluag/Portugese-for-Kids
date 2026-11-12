@@ -37,6 +37,10 @@ if (isFirebaseConfigured) {
 export const googleProvider = new GoogleAuthProvider();
 googleProvider.setCustomParameters({ prompt: 'select_account' });
 
+export const googleClientId =
+  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+  '169990403474-ap0apl8j9l68jcqgi0vittv6kj69jn48.apps.googleusercontent.com';
+
 /**
  * Returns a valid Firebase ID Token for API calls.
  * Waits for initial auth state hydration (indexedDB) before inspecting auth.currentUser.
