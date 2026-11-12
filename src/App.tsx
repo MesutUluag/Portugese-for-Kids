@@ -52,7 +52,26 @@ const BACKGROUND_MUSIC_VOLUME = 0.03;
 export default function App(): React.ReactElement {
   const { user, profile, openAuthModal, openStatsModal, openLeaderboardModal } = useAuth();
   const [mode, setMode] = useState<Mode>('cards');
-  const [pendingModeAfterAuth, setPendingModeAfterAuth] = useState<Mode | null>(null);
+  const [pendingModeAfterAuth, setPendingModeAfterAuthState] = useState<Mode | null>(() => {
+    try {
+      return (sessionStorage.getItem('kids_pending_mode_after_auth') as Mode) || null;
+    } catch {
+      return null;
+    }
+  });
+
+  const setPendingModeAfterAuth = (m: Mode | null) => {
+    setPendingModeAfterAuthState(m);
+    try {
+      if (m) {
+        sessionStorage.setItem('kids_pending_mode_after_auth', m);
+      } else {
+        sessionStorage.removeItem('kids_pending_mode_after_auth');
+      }
+    } catch {
+      // ignore
+    }
+  };
   const [_score, setScore] = useState(0);
   const [_bounce, setBounce] = useState(false);
   const [recentGain, setRecentGain] = useState<number | null>(null);
