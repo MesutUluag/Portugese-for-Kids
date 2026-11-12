@@ -1,4 +1,4 @@
-import{c as z,j as r,r as l,u as et,g as L,b as rt,V as ot}from"./index-aDW08r4U.js";import{c as nt,s as b}from"./speech-CGS2wwkd.js";/**
+import{c as z,j as r,r as l,u as et,g as L,b as rt,V as ot}from"./index-Cr23HI9z.js";import{c as nt,s as b}from"./speech-CGS2wwkd.js";/**
  * @license lucide-react v1.34.0 - ISC
  *
  * This source code is licensed under the ISC license.
