@@ -17,6 +17,7 @@ import {
   Flame,
   LogIn,
   Trophy,
+  Lock,
 } from 'lucide-react';
 import { Mode, StoryPage } from './data/index';
 import { AiState, initAI, getNewStoryPage } from './utils/ai';
@@ -51,7 +52,7 @@ const BACKGROUND_MUSIC_VOLUME = 0.03;
 export default function App(): React.ReactElement {
   const { user, profile, openAuthModal, openStatsModal, openLeaderboardModal } = useAuth();
   const [mode, setMode] = useState<Mode>('cards');
-  const [pendingStoryAfterAuth, setPendingStoryAfterAuth] = useState(false);
+  const [pendingModeAfterAuth, setPendingModeAfterAuth] = useState<Mode | null>(null);
   const [_score, setScore] = useState(0);
   const [_bounce, setBounce] = useState(false);
   const [recentGain, setRecentGain] = useState<number | null>(null);
@@ -75,7 +76,7 @@ export default function App(): React.ReactElement {
   // Cleans up & revokes blob URLs on logout or guest state.
   useEffect(() => {
     if (!user) {
-      if (mode === 'story') {
+      if (mode !== 'cards') {
         setMode('cards');
       }
       storyPrefetchRef.current = null;
@@ -93,9 +94,10 @@ export default function App(): React.ReactElement {
       return;
     }
 
-    if (pendingStoryAfterAuth) {
-      setPendingStoryAfterAuth(false);
-      setMode('story');
+    if (pendingModeAfterAuth) {
+      const nextMode = pendingModeAfterAuth;
+      setPendingModeAfterAuth(null);
+      setMode(nextMode);
     }
 
     if (storyPrefetchRef.current !== null) return;
@@ -295,20 +297,6 @@ export default function App(): React.ReactElement {
     }, 1000);
   }
 
-  const handleModeSelect = (key: Mode) => {
-    if (key === 'story' && !user) {
-      setPendingStoryAfterAuth(true);
-      openAuthModal(
-        language === 'tr'
-          ? 'Yapay zeka hikaye modunu açmak ve ilerlemenizi kaydetmek için lütfen giriş yapın!'
-          : 'Please sign in to access AI Story Mode and save your reading progress!'
-      );
-      return;
-    }
-    setPendingStoryAfterAuth(false);
-    setMode(key);
-  };
-
   type NavButton = { key: Mode; label: string; labelTr: string; cls: string; icon: React.ReactNode };
   const navButtons: NavButton[] = [
     { key: 'cards',  label: 'Cards',        labelTr: 'Kartlar',        cls: 'btn-kids',   icon: <LayoutGrid  size={15} strokeWidth={2} /> },
@@ -322,6 +310,32 @@ export default function App(): React.ReactElement {
     { key: 'game6',  label: 'Puzzle',       labelTr: 'Yapboz',         cls: 'btn-game6',  icon: <Puzzle      size={15} strokeWidth={2} /> },
     { key: 'game7',  label: 'Market',       labelTr: 'Market Oyunu',   cls: 'btn-game7',  icon: <ShoppingCart size={15} strokeWidth={2} /> },
   ];
+
+  const handleModeSelect = (key: Mode) => {
+    if (key !== 'cards' && !user) {
+      setPendingModeAfterAuth(key);
+      const button = navButtons.find((b) => b.key === key);
+      const gameNameEn = button ? button.label : 'this activity';
+      const gameNameTr = button ? button.labelTr : 'bu etkinliği';
+
+      if (key === 'story') {
+        openAuthModal(
+          language === 'tr'
+            ? 'Yapay zeka hikaye modunu açmak ve ilerlemenizi kaydetmek için lütfen giriş yapın!'
+            : 'Please sign in to access AI Story Mode and save your reading progress!'
+        );
+      } else {
+        openAuthModal(
+          language === 'tr'
+            ? `${gameNameTr} oynamak ve puanınızı liderlik tablosuna kaydetmek için lütfen giriş yapın!`
+            : `Please sign in to play ${gameNameEn} and save your score to the leaderboard!`
+        );
+      }
+      return;
+    }
+    setPendingModeAfterAuth(null);
+    setMode(key);
+  };
 
   const currentGameScore = getScoreForMode(mode);
 
@@ -383,7 +397,10 @@ export default function App(): React.ReactElement {
         ) : (
           <button
             className="btn-auth-prompt-badge"
-            onClick={() => openAuthModal()}
+            onClick={() => {
+              setPendingModeAfterAuth(null);
+              openAuthModal();
+            }}
             title={language === 'tr' ? 'Giriş Yap' : 'Sign In'}
           >
             <LogIn size={13} style={{ marginRight: 4 }} />
@@ -393,16 +410,34 @@ export default function App(): React.ReactElement {
       </div>
 
       <div className="nav-buttons">
-        {navButtons.map(({ key, label, labelTr, cls, icon }) => (
-          <button
-            key={key}
-            className={`btn ${cls}${mode === key ? ' btn--active' : ''}`}
-            onClick={() => handleModeSelect(key)}
-          >
-            {icon}
-            <span style={{ marginLeft: 5 }}>{language === 'tr' ? labelTr : label}</span>
-          </button>
-        ))}
+        {navButtons.map(({ key, label, labelTr, cls, icon }) => {
+          const isLocked = !user && key !== 'cards';
+          return (
+            <button
+              key={key}
+              className={`btn ${cls}${mode === key ? ' btn--active' : ''}${isLocked ? ' btn--locked' : ''}`}
+              onClick={() => handleModeSelect(key)}
+              title={
+                isLocked
+                  ? language === 'tr'
+                    ? `${labelTr} oynamak için giriş yapın`
+                    : `Sign in to play ${label}`
+                  : undefined
+              }
+            >
+              {icon}
+              <span style={{ marginLeft: 5 }}>{language === 'tr' ? labelTr : label}</span>
+              {isLocked && (
+                <Lock
+                  size={12}
+                  strokeWidth={2.4}
+                  style={{ marginLeft: 4, opacity: 0.8, flexShrink: 0 }}
+                  aria-hidden="true"
+                />
+              )}
+            </button>
+          );
+        })}
       </div>
 
       <Suspense fallback={<LoadingSpinner />}>

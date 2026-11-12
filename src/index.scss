@@ -321,6 +321,13 @@ body {
     &:hover { transform: scale(1.05); opacity: 0.92; }
   }
 
+  &--locked {
+    opacity: 0.92;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
   // Active mode indicator — bright ring + scale up
   &--active {
     transform: scale(1.08);
